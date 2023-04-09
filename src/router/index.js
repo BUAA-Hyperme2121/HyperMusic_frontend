@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: "/",
@@ -21,8 +21,16 @@ export default new VueRouter({
         {
           path: "music",
           component: () => import("../views/UserMusic.vue"),
+        },
+        {
+          path: "setting",
+          component: () => import("../views/UserSetting.vue"),
+        },
+        {
+          path:"message",
+          component:()=>import("../views/UserMessage.vue")
         }
-      ]
+      ],
     },
     {
       path: "/homepage",
@@ -31,6 +39,16 @@ export default new VueRouter({
     {
       path: "/social",
       component: () => import("../views/SocialPage.vue"),
-    }
+    },
+    {
+      path: "/login",
+      component: () => import("../views/LoginPage.vue"),
+    },
+    {
+      path: "/register",
+      component: () => import("../views/RegisterPage.vue"),
+    },
   ],
 });
+
+export default router;
