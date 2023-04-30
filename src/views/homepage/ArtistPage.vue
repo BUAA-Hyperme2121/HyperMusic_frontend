@@ -14,7 +14,7 @@
     </div>
     <div class="right-section">
       <content-list :contentList="data"></content-list>
-      <div class="playlist-pagination">
+      <div class="artist-pagination">
         <el-pagination class="button" @current-change="changeCurrentPage" background layout="total,prev,pager,next" 
         :current-page="currentPage" :page-size="pageSize" :total="artistList.length">
         </el-pagination>
@@ -26,7 +26,7 @@
 <script>
 import {artistList} from "../../assets/data/artistlist";
 import {artistClassification} from "../../assets/data/artistclassify";
-import ContentList from "../../components/ContentList.vue";
+import ContentList from "../../components/homepage/ContentList.vue";
 export default {
   components:{
     ContentList,
@@ -105,11 +105,11 @@ export default {
 .active {
   color:rgb(212, 3, 3);
 }
-.playlist-pagination {
+.artist-pagination {
   width: 100%;
   text-align: center;
 }
-.playlist-pagination > .button{
+.artist-pagination > .button{
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -138,4 +138,5 @@ export default {
   margin:auto;
   border:2px solid rgb(239, 239, 239);
 }
+
 </style>

@@ -32,10 +32,10 @@
 </template>
   
 <script>
-import ContentList from "../../components/ContentList.vue";
-import Carousel from "../../components/Carousel.vue";
+import ContentList from "../../components/homepage/ContentList.vue";
+import Carousel from "../../components/homepage/Carousel.vue";
 import {recommendList} from "../../assets/data/discoverlist";
-import RankList from "../../components/RankList.vue";
+import RankList from "../../components/homepage/RankList.vue";
 export default {
     components:{
         Carousel,

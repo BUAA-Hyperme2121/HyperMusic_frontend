@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ContentList from "../../components/ContentList.vue";
+import ContentList from "../../components/homepage/ContentList.vue";
 import {playListStyle} from "../../assets/data/playliststyle";
 import {playListList} from "../../assets/data/playlistlist";
 export default {

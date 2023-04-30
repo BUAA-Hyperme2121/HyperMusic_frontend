@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import SelectNav from "../components/SelectNav.vue";
+import SelectNav from "../components/homepage/SelectNav.vue";
 export default {
   name: 'home',
   components:{

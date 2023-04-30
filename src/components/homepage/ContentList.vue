@@ -8,7 +8,7 @@
                 <div class="mask">
                     <i class="icon iconfont icon-bofang1"></i>
                 </div>
-                <p class="item-name">{{item.title}}</p>
+                <p class="item-title">{{item.title}}</p>
             </li>
         </ul>
     </div>
@@ -19,7 +19,7 @@ export default {
     props: ['contentList']
 }
 </script>
-<style>
+<style scoped>
 .content-list {
     min-height: 100px;
     width: 100%;

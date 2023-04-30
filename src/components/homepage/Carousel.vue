@@ -8,7 +8,7 @@
     </div>
 </template>
 <script>
-import {carouselList} from "../assets/data/carousel";
+import {carouselList} from "../../assets/data/carousel";
 export default{
     name: "carousel",
     data(){
@@ -22,7 +22,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 
 .carousel {
     width: 80%;

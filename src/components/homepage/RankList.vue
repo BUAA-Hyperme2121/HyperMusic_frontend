@@ -21,7 +21,7 @@
    </div> 
 </template>
 <script>
-import {songsRankList} from "../assets/data/songsRank";
+import {songsRankList} from "../../assets/data/songsRank";
 export default{
     name: "RankList",
     data(){
@@ -35,7 +35,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 .rank-list {
     width: 100%;
     height: auto;
