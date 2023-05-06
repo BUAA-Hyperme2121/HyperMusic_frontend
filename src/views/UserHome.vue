@@ -56,21 +56,103 @@
       <!-- 个人简介 -->
       <div class="user-intro">
         <div class="title">个人简介(或许可以支持markdown??)</div>
-        <div class="content">
-          <p>这个人很懒，什么都没有留下</p>
-        </div>
+        <div style="margin-top:10px;margin-bottom:10px">这里是个人简介</div>
       </div>
       <!-- 最近播放 -->
       <div class="user-recent-play">
         <div class="title">最近播放</div>
         <!-- 歌曲列表 -->
-        <ul class="user-recent-play-list"></ul>
+        <el-table :data="playlist.songs" style="width: 100%" stripe>
+          <el-table-column type="index" label="序号"></el-table-column>
+          <el-table-column prop="name" label="歌曲名称"></el-table-column>
+          <el-table-column prop="duration" label="时长"></el-table-column>
+          <el-table-column prop="singer" label="歌手"></el-table-column>
+          <el-table-column prop="album" label="专辑"></el-table-column>
+          <el-table-column label="操作">
+            <div class="operation">
+              <el-link @click="addToPlaylist(scope.row)" class="operation-link">
+                <el-tooltip
+                  content="加入播放列表"
+                  placement="top"
+                  open-delay="1000"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link
+                @click="addToFavorites(scope.row)"
+                class="operation-link"
+              >
+                <el-tooltip content="收藏" placement="top" open-delay="1000">
+                  <i class="el-icon-star-on"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="shareSong(scope.row)" class="operation-link">
+                <el-tooltip content="分享" placement="top" open-delay="1000">
+                  <i class="el-icon-share"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="downloadSong(scope.row)" class="operation-link">
+                <el-tooltip content="下载" placement="top" open-delay="1000">
+                  <i class="el-icon-download"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="deleteSong(scope.row)" class="operation-link">
+                <el-tooltip content="删除" placement="top" open-delay="1000">
+                  <i class="el-icon-delete"></i>
+                </el-tooltip>
+              </el-link>
+            </div>
+          </el-table-column>
+        </el-table>
       </div>
       <!-- 听歌排行 -->
       <div class="user-music-rank">
         <div class="title">听歌排行</div>
         <!-- 歌曲列表 -->
-        <ul class="user-music-rank-list"></ul>
+        <el-table :data="playlist.songs" style="width: 100%" stripe>
+          <el-table-column type="index" label="序号"></el-table-column>
+          <el-table-column prop="name" label="歌曲名称"></el-table-column>
+          <el-table-column prop="duration" label="时长"></el-table-column>
+          <el-table-column prop="singer" label="歌手"></el-table-column>
+          <el-table-column prop="album" label="专辑"></el-table-column>
+          <el-table-column label="操作">
+            <div class="operation">
+              <el-link @click="addToPlaylist(scope.row)" class="operation-link">
+                <el-tooltip
+                  content="加入播放列表"
+                  placement="top"
+                  open-delay="1000"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link
+                @click="addToFavorites(scope.row)"
+                class="operation-link"
+              >
+                <el-tooltip content="收藏" placement="top" open-delay="1000">
+                  <i class="el-icon-star-on"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="shareSong(scope.row)" class="operation-link">
+                <el-tooltip content="分享" placement="top" open-delay="1000">
+                  <i class="el-icon-share"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="downloadSong(scope.row)" class="operation-link">
+                <el-tooltip content="下载" placement="top" open-delay="1000">
+                  <i class="el-icon-download"></i>
+                </el-tooltip>
+              </el-link>
+              <el-link @click="deleteSong(scope.row)" class="operation-link">
+                <el-tooltip content="删除" placement="top" open-delay="1000">
+                  <i class="el-icon-delete"></i>
+                </el-tooltip>
+              </el-link>
+            </div>
+          </el-table-column>
+        </el-table>
       </div>
     </div>
   </div>
@@ -86,6 +168,41 @@ export default {
         this.$router.push("/user/setting");
       }
     },
+  },
+  data() {
+    return {
+      userIntro: "",
+      playlist: {
+        name: "我的私人歌单",
+        cover:
+          "https://img.51miz.com/Element/00/59/30/57/00d5b623_E593057_2ffbe2c2.jpg",
+        description: "这是我的私人歌单，收录了很多好听的歌曲。",
+        songs: [
+          {
+            id: 1,
+            name: "歌曲 1",
+            duration: "04:30",
+            singer: "歌手 A",
+            album: "专辑 A",
+          },
+          {
+            id: 2,
+            name: "歌曲 2",
+            duration: "03:45",
+            singer: "歌手 B",
+            album: "专辑 B",
+          },
+          {
+            id: 3,
+            name: "歌曲 3",
+            duration: "05:12",
+            singer: "歌手 C",
+            album: "专辑 C",
+          },
+          // 其他歌曲数据...
+        ],
+      },
+    };
   },
 };
 </script>

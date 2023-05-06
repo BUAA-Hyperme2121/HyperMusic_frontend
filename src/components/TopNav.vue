@@ -4,9 +4,6 @@
       <!-- logo -->
       <el-col :span="5" class="logo">
         <span @click="goHomePage"> HyperMusic </span>
-        <!-- <div class="logo">
-          <img src="../assets/avatar.png" alt="HyperMusic" />
-        </div> -->
       </el-col>
       <!-- 主要分区 -->
       <el-col :span="14">
@@ -33,21 +30,26 @@
         ></el-input>
       </el-col>
 
-      <!-- 登录注册 -->
-      <el-col :span="4" class="nav-right">
-        <router-link to="/login" class="login-link">登录</router-link>
-        <el-divider direction="vertical"></el-divider>
-        <router-link to="/register" class="register-link">注册</router-link>
-        <!-- <el-dropdown trigger="hover" @command="handleCommand">
-          <span class="user-image">
-            <img src="../assets/avatar.png" @click="goUserHome" />
-          </span>
-          <el-dropdown-menu>
-            <el-dropdown-item command="setting">设置</el-dropdown-item>
-            <el-dropdown-item command="msg">消息</el-dropdown-item>
-            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown> -->
+      <el-col :span="4">
+        <!-- 登录注册 -->
+        <div class="nav-right" v-if="!isLogin">
+          <router-link to="/login" class="login-link">登录</router-link>
+          <el-divider direction="vertical"></el-divider>
+          <router-link to="/register" class="register-link">注册</router-link>
+        </div>
+        <!-- 用户信息 -->
+        <div class="nav-right" v-if="isLogin">
+          <el-dropdown trigger="hover" @command="handleCommand">
+            <span class="user-image">
+              <img src="../assets/avatar.png" @click="goUserHome" />
+            </span>
+            <el-dropdown-menu>
+              <el-dropdown-item command="setting">设置</el-dropdown-item>
+              <el-dropdown-item command="msg">消息</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -55,6 +57,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      // 获取登录状态
+      isLogin: false,
+      
+    };
+  },
   methods: {
     //点击logo，转到首页
     goHomePage() {
@@ -86,6 +95,10 @@ export default {
       }
     },
   },
+  mounted() {
+    // localStorage获取登录状态
+    this.isLogin = JSON.parse(localStorage.getItem("isLogin"));
+  },
 };
 </script>
 
@@ -116,6 +129,8 @@ export default {
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
 .login-link {

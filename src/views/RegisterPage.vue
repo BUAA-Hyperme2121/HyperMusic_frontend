@@ -1,49 +1,63 @@
 <template>
-  <div class="container">
-    <h1>Sign up</h1>
-
-    <form @submit.prevent="submit">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input v-model="username" id="username" type="text" placeholder="Enter your username" required>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input v-model="email" id="email" type="email" placeholder="Enter your email" required>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input v-model="password" id="password" type="password" placeholder="Enter your password" required>
-      </div>
-
-      <div class="form-group">
-        <label for="confirm-password">Confirm Password</label>
-        <input v-model="confirmPassword" id="confirm-password" type="password" placeholder="Confirm your password" required>
-      </div>
-
-      <div class="form-group">
-        <label for="email-code">Email verification code</label>
-
-        <div class="input-group">
-          <input v-model="emailCode" id="email-code" type="text" placeholder="Enter verification code" required>
-          <button type="button" class="btn-get-code" :disabled="isCountdown" @click="sendEmailCode">
-            <template v-if="isCountdown">{{ countDownSeconds }}s</template>
-            <template v-else>Get code</template>
-          </button>
+  <div class="register-page">
+    <h1>\ HyperMusic /</h1>
+    <!-- 注册表单 -->
+    <el-form
+      :model="registerForm"
+      :rules="rules"
+      ref="registerForm"
+      label-position="top"
+      status-icon
+      size="mini"
+    >
+      <el-form-item label="用户名" prop="username">
+        <el-input
+          v-model="registerForm.username"
+          placeholder="3~10个字符"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input
+          v-model="registerForm.password"
+          placeholder="6~16位密码"
+          show-password
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码" prop="password2">
+        <el-input
+          v-model="registerForm.password2"
+          placeholder="请再次输入密码"
+          show-password
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input
+          v-model="registerForm.email"
+          placeholder="请输入邮箱"
+        ></el-input>
+      </el-form-item>
+      <!-- 邮箱验证码 -->
+      <el-form-item label="邮箱验证码" prop="emailCode">
+        <div style="display: flex">
+          <el-input
+            v-model="registerForm.emailCode"
+            placeholder="请输入邮箱验证码"
+            style="margin-right: 20px"
+          ></el-input>
+          <!-- 获取邮箱验证码 -->
+          <el-button type="primary" size="mini" @click="postEmailCode" :disabled="canPostCode"
+            >{{btnText}}</el-button
+          >
         </div>
-      </div>
-
-      <!-- 注册按钮 -->
-      <el-button>
-        <span>Sign up</span>
-      </el-button>
-    </form>
-
-    <div class="redirect">
-      <span>Already have an account?</span>
-      <router-link to="/login">去登录</router-link>
+      </el-form-item>
+    </el-form>
+    <!-- 注册按钮 -->
+    <el-button type="primary" @click="register" class="register-btn"
+      >注册</el-button
+    >
+    <!-- 跳转到登录页面 -->
+    <div class="to-login">
+      <router-link to="/login" class="login-link">已有账号？去登录</router-link>
     </div>
   </div>
 </template>
@@ -52,135 +66,210 @@
 export default {
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      emailCode: '',
-      isCountdown: false,
-      countDownSeconds: 60,
-      emailCodeTimer: null,
-    }
+      // 获取邮箱验证码按钮文本
+      btnText: "获取邮箱验证码",
+      // 是否可以点击获取邮箱验证码按钮
+      canPostCode: false,
+      // 注册表单
+      registerForm: {
+        username: "",
+        password: "",
+        password2: "",
+        email: "",
+        emailCode: "",
+      },
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 20,
+            message: "长度在 6 到 16 个字符",
+            trigger: "blur",
+          },
+        ],
+        password2: [
+          { required: true, message: "请再次输入密码", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (!this.isSamePassword()) {
+                callback(new Error("两次输入密码不一致"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur",
+          },
+        ],
+        email: [
+          { required: true, message: "请输入邮箱地址", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              if (!this.isEmail(value)) {
+                callback(new Error("请输入正确的邮箱地址"));
+              } else {
+                callback();
+              }
+            },
+            trigger: ["blur", "change"],
+          },
+        ],
+        emailCode: [
+          { required: true, message: "请输入邮箱验证码", trigger: "blur" },
+          {
+            min: 6,
+            max: 6,
+            message: "请输入6位邮箱验证码",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
   },
-
   methods: {
-    submit() {
-      // 提交表单代码
-    },
-
-    sendEmailCode() {
-      // 发送邮件验证码代码
-
-      // 设置倒计时
-      this.isCountdown = true;
-      this.countDownSeconds = 60;
-      clearInterval(this.emailCodeTimer);
-      this.emailCodeTimer = setInterval(() => {
-        if (this.countDownSeconds > 0) {
-          this.countDownSeconds--;
+    register() {
+      // 处理注册逻辑
+      this.$refs.registerForm.validate((valid) => {
+        if (valid) {
+          this.$axios({
+            method: "post",
+            url: "/register",
+            data: JSON.stringify(this.registerForm),
+          })
+            .then((res) => {
+              // 注册成功
+              if (res.data.code === 200) {
+                this.$message({
+                  message: "注册成功",
+                  type: "success",
+                });
+                // 跳转到登录页面
+                this.$router.push("/login");
+              } else {
+                // 注册失败
+                this.$message({
+                  message: res.data.message,
+                  type: "error",
+                });
+              }
+            })
+            .catch((err) => {
+              // 服务器错误
+              console.log(err);
+              this.$message({
+                message: "服务器开摆了~(￣▽￣)~*",
+                type: "error",
+              });
+            });
         } else {
-          this.isCountdown = false;
-          clearInterval(this.emailCodeTimer);
+          // 表单验证失败
+          this.$message({
+            message: "请检查输入是否正确",
+            type: "error",
+          });
+        }
+      });
+    },
+    // 邮箱合法性验证
+    isEmail(email) {
+      let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      return reg.test(email);
+    },
+    //两次输入密码是否相同
+    isSamePassword() {
+      return this.registerForm.password === this.registerForm.password2;
+    },
+    //发送邮箱验证码
+    postEmailCode() {
+      // 处理发送邮箱验证码逻辑
+      this.$axios({
+        method: "post",
+        url: "/postEmailCode",
+        data: JSON.stringify({
+          email: this.registerForm.email,
+        }),
+      })
+        .then((res) => {
+          // 发送成功
+          if (res.data.code === 200) {
+            this.$message({
+              message: "验证码发送成功",
+              type: "success",
+            });
+          } else {
+            // 发送失败
+            this.$message({
+              message: "验证码发送失败",
+              type: "error",
+            });
+          }
+        })
+        // 服务器错误
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            message: "服务器开摆了~(￣▽￣)~*",
+            type: "error",
+          });
+        });
+
+      // 禁用获取验证码按钮
+      this.canPostCode = true;
+      // 获取验证码按钮倒计时
+      let count = 60;
+      this.btnText = count + "s后重新获取";
+      let timer = setInterval(() => {
+        if (count > 0) {
+          count--;
+          this.btnText = count + "s后重新获取";
+        } else {
+          clearInterval(timer);
+          this.btnText = "获取邮箱验证码";
+          this.canPostCode = false;
         }
       }, 1000);
     },
   },
-
-  watch: {
-    emailCode() {
-      // 在此处执行验证邮件验证码的代码
-    },
-  },
-}
+};
 </script>
 
-<style>
-.container {
-  max-width: 400px;
-  margin: 30px auto;
-  padding: 25px;
+<style scoped>
+.register-page {
   background-color: #fff;
+  padding: 50px;
   border-radius: 5px;
-  box-shadow: 0px 0px 20px #eaeaea;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  margin: 20px auto;
 }
-
-h1 {
-  margin-bottom: 30px;
+.register-page h1 {
   text-align: center;
-  color: #333;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  
-}
-
-label {
+.register-btn {
+  margin: 0 auto;
   display: block;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #666;
 }
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  padding: 10px;
-  border: 1px solid #bbb;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #999;
-  width: 70%;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  outline: none;
-  border-color: #28a745;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-}
-
-.btn-get-code {
-  margin-left: 10px;
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-size: 14px;
-  color: #28a745;
-  background-color: #fff;
-  border: 1px solid #28a745;
-  cursor: pointer;
-}
-
-.btn-get-code:hover {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.btn-get-code:disabled {
-  color: #ccc;
-  border-color: #ccc;
-  cursor: not-allowed;
-}
-
-.redirect {
+.to-login {
   text-align: center;
   margin-top: 20px;
-  font-size: 14px;
-  color: #666;
 }
-
-.redirect span {
-  margin-right: 10px;
+.login-link {
+  font-size: 14px;
+  color: #0366d6;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.login-link:hover {
+  color: #044b9c;
 }
 </style>

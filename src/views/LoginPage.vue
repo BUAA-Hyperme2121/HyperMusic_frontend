@@ -1,44 +1,32 @@
 <template>
-  <div class="login">
-    <!-- 标题 -->
-    <div class="login-header">
-      <img src="../assets/avatar.png" alt="HyperMusic" />
-      <h1>加入 HyperMusic</h1>
-    </div>
-    <!-- 登录表单 -->
-    <div class="login-form">
-      <form>
-        <div class="form-group">
-          <label for="username">用户名或邮箱</label>
-          <input type="text" id="username" name="username" v-model="username" />
-        </div>
-        <div class="form-group">
-          <label for="password">密码</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            v-model="password"
-          />
-        </div>
-        <div
-          style="display: flex; justify-content: center; align-items: center"
-        >
-          <button
-            class="btn-primary"
-            type="submit"
-            @click.prevent="handleSubmit"
-          >
-            登录
-          </button>
-        </div>
-        <div>
-          <router-link class="register-link" to="/register"
-            >没有账号？</router-link
-          >
-        </div>
-      </form>
-    </div>
+  <div class="login-page">
+    <el-form
+      :model="loginForm"
+      :rules="rules"
+      ref="loginForm"
+      label-position="top"
+      status-icon
+    >
+      <el-form-item label="用户名" prop="username">
+        <el-input
+          v-model="loginForm.username"
+          placeholder="请输入用户名"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input
+          v-model="loginForm.password"
+          placeholder="请输入密码"
+          show-password
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <el-button type="primary" @click="login" class="btn-primary">
+      登录
+    </el-button>
+    <router-link to="/register" class="register-link"
+      >没有账号？去注册</router-link
+    >
   </div>
 </template>
 
@@ -46,75 +34,99 @@
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      loginForm: {
+        username: "",
+        password: "",
+      },
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 20,
+            message: "长度在 6 到 16 个字符",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
-    handleSubmit() {
-      // todo: 处理登录逻辑
-      console.log("login submitted");
+    login() {
+
+      localStorage.setItem("isLogin", true);
+
+      
+      // 处理登录逻辑
+      this.$refs["loginForm"].validate((valid) => {
+        if (valid) {
+          this.$axios({
+            method: "post",
+            url: "/login",
+            data: JSON.stringify(this.loginForm),
+          })
+            .then((res) => {
+              if (res.data.code === 200) {
+                // 登录成功
+                this.$message({
+                  message: "登录成功",
+                  type: "success",
+                });
+                // 保存登录信息(用户信息、token、状态码及msg)
+                localStorage.setItem("loginInfo", res.data);
+                
+                // 跳转到首页
+                this.$router.push("/homepage");
+              } else {
+                // 登录失败
+                this.$message({
+                  message: res.data.msg,
+                  type: "error",
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$message({
+                message: "服务器开摆了~(￣▽￣)~*",
+                type: "error",
+              });
+            });
+        } else {
+          this.$message({
+            message: "请检查输入是否正确",
+            type: "error",
+          });
+        }
+      });
     },
   },
 };
 </script>
 
 <style scoped>
-.login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f6f8fa;
-}
-.login-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.login-header img {
-  max-width: 50px;
-  margin-right: 10px;
-}
-.login-header h1 {
-  font-size: 24px;
-  font-weight: 400;
-}
-.login-form {
+.login-page {
   background-color: #fff;
   padding: 50px;
   border-radius: 5px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   width: 400px;
+  margin: 20px auto;
 }
-.form-group {
-  margin-bottom: 20px;
-}
-.form-group label {
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.form-group input[type="text"],
-.form-group input[type="password"] {
-  width: 100%;
-  border-radius: 5px;
-  border: 1px solid #d1d5da;
-  padding: 10px;
-  font-size: 16px;
-  outline: none;
-  transition: border-color 0.3s;
-}
-.form-group input[type="text"]:focus,
-.form-group input[type="password"]:focus {
-  border-color: #0366d6;
-}
+
 .btn-primary {
   display: block;
   width: 30%;
+  text-align: center;
   background-color: #0366d6;
   color: #fff;
   border: none;
@@ -122,7 +134,7 @@ export default {
   font-size: 16px;
   font-weight: 600;
   padding: 15px 20px;
-  margin-top: 20px;
+  margin: 0 auto;
   cursor: pointer;
   transition: background-color 0.3s;
 }

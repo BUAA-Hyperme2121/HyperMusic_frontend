@@ -2,7 +2,7 @@
   <div class="personal-info">
     <!-- 借助el-row和el-col布局 -->
     <el-row>
-      <el-col :span="6">
+      <el-col :span="4">
         <!-- 侧边栏导航，根据被选中的Tab显示右边的内容 -->
         <el-menu default-active="basic" class="menu" @select="handleSelect">
           <el-menu-item index="basic" class="menu-item">基本设置</el-menu-item>
@@ -30,9 +30,6 @@
                   <el-radio label="female">女</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="出生日期">
-                <el-date-picker v-model="basic.birth"></el-date-picker>
-              </el-form-item>
               <el-form-item label="所在地">
                 <el-cascader></el-cascader>
               </el-form-item>
@@ -51,22 +48,72 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
-
-              <!-- 保存按钮 -->
-              <el-button type="primary">保存</el-button>
+              <el-form-item label="个人简介">
+                <el-input
+                  v-model="userIntro"
+                  type="textarea"
+                  autosize="true"
+                  placeholder="请输入个人简介(最多50字)"
+                  maxlength="50"
+                ></el-input>
+              </el-form-item>
             </div>
           </div>
+          <!-- 保存按钮 -->
+          <el-button type="primary">保存</el-button>
         </el-form>
         <!-- 绑定设置 -->
         <div v-show="activeTab === 'bind'" class="form">
           <h2>邮箱绑定</h2>
-          <span>当前邮箱为:  2873704761@qq.com</span>
+          <span>当前邮箱为: 2873704761@qq.com</span>
+          <!-- 更换邮箱按钮 -->
           <el-button
             type="text"
             icon="el-icon-edit"
             style="margin-left: 20px"
-            ></el-button
-          >
+            @click="dialogVisible = true"
+          ></el-button>
+
+          <!-- 弹出对话框 -->
+          <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+            <div>
+              <label for="email">Email</label>
+            </div>
+            <div>
+              <input
+                v-model="email"
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <div><label for="email-code">Email verification code</label></div>
+            <div class="input-group">
+              <input
+                v-model="emailCode"
+                id="email-code"
+                type="text"
+                placeholder="Enter verification code"
+                required
+              />
+              <button
+                type="button"
+                class="btn-get-code"
+                :disabled="isCountdown"
+                @click="sendEmailCode"
+              >
+                <template v-if="isCountdown">{{ countDownSeconds }}s</template>
+                <template v-else>Get code</template>
+              </button>
+            </div>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false"
+                >确 定</el-button
+              >
+            </span>
+          </el-dialog>
         </div>
         <!-- 隐私设置 -->
         <el-form v-show="activeTab === 'privacy'" class="form">
@@ -75,6 +122,9 @@
             <el-switch v-model="privacy.encrypt"></el-switch>
           </el-form-item>
           <el-form-item label="展示最近动态">
+            <el-switch v-model="privacy.hide"></el-switch>
+          </el-form-item>
+          <el-form-item label="展示最近播放">
             <el-switch v-model="privacy.hide"></el-switch>
           </el-form-item>
         </el-form>
@@ -87,6 +137,8 @@
 export default {
   data() {
     return {
+      dialogVisible: false,
+      userIntro: "",
       activeTab: "basic",
       basic: {
         name: "",
@@ -156,8 +208,8 @@ h2 {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  width: 178px;
-  height: 178px;
+  width: 100px;
+  height: 100px;
 }
 .avatar-uploader:hover {
   border-color: #409eff;
@@ -165,14 +217,14 @@ h2 {
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
   text-align: center;
 }
 .avatar {
-  width: 178px;
-  height: 178px;
+  width: 100px;
+  height: 100px;
   display: block;
 }
 </style>

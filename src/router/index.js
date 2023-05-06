@@ -27,9 +27,29 @@ const router = new VueRouter({
           component: () => import("../views/UserSetting.vue"),
         },
         {
-          path:"message",
-          component:()=>import("../views/UserMessage.vue")
-        }
+          path: "message",
+          component: () => import("../views/UserMessage.vue"),
+          // redirect: "/user/message/comment",
+          children: [
+            {
+              path: "comment",
+              component: () => import("../views/Message/MyCommentPage.vue"),
+            },
+            {
+              path: "notice",
+              component: () => import("../views/Message/NoticePage.vue"),
+            },
+            {
+              path: "exam",
+              component: () => import("../views/Message/ExamPage.vue"),
+              
+            },
+            {
+              path: "exam-detail",
+              component: () => import("../views/Message/ExamDetailPage.vue"),
+            }
+          ],
+        },
       ],
     },
     {
@@ -39,6 +59,16 @@ const router = new VueRouter({
     {
       path: "/social",
       component: () => import("../views/SocialPage.vue"),
+      children: [
+        {
+          path: "follow",
+          component: () => import("../views/Social/FollowPage.vue"),
+        },
+        {
+          path: "fan",
+          component: () => import("../views/Social/FanPage.vue"),
+        },
+      ],
     },
     {
       path: "/login",
