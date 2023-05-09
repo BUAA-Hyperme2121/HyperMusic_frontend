@@ -5,7 +5,13 @@
       <li v-for="singer in singers" :key="singer.id" class="singer-item">
         <img :src="singer.avatar" class="singer-avatar" alt="" />
         <div class="singer-info">
-          <h3 class="singer-name">{{ singer.name }}</h3>
+          <router-link
+            class="songlist-table-link"
+            :to="'/singer/' + singer.singerId"
+            > <h3 class="singer-name">{{ singer.name }}</h3></router-link
+          >
+           
+          
           <p class="singer-album-count">专辑数量：{{ singer.albums }}</p>
         </div>
       </li>

@@ -1,59 +1,98 @@
 <template>
   <div class="fronthead-container">
     <el-row :gutter="20">
-      <!-- 歌单封面 -->
-      <el-col :span="6">
-        <div class="fronthead-cover">
-          <img :src="playlistData.cover" alt="album cover" />
+      <!-- 专辑封面 -->
+      <el-col :span="6" :offset="1" style="position: sticky; top: 0px">
+        <div class="fronthead-cover-big">
+          <img :src="albumData.cover" alt="album cover" @click="playAll" />
           <div class="fronthead-play-btn">
-            <el-button type="primary" icon="el-icon-play">播放全部</el-button>
+            <el-button type="primary" icon="el-icon-play" @click="showDialog"
+              >播放全部</el-button
+            >
           </div>
         </div>
-      </el-col>
-      <el-col :span="18">
-        <!-- 歌单名称、操作按钮 -->
+        <!-- 专辑名称、操作按钮 -->
         <div class="fronthead-header">
-          <div class="fronthead-title font-title" style="padding-top: 30px;">{{ playlistData.name }}{{ id }}</div>
+          <div class="fronthead-title font-title">
+            {{ albumData.name }}{{ id }}
+          </div>
+          <div class="font-description">歌手：{{ albumData.singer }}</div>
+          <div class="font-description" style="padding-bottom: 20px">
+            发行日期：{{ albumData.date }}
+          </div>
           <div class="fronthead-actions">
-            <el-button type="default" icon="el-icon-folder-add">收藏</el-button>
-            <el-button type="default" icon="el-icon-plus">添加歌曲</el-button>
-            <el-button type="default" icon="el-icon-share">分享</el-button>
-            <el-button type="default" icon="el-icon-chat-dot-square"
+            <el-button type="default" icon="el-icon-folder-add" size="small"
+              >收藏</el-button
+            >
+            <el-button type="default" icon="el-icon-share" size="small"
+              >分享</el-button
+            >
+            <el-button
+              type="default"
+              icon="el-icon-chat-dot-square"
+              size="small"
               >评论</el-button
             >
-            <el-button type="default" icon="el-icon-download">下载</el-button>
+            <el-button type="default" icon="el-icon-download" size="small"
+              >下载</el-button
+            >
           </div>
         </div>
-        <!-- 歌单简介 -->
-        <div class="fronthead-description font-description">{{ playlistData.description }}</div>
+        <!-- 专辑简介 -->
+        <div class="fronthead-description font-description">
+          {{ albumData.description }}
+        </div>
+      </el-col>
+      <el-col :span="15" :offset="1">
+        <!-- 歌曲列表 -->
+        <h2>歌曲列表</h2>
+        <SonglistComponent :songlist="albumData" :noAlbum="true"/>
       </el-col>
     </el-row>
-    <!-- 歌曲列表 -->
-    <h2>歌曲列表</h2>
-    <SonglistComponent :songlist="playlistData" />
+    <div class="dialog-mask" v-show="dialogVisible" @click="closeDialog"></div>
+    <transition name="dialog-slide" appear>
+      <div class="dialog-container" v-show="dialogVisible" key="0">
+        <div class="dialog-header">
+          <span>弹窗标题</span>
+          <i class="el-icon-close" @click="closeDialog"></i>
+        </div>
+        <div class="dialog-body">弹窗内容</div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import SonglistComponent from '@/components/PageComponent/SonglistComponent.vue';
+import SonglistComponent from "@/components/PageComponent/SonglistComponent.vue";
+
 export default {
   name: "PlaylistPage",
   props: ["id"],
   components: {
     SonglistComponent,
   },
-  created() {
-    // 通过 this.id 获取参数 id
-    console.log(this.id); // 输出 123
-    // 可以在这里根据 id 获取对应的歌单数据等操作
+  methods: {
+    playAll() {
+      console.log("play all!");
+    },
+    showDialog() {
+      this.dialogVisible = true;
+    },
+    closeDialog() {
+      this.dialogVisible = false;
+    },
   },
   data() {
     return {
-      playlistData: {
-        name: "我的私人歌单",
+      dialogVisible: false,
+      albumData: {
+        name: "专辑1",
+        singer: "AAA",
+        date: "2022/02/02",
         cover:
           "https://img.51miz.com/Element/00/59/30/57/00d5b623_E593057_2ffbe2c2.jpg",
-        description: "这是我的私人歌单，收录了很多好听的歌曲。",
+        description:
+          "你能够想到最坏 却还幻想着例外.在你设计的未来 他却计划着离开他不懂你的心假装冷静他不懂你的心......",
         songs: [
           {
             id: 1,
@@ -262,6 +301,63 @@ export default {
   },
 };
 </script>
-
 <style scoped>
+/* 页面遮罩 */
+/* 页面遮罩样式 */
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+/* 弹窗容器 */
+.dialog-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+}
+
+/* 弹窗标题栏 */
+.dialog-header {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #f5f7fa;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* 弹窗内容 */
+.dialog-body {
+  padding: 20px;
+}
+
+/* 弹窗滑入滑出动画 */
+.dialog-container-enter-active,
+.dialog-container-leave-active {
+    transition: transform all 1s ;
+}
+
+.dialog-container-enter,
+.dialog-container-leave-to {
+  transform: translateY(-100%);
+}
+
+.dialog-container-enter-to,
+.dialog-container-leave {
+  transform: translateY(0);
+}
 </style>

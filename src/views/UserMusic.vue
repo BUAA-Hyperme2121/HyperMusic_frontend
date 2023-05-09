@@ -1,7 +1,7 @@
 <template>
   <div class="music-container">
     <el-row :gutter="20">
-      <el-col :span="6" >
+      <el-col :span="6" style="position: sticky; top: 20px">
         <el-menu
           :default-active="activeIndex"
           class="el-menu-vertical-demo"
@@ -20,7 +20,7 @@
               <i class="el-icon-notebook-2"></i>
               <span>创建的歌单</span>
               <span>({{ Menus.createdPlayLists.length }})</span>
-              <el-button size="mini" type="info" round>添加</el-button>
+              <i class="el-icon-plus" ></i>
             </template>
             <el-menu-item
               v-for="playlist in Menus.createdPlayLists"
@@ -151,6 +151,11 @@ export default {
         this.$router.push({ name: "Playlist", params: { id: playlistId } });
       }
       this.activeIndex = index;
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
     },
   },
 };

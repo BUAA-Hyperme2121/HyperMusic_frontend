@@ -39,6 +39,24 @@ export default new VueRouter({
       ],
     },
     {
+      path: "/album/:id",
+      name: "AlbumPage",
+      component: () => import("../views/AlbumPage.vue"),
+      props: true,
+    },
+    {
+      path: "/singer/:id",
+      name: "SingerPage",
+      component: () => import("../views/SingerPage.vue"),
+      props: true,
+    },
+    {
+      path: "/test",
+      name: "TestPage",
+      component: () => import("../views/SongPage.vue"),
+      props: true,
+    },
+    {
       path: "/homepage",
       component: () => import("../views/HomePage.vue"),
     },
