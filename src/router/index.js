@@ -51,8 +51,8 @@ export default new VueRouter({
       props: true,
     },
     {
-      path: "/test",
-      name: "TestPage",
+      path: "/song/:id",
+      name: "SongPage",
       component: () => import("../views/SongPage.vue"),
       props: true,
     },
