@@ -27,6 +27,8 @@
           prefix-icon="el-icon-search"
           size="small"
           class="search-input"
+          @keyup.enter.native="goSearch()"
+          v-model="keywords"
         ></el-input>
       </el-col>
 
@@ -58,7 +60,11 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      // 获取登录状态
+      isLogin: false,
+      keywords: '',
+    };
   },
   methods: {
     //点击logo，转到首页
@@ -82,6 +88,7 @@ export default {
         });
       }
     },
+    
     //点击导航栏，转到对应页面
     handleSelect(index) {
       if (index === "1") {
@@ -134,6 +141,11 @@ export default {
           this.$router.push("/user/setting");
         }
       }
+    },
+    //搜索内容
+    goSearch(){
+      this.$router.push({path:'/search',query:{keywords:this.keywords}});
+      this.$store.commit('setSearchRender',false);
     },
   },
   mounted() {
