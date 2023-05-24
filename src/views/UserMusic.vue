@@ -10,7 +10,7 @@
           <!-- 我的歌手 -->
           <el-menu-item index="1"
             ><i class="el-icon-star-off"></i>
-            <span>我的歌手</span>
+            <span>关注用户</span>
             <span>({{ Menus.singers.length }})</span>
           </el-menu-item>
 
@@ -20,7 +20,7 @@
               <i class="el-icon-notebook-2"></i>
               <span>创建的歌单</span>
               <span>({{ Menus.createdPlayLists.length }})</span>
-              <i class="el-icon-plus" ></i>
+              <i class="el-icon-plus"></i>
             </template>
             <el-menu-item
               v-for="playlist in Menus.createdPlayLists"
@@ -44,7 +44,7 @@
             </el-menu-item>
           </el-submenu>
 
-          <!-- 收藏的歌单 -->
+          <!-- 
           <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-folder-opened"></i>
@@ -71,7 +71,7 @@
                 </div>
               </div>
             </el-menu-item>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
       </el-col>
       <el-col :span="18">
@@ -101,6 +101,7 @@ export default {
     fetchMenus() {
       // 使用axios等工具从API接口获取子项列表数据
       // 然后将数据存储到Menus对象中
+
       this.Menus = {
         singers: [
           { name: "周杰伦", id: 1 },

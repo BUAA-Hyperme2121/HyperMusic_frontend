@@ -33,6 +33,9 @@
                 size="small"
                 >评论</el-button
               >
+              <el-button type="default" icon="el-icon-view" size="small"
+                >关注</el-button
+              >
               <!-- <el-button type="default" icon="el-icon-download" size="small"
                 >下载</el-button
               > -->
@@ -47,7 +50,6 @@
           <!-- 歌曲列表 -->
           <h2>歌曲列表</h2>
           <SonglistComponent :songlist="albumData"  :noSinger="true"/>
-          <AlbumlistComponent/>
         </el-col>
       </el-row>
       <div class="dialog-mask" v-show="dialogVisible" @click="closeDialog"></div>
@@ -65,13 +67,11 @@
   
   <script>
   import SonglistComponent from "@/components/PageComponent/SonglistComponent.vue";
-  import AlbumlistComponent from "@/components/PageComponent/AlbumlistComponent.vue";
   export default {
     name: "PlaylistPage",
     props: ["id"],
     components: {
       SonglistComponent,
-      AlbumlistComponent,
     },
     methods: {
       playAll() {

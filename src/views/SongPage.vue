@@ -1,9 +1,6 @@
 <template>
-  <div class="song-page">
-    <div
-      class="background"
-      :style="{ backgroundImage: `url(${song.cover_path})` }"
-    ></div>
+  <div class="fronthead-container">
+    <div class="background" :style="{ backgroundImage: `url(${song.cover_path})` }"></div>
     <el-container class="fronthead-container">
       <el-row :gutter="20">
         <el-col :span="6" :offset="1" style="position: sticky; top: 0px">
@@ -13,29 +10,72 @@
           </div>
           <!--name, description-->
           <div class="fronthead-header">
-            <div class="fronthead-title font-title" style="color: white">
-              {{ song.music_name }}
+            <div class="fronthead-title">
+              <span class=" font-title" style="color: white; font-size: 40px;padding-left: 40px;">
+                {{ song.music_name }}
+              </span>
+              <a-button type="link" ghost @click="like_song">
+                <img v-if="isLike" src="../assets/like.png" style="height: 40px;">
+                <img v-else src="../assets/notlike.png" style="height: 40px">
+              </a-button>
             </div>
             <div class="font-description">歌手：{{ song.singer_name }}</div>
+
             <div class="font-description" style="padding-bottom: 20px">
               播放量：{{ song.listen_nums }}
             </div>
+            <!--歌曲标签-->
+            <div class="label-container">
+              <div v-if="isModifyLabel">
+                <el-button size="mini" round v-for="(label, index) in song.labels" :key="label._id"
+                  :class="{ activeLabel: label.isSelect, label: !label.isSelect }" @click="selectLabel(index)">
+                  {{ label.label_name }}</el-button>
+                <el-button size="mini" round type="primary" @click="modifyLabel">完成</el-button>
+              </div>
+              <div v-else>
+                <el-button size="mini" round v-for="label in activeLabel" :key="label._id" disabled
+                  style="background-color: cadetblue; border-color: cadetblue; color: white;">{{ label.label_name
+                  }}</el-button>
+                <el-button size="mini" round type="primary" @click="modifyLabel">修改</el-button>
+              </div>
+
+            </div>
+            <!--对歌曲的操作-->
             <div class="fronthead-actions">
-              <el-button type="default" icon="el-icon-folder-add" size="small"
-                >关注</el-button
-              >
-              <el-button type="default" icon="el-icon-share" size="small"
-                >分享</el-button
-              >
-              <el-button
-                type="default"
-                icon="el-icon-chat-dot-square"
-                size="small"
-                >评论</el-button
-              >
-              <el-button type="default" icon="el-icon-view" size="small"
-                >关注</el-button
-              >
+
+              <el-popover placement="right" width="400" trigger="click">
+                <div v-for="l in playlist" :key="l.id"><el-button style="width: 400px;">{{ l.name }}</el-button></div>
+                <el-input v-model="complaintForm.reason" type="textarea" :rows="1" placeholder="新建歌单"></el-input>
+                <el-button type="default" icon="el-icon-folder-add" size="mini" slot="reference">收藏</el-button>
+              </el-popover>
+              <el-popover placement="right" width="400" trigger="click">
+
+                <el-button type="default" icon="el-icon-share" size="mini" slot="reference">分享</el-button>
+              </el-popover>
+              <el-popover placement="right" width="400" trigger="click">
+                <el-button type="default" icon="el-icon-chat-dot-square" size="mini" slot="reference">评论</el-button>
+              </el-popover>
+              <el-popover placement="right" width="400" trigger="click">
+                <div class="complaint-form">
+                  <el-form ref="form" :model="complaintForm" label-width="80px">
+                    <el-form-item label="投诉类型">
+                      <el-select v-model="complaintForm.type" placeholder="请选择投诉类型">
+                        <el-option label="服务" value="service"></el-option>
+                        <el-option label="产品" value="product"></el-option>
+                        <el-option label="其他" value="other"></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="投诉理由">
+                      <el-input v-model="complaintForm.reason" type="textarea" :rows="4" placeholder="请输入投诉理由"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="submitComplaintForm">提交</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <el-button type="default" icon="el-icon-warning-outline" size="mini" slot="reference">投诉</el-button>
+              </el-popover>
+
             </div>
             <div class="fronthead-description font-description">
               {{ song.description }}
@@ -51,16 +91,13 @@
 </template>
 
 <style scoped>
-.song-page {
-  height: 100vh;
-  width: 100vw;
-}
 ::-webkit-scrollbar {
   display: none;
 }
+
 .background {
-  height: 110vh;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   transform: scale(1.09);
   position: absolute;
   background-size: cover;
@@ -77,7 +114,7 @@
 }
 
 .lyrics-container {
-  height: 80vh; 
+  height: 80vh;
   padding-top: 100px;
   display: flex;
   justify-content: center;
@@ -87,7 +124,7 @@
 }
 
 .lyrics {
-  overflow:auto;
+  overflow: auto;
   white-space: pre-wrap;
   font-size: 20px;
   line-height: 2;
@@ -101,6 +138,26 @@ export default {
   name: "SongPage",
   data() {
     return {
+      isLike: false,
+      isModifyLabel: false,
+      complaintForm: {
+        type: '',
+        reason: ''
+      },
+      playlist: [
+        {
+          name: 'playlist1',
+          id: 1,
+        },
+        {
+          name: 'playlist2',
+          id: 2,
+        },
+        {
+          name: 'playlist3',
+          id: 3,
+        },
+      ],
       song: {
         id: "1",
         singer_id: "1",
@@ -111,9 +168,22 @@ export default {
         music_name: "Love Story",
         lyrics_path: "/lyrics/love_story.lrc",
         listen_nums: "1000000",
+        labels: [
+          {
+            label_name: 'label1',
+            isSelect: false
+          },
+          {
+            label_name: 'label2',
+            isSelect: true
+          },
+          {
+            label_name: 'label3',
+            isSelect: false
+          }
+        ],
         description:
           "Love Story is a song by American singer-songwriter Taylor Swift. It was released on September 12, 2008.",
-        labels: ["country", "pop"],
         lyrics: `[length:04:09.34]
 [re:www.megalobiz.com/lrc/maker]
 [ve:v1.2.3]
@@ -156,7 +226,36 @@ export default {
       },
     };
   },
-  computed: {},
-  methods: {},
+  computed: {
+    activeLabel: function () {
+      return this.song.labels.filter((item) => {
+        return item.isSelect;
+      })
+    }
+  },
+  methods: {
+    like_song() {
+      console.log(this.isLike);
+      this.isLike = !this.isLike;
+      this.$axios.post('/api/user/like_music/', {
+        "music_id": this.song.id
+      }).then(response => {
+        console.log('/a1', response.data)
+      }, error => {
+        console.log('错误', error.message)
+      })
+    },
+
+    modifyLabel() {
+      console.log(this.isModifyLabel);
+      this.isModifyLabel = !this.isModifyLabel;
+    },
+    selectLabel(index) {
+      this.song.labels[index].isSelect = !this.song.labels[index].isSelect;
+    },
+    submitComplaintForm() {
+      console.log('提交表单：', this.form);
+    }
+  },
 };
 </script>
