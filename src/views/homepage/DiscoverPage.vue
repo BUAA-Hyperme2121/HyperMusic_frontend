@@ -30,7 +30,7 @@
             </div>
             <div class="right">
                 <div class="login-section">
-                    <div v-if="!$store.state.userInfo.isLogin">
+                    <div v-if="!isLogin">
                       <div style="margin-bottom: 20px;">
                         <em>登录HyperMusic，开始你的音乐之旅</em>
                       </div>     
@@ -66,6 +66,7 @@ export default {
         recommendsingers: [],
         recommendplaylists: [],
         rankList: [],
+        isLogin:false,
       }
     },
     mounted (){                      
@@ -79,7 +80,11 @@ export default {
       this.getPlaylists()
       this.getSingers()
       this.getRankList()
-      
+      if(localStorage.getItem('loginInfo')!=null){
+        this.isLogin=true;
+      }else{
+        this.isLogin=false;
+      }
     },
     methods:{
         getSongs(){
@@ -120,7 +125,7 @@ export default {
         },
         goLogin(){
           this.$router.push('/login');
-        }
+        },
     }
 }
 </script>

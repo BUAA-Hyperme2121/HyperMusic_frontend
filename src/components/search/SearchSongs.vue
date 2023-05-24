@@ -159,7 +159,7 @@ export default{
         getSongsRes(){
             getSongRes(this.$router.query.keywords)
                 .then(res => {
-                    this.SongsRes=res.data
+                    this.SongsRes=res.data.musics
                 })
                 .catch(err => {
                     console.log(err)

@@ -67,7 +67,7 @@ export default{
         getUsersRes(){
             getUserRes(this.$route.query.keywords)
                 .then(res => {
-                    this.UsersRes=res.data
+                    this.UsersRes=res.data.users
                 })
                 .catch(err => {
                     console.log(err)

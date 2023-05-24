@@ -49,7 +49,7 @@ export default{
         getSingersRes(){
             getSingerRes(this.$route.query.keywords)
                 .then(res => {
-                    this.ArtistsRes=res.data
+                    this.ArtistsRes=res.data.singers
                 })
                 .catch(err => {
                     console.log(err)

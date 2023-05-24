@@ -35,6 +35,6 @@ export const setPosts = (formdata) => post(``, formdata);
 export const setMessages = (formdata) => post(``, formdata);
 //获取创建的收藏夹
 export const getFavorites = function() {
-    let jwt = "牛魔酬宾" //JSON.parse(localStorage.getItem("loginInfo")).JWT
+    let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT
     return get(`    ?JWT=${jwt}`);
 }
