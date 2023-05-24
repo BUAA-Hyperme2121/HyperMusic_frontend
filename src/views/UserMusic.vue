@@ -101,7 +101,6 @@ export default {
     fetchMenus() {
       // 使用axios等工具从API接口获取子项列表数据
       // 然后将数据存储到Menus对象中
-
       this.Menus = {
         singers: [
           { name: "周杰伦", id: 1 },

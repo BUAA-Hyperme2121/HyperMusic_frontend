@@ -21,40 +21,8 @@ export default new VueRouter({
         {
           path: "music",
           component: () => import("../views/UserMusic.vue"),
-          children: [
-            {
-              path: "playlist/:id",
-              name: 'Playlist',
-              component: () => import("../views/ListPage/PlaylistPage.vue"),
-              props: true,
-            },
-            {
-              path: "singerList/:id",
-              name: 'Singerlist',
-              component: () => import("../views/ListPage/SingerListPage.vue"),
-              props: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: "/album/:id",
-      name: "AlbumPage",
-      component: () => import("../views/AlbumPage.vue"),
-      props: true,
-    },
-    {
-      path: "/singer/:id",
-      name: "SingerPage",
-      component: () => import("../views/SingerPage.vue"),
-      props: true,
-    },
-    {
-      path: "/song/:id",
-      name: "SongPage",
-      component: () => import("../views/SongPage.vue"),
-      props: true,
+        }
+      ]
     },
     {
       path: "/homepage",
@@ -64,5 +32,6 @@ export default new VueRouter({
       path: "/social",
       component: () => import("../views/SocialPage.vue"),
     },
+    }
   ],
 });
