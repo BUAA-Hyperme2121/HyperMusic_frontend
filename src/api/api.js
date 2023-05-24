@@ -1,4 +1,4 @@
-import axios from 'axios'
+
 import {get, post } from './http.js'
 
 //主页部分

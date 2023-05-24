@@ -39,7 +39,7 @@
 
 <script>
 import { UsersRes } from '@/assets/data/searchRes';
-import { getUserRes } from '@/api/api';
+import { getUserRes,setLikes } from '@/api/api';
 export default{
     data(){
         return{

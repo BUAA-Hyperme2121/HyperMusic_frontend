@@ -37,7 +37,7 @@
         ></el-input>
       </el-form-item>
       <!-- 邮箱验证码 -->
-      <el-form-item label="邮箱验证码" prop="emailCode">
+      <el-form-item label="邮箱验证码" prop="sms_code">
         <div style="display: flex">
           <el-input
             v-model="registerForm.sms_code"
@@ -45,14 +45,21 @@
             style="margin-right: 20px"
           ></el-input>
           <!-- 获取邮箱验证码 -->
-          <el-button type="primary" size="mini" @click="postEmailCode" :disabled="canPostCode"
-            >{{btnText}}</el-button
+          <el-button
+            type="primary"
+            size="mini"
+            @click="postEmailCode"
+            :disabled="canPostCode"
+            >{{ btnText }}</el-button
           >
         </div>
       </el-form-item>
     </el-form>
     <!-- 注册按钮 -->
-    <el-button type="primary" @click="register" class="register-btn"
+    <el-button
+      type="primary"
+      @click="register('registerForm')"
+      class="register-btn"
       >注册</el-button
     >
     <!-- 跳转到登录页面 -->
@@ -63,6 +70,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
@@ -123,7 +131,7 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
-        emailCode: [
+        sms_code: [
           { required: true, message: "请输入邮箱验证码", trigger: "blur" },
           {
             min: 6,
@@ -136,20 +144,26 @@ export default {
     };
   },
   methods: {
-    register() {
+    register(formName) {
       // 处理注册逻辑
-      this.$refs.registerForm.validate((valid) => {
-        if (valid) {
+      this.$refs[formName].validate((validate) => {
+        if (validate) {
           this.$axios({
             method: "post",
-            url: "/user/register",
-            data: JSON.stringify(this.registerForm),
+            url: "/user/register/",
+            data: qs.stringify({
+              username: this.registerForm.username,
+              password_1: this.registerForm.password_1,
+              password_2: this.registerForm.password_2,
+              email: this.registerForm.email,
+              sms_code: this.registerForm.sms_code,
+            }),
           })
             .then((res) => {
               // 注册成功
-              if (res.data.result == 0) {
+              if (res.data.result == 1) {
                 this.$message({
-                  message: "注册成功",
+                  message: res.data.message,
                   type: "success",
                 });
                 // 跳转到登录页面
@@ -193,14 +207,14 @@ export default {
       // 处理发送邮箱验证码逻辑
       this.$axios({
         method: "post",
-        url: "/postEmailCode",
-        data: JSON.stringify({
+        url: "/message/send_email_register/",
+        data: qs.stringify({
           email: this.registerForm.email,
         }),
       })
         .then((res) => {
           // 发送成功
-          if (res.data.code === 200) {
+          if (res.data.result == 1) {
             this.$message({
               message: "验证码发送成功",
               type: "success",
@@ -208,7 +222,7 @@ export default {
           } else {
             // 发送失败
             this.$message({
-              message: "验证码发送失败",
+              message: res.data.message,
               type: "error",
             });
           }

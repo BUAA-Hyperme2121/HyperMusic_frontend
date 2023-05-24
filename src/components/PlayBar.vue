@@ -65,7 +65,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import {download} from '../api/api';
+import {setLikes} from '../api/api';
 export default {
     data (){
         return {
@@ -319,6 +319,7 @@ export default {
     bottom:0;
     transition: all 0.5s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    z-index: 999;
 }
 .kongjian {
     display: flex;

@@ -50,7 +50,7 @@
                                 <div style="width: 100%; display: flex;">
                                     <div style="margin: auto; margin-top: 40px;">
                                         <el-select size="medium" :disabled="disabled" v-model="starSongForm.favorites_id">
-                                            <el-option  v-for="item in favorites" :label="item.name" :value="item.id"></el-option>
+                                            <el-option  v-for="(item,index) in favorites" :key="index" :label="item.name" :value="item.id"></el-option>
                                         </el-select>
                                     </div>
                                 </div>
