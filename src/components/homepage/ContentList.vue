@@ -2,13 +2,13 @@
     <div class="content-list">
         <ul class="content">
             <li class="content-item" v-for="(item,index) in contentList" :key="index">
-                <div class="item-outline">
-                    <img class="item-img" :src="item.picImg">
+                <div class="item-outline" @click="goSpecific(item,item.type)">
+                    <img class="item-img" :src="item.cover_path">
                 </div>
-                <div class="mask">
+                <div class="mask" @click="goSpecific(item)">
                     <i class="icon iconfont icon-bofang1"></i>
                 </div>
-                <p class="item-title">{{item.title}}</p>
+                <p class="item-title">{{item.name}}</p>
             </li>
         </ul>
     </div>
@@ -16,7 +16,21 @@
 <script>
 export default {
     name: 'content-list',
-    props: ['contentList']
+    props: ['contentList','type'],
+    methods: {
+        //前往特定的歌曲、歌单、歌手页面
+        goSpecific(item){
+            if(this.type==1){
+                this.$router.push({path: `/song/${item.id}`});
+            }else if(this.type==2){
+                this.$router.push({path: `/album/${item.id}`});
+            }else if(this.type==3){
+                this.$router.push({path: `/singer/${item.id}`});
+            }else{
+                //无法识别的类型
+            }
+        }
+    }
 }
 </script>
 <style scoped>

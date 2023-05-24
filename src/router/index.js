@@ -54,13 +54,6 @@ export default new VueRouter({
                     path: 'toplist',
                     component: () =>
                         import ("../views/homepage/TopListPage.vue"),
-                    children: [{
-                        name: 'Toplist',
-                        path: "toplist/:id",
-                        component: () =>
-                            import ("../views/ListPage/ToplistSpecificPage.vue"),
-                        props: true,
-                    }]
                 },
                 {
                     path: 'playlist',
@@ -72,7 +65,33 @@ export default new VueRouter({
                     component: () =>
                         import ("../views/homepage/ArtistPage.vue"),
                 },
+                {
+                    path: 'song',
+                    component: () =>
+                        import ("../views/homepage/SongPage.vue"),
+                },
             ]
+        },
+        {
+            path: "/album/:id",
+            name: "AlbumPage",
+            component: () =>
+                import ("../views/specific/AlbumPage.vue"),
+            props: true,
+        },
+        {
+            path: "/singer/:id",
+            name: "SingerPage",
+            component: () =>
+                import ("../views/specific/SingerPage.vue"),
+            props: true,
+        },
+        {
+            path: "/song/:id",
+            name: "TestPage",
+            component: () =>
+                import ("../views/specific/SongPage.vue"),
+            props: true,
         },
         {
             path: "/search",

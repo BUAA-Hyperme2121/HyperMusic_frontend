@@ -6,7 +6,7 @@
         :class="{active:item.name==activeName}">{{item.name}}</li>
       </ul>
     </div>
-    <content-list :contentList="data"></content-list>
+    <content-list :contentList="data" :type="2"></content-list>
     <div class="playlist-pagination">
       <el-pagination class="button" @current-change="changeCurrentPage" background layout="total,prev,pager,next" 
       :current-page="currentPage" :page-size="pageSize" :total="playListList.length">
@@ -18,7 +18,7 @@
 <script>
 import ContentList from "../../components/homepage/ContentList.vue";
 import {playListStyle} from "../../assets/data/playliststyle";
-import {playListList} from "../../assets/data/playlistlist";
+import { getAllPlaylists } from "@/api/api";
 export default {
   components:{
     ContentList,
@@ -34,7 +34,7 @@ export default {
   },
   created (){
     this.playListStyle=playListStyle;
-    this.playListList=playListList;
+    this.changeClassification('全部歌单');          //调接口时需要改变
   },
   computed:{   //获取当前页面的歌单数据
     data(){
@@ -49,26 +49,38 @@ export default {
       this.activeName=name;
       this.playListList = [];
       if(name == '全部歌单'){
-        this.getAll();
+        this.getPlaylists();             //调接口要改成getPlaylists
       }else{
         this.getClassification(name);
       }
     },
-    getAll(){
-      this.currentPage=1;
-      this.playListList=playListList;
-    },
     getClassification(style){
-      this.currentPage=1;
-      this.playListList=playListList.filter(function(item){
-          return item.style==style;
-      });
+      getAllPlaylists()
+        .then(res => {
+          this.playListList=res.data.music_list_all.filter(function(item){
+            return item.labels.indexOf(style)!=-1;
+          });
+          this.currentPage=1
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }, 
+    getPlaylists(){
+      getAllPlaylists()
+        .then(res => {
+          this.playListList=res.data.music_list_all
+          this.currentPage=1
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
   },
 }
 </script>
   
-<style>
+<style scoped>
 .main-div-two {
   display: block;
   width: 80%;

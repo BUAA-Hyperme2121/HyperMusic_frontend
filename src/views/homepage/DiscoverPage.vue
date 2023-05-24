@@ -3,29 +3,45 @@
         <carousel />
         <div class="main-div">
             <div class="left">
-                <div class="section" v-for="(item,index) in recommendList" :key="index">
+                <div class="section">
                     <div class="section-title">
                         <img src="@/assets/img/homepageTest/icon.jpg">
-                        <em>{{item.name}}</em>
-                        <router-link to="/homepage/playlist" v-if="index==1">更多></router-link>
-                        <router-link to="/homepage/artist" v-if="index==2">更多></router-link>
+                        <em>随便听听</em>
+                        <router-link to="/homepage/song">更多></router-link>
                     </div>
-                    <content-list :contentList="item.list"></content-list>
+                    <content-list :contentList="recommendsongs" :type="1"></content-list>
+                </div>
+                <div class="section">
+                    <div class="section-title">
+                        <img src="@/assets/img/homepageTest/icon.jpg">
+                        <em>推荐歌单</em>
+                        <router-link to="/homepage/playlist">更多></router-link>
+                    </div>
+                    <content-list :contentList="recommendplaylists" :type="2"></content-list>
+                </div>
+                <div class="section">
+                    <div class="section-title">
+                        <img src="@/assets/img/homepageTest/icon.jpg">
+                        <em>推荐歌手</em>
+                        <router-link to="/homepage/artist">更多></router-link>
+                    </div>
+                    <content-list :contentList="recommendsingers" :type="3"></content-list>
                 </div>
             </div>
             <div class="right">
                 <div class="login-section">
-                    <div v-if="0">
-                    <em>登录HyperMusic，开始你的音乐之旅</em>
-                    <el-button type="danger" >用户登录</el-button>
+                    <div v-if="!$store.state.userInfo.isLogin">
+                      <div style="margin-bottom: 20px;">
+                        <em>登录HyperMusic，开始你的音乐之旅</em>
+                      </div>     
+                      <el-button type="danger" @click="goLogin">用户登录</el-button>
                     </div>
-                    <div v-if="1">
-                    <img src="@/assets/img/homepageTest/icon.jpg" style="height: 100px;width: 100px;">
-                    <p style="color:brown;font-weight:700;margin:0;">欢迎你，{{user.name }}</p>
-                    <p style="color:brown;font-weight:700;margin:0;">动态:{{user.social}} | 关注:{{ user.following }} | 粉丝:{{user.follower}}</p>
+                    <div v-else>
+                      <img :src="$store.state.userInfo.avatarUrl" style="height: 100px;width: 100px; border-radius: 15%;">
+                      <p style="color:brown;font-weight:700;margin:0;">欢迎你，{{$store.state.userInfo.username}}</p>
                     </div>
                 </div>
-                <RankList />
+                <RankList :rankList="rankList"/>
             </div>
         </div>
     </div>
@@ -34,8 +50,10 @@
 <script>
 import ContentList from "../../components/homepage/ContentList.vue";
 import Carousel from "../../components/homepage/Carousel.vue";
-import {recommendList} from "../../assets/data/discoverlist";
+import {recommendsongs, recommendsingers,recommendplaylists} from "../../assets/data/discoverlist";
+import {songsRankList} from "../../assets/data/songsRank"
 import RankList from "../../components/homepage/RankList.vue";
+import {getAllPlaylists,getAllSingers,getAllSongs,getRankList1,getUserImf} from "@/api/api";
 export default {
     components:{
         Carousel,
@@ -43,19 +61,67 @@ export default {
         RankList,
     },
     data (){
-    return{
-        recommendList: [],
-        user:{
-          name: "落雁",
-          social: "1",
-          follower: "14",
-          following: "20"
+      return{
+        recommendsongs: [],
+        recommendsingers: [],
+        recommendplaylists: [],
+        rankList: [],
+      }
+    },
+    mounted (){                      
+      /*
+      this.recommendsongs=recommendsongs
+      this.recommendsingers=recommendsingers
+      this.recommendplaylists=recommendplaylists
+      this.rankList=songsRankList
+      */
+      this.getSongs()
+      this.getPlaylists()
+      this.getSingers()
+      this.getRankList()
+      
+    },
+    methods:{
+        getSongs(){
+          getAllSongs()
+            .then(res => {
+              this.recommendsongs=res.data.music_list.slice(0,10)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        getPlaylists(){
+          getAllPlaylists()
+            .then(res => {
+              this.recommendplaylists=res.data.music_list_all.slice(0,10)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        getSingers(){
+          getAllSingers()
+            .then(res => {
+              this.recommendsingers=res.data.singer_list.slice(0,10)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        getRankList(){
+          getRankList1()
+            .then(res => {
+              this.rankList=res.data.hot_music_rank.slice(0,20)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        goLogin(){
+          this.$router.push('/login');
         }
     }
-    },
-    created(){
-        this.recommendList=recommendList;
-    },
 }
 </script>
   

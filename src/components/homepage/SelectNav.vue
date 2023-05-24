@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
         <ul style="padding: 0;">
           <li><router-link to="/homepage/discover"><em>推荐</em></router-link></li>
           <li><router-link to="/homepage/toplist"><em>排行榜</em></router-link></li>
+          <li><router-link to="/homepage/song"><em>歌曲</em></router-link></li>
           <li><router-link to="/homepage/playlist"><em>歌单</em></router-link></li>
           <li><router-link to="/homepage/artist"><em>歌手</em></router-link></li>
         </ul>

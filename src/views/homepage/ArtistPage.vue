@@ -13,7 +13,7 @@
       </ul>
     </div>
     <div class="right-section">
-      <content-list :contentList="data"></content-list>
+      <content-list :contentList="data" :type="3"></content-list>
       <div class="artist-pagination">
         <el-pagination class="button" @current-change="changeCurrentPage" background layout="total,prev,pager,next" 
         :current-page="currentPage" :page-size="pageSize" :total="artistList.length">
@@ -26,6 +26,7 @@
 <script>
 import {artistList} from "../../assets/data/artistlist";
 import {artistClassification} from "../../assets/data/artistclassify";
+import { getAllSingers } from "@/api/api";
 import ContentList from "../../components/homepage/ContentList.vue";
 export default {
   components:{
@@ -41,7 +42,7 @@ export default {
     }
   },
   created (){
-    this.artistList=artistList;
+    this.changeClassification('全部歌手');
     this.artistClassification=artistClassification;
   },
   computed:{   //获取当前页面的歌单数据
@@ -57,21 +58,33 @@ export default {
       this.activeName=name;
       this.artistList = [];
       if(name == '全部歌手'){
-        this.getAll();
+        this.getSingers();
       }else{
         this.getClassification(name);
       }
     },
-    getAll(){
-      this.currentPage=1;
-      this.artistList=artistList;
-    },
     getClassification(style){
-      this.currentPage=1;
-      this.artistList=artistList.filter(function(item){
-          return item.style==style;
-      });
+      getAllSingers()
+        .then(res => {
+          this.artistList=res.data.singer_list.filter(function(item){
+            return item.labels.indexOf(style)!=-1;
+          });
+          this.currentPage=1
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }, 
+    getSingers(){
+      getAllSingers()
+        .then(res => {
+          this.artistList=res.data.singer_list
+          this.currentPage=1
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
 }
 </script>

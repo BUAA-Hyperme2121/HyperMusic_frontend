@@ -15,54 +15,68 @@
                     <span :class="{isActive: toggle=='Users'}" @click="changeView('Users')">用户</span>
                 </nav>
             </div>
-            <div v-if="currentView=='SearchSongs'"><SearchSongs :SongsRes="SongsRes"></SearchSongs></div>
-            <div v-if="currentView=='SearchPlayLists'"><SearchPlayLists :PlayListsRes="PlayListsRes"></SearchPlayLists></div>
-            <div v-if="currentView=='SearchArtists'"><SearchArtists :ArtistsRes="ArtistsRes"></SearchArtists></div>
-            <div v-if="currentView=='SearchUsers'"><SearchUsers :UsersRes="UsersRes"></SearchUsers></div>
+            <div v-if="currentView=='SearchSongs' && render"><SearchSongs /></div>
+            <div v-if="currentView=='SearchPlayLists' && render"><SearchPlayLists /></div>
+            <div v-if="currentView=='SearchArtists' && render"><SearchSingers /></div>
+            <div v-if="currentView=='SearchUsers' && render"><SearchUsers /></div>
         </div>
    </div> 
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex';
 import SearchSongs from '../components/search/SearchSongs.vue';
 import SearchPlayLists from '../components/search/SearchPlayLists.vue';
-import SearchArtists from '../components/search/SearchArtists.vue';
+import SearchSingers from '../components/search/SearchSingers.vue';
 import SearchUsers from '../components/search/SearchUsers.vue';
-import {SongsRes,PlayListsRes,ArtistsRes,UsersRes} from '../assets/data/searchRes';
 export default {
+    
     components: {
-        SearchArtists,
+        SearchSingers,
         SearchPlayLists,
         SearchSongs,
         SearchUsers,
     },
     data(){
         return {
+            render: true,
             SongsRes: [],
             PlayListsRes: [],
             ArtistsRes: [],
             UsersRes: [],
             toggle: 'Songs',
             currentView: 'SearchSongs',      //当前页面
-            keywords: '',
+            keywords: '',             //搜索字符串
         }
     },
-    created(){
-        this.SongsRes=SongsRes;
-        this.PlayListsRes=PlayListsRes;
-        this.ArtistsRes=ArtistsRes;
-        this.UsersRes=UsersRes;
+    computed: {
+        ...mapGetters([
+            'searchRender',
+        ])
+    },
+    watch:{
+        searchRender(){
+            this.forceRerender();
+            this.$store.commit('setSearchRender',true);
+        }
     },
     methods: {
         goSearch(){
             this.$router.push({path:'/search',query:{keywords:this.keywords}});
+            this.forceRerender();
         },
         changeView(component){
             this.currentView = 'Search'+component;
             this.toggle=component;
+        },
+        async forceRerender() {
+            this.render=false;
+            await this.$nextTick();
+            this.render=true;
         }
     },
+    
+    
 }
 
 </script>

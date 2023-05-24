@@ -1,82 +1,98 @@
 const SongsRes = [{
         id: 1,
-        name: "歌曲 1",
-        duration: "04:30",
-        singer: "歌手 A",
+        name: "Miracle love",
+        singer_name: "歌手 A",
+        singer_id: 1,
+        music_path: require("@/assets/img/Miracle Love.mp3"),
+        cover_path: require("@/assets/img/homepageTest/test.jpg"),
     },
     {
         id: 2,
-        name: "歌曲 2",
-        duration: "03:45",
-        singer: "歌手 B",
+        name: "拥抱",
+        singer_name: "歌手 B",
+        singer_id: 1,
+        music_path: require("@/assets/img/拥抱.mp3"),
+        cover_path: require("@/assets/img/homepageTest/icon.jpg"),
     },
     {
-        id: 3,
-        name: "歌曲 3",
-        duration: "05:12",
-        singer: "歌手 C",
+        id: 4,
+        name: "纯音乐",
+        singer_name: "歌手 C",
+        singer_id: 1,
+        music_path: require("@/assets/img/纯音乐.mp3"),
+        cover_path: require("@/assets/img/homepageTest/test.jpg"),
     },
 ];
+
 const PlayListsRes = [{
-        cover: require('@/assets/img/homepageTest/test.jpg'),
-        title: "魔杰座",
-        num: "18",
-        creator: "小黄人",
-        likes: "199000",
-        viewCounts: "2500万"
+        id: '1',
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
+        name: "魔杰座",
+        music_num: "18",
+        creator_name: "小黄人",
+        creator_id: 1,
+
     },
     {
-        cover: require('@/assets/img/homepageTest/test.jpg'),
-        title: "范特西",
-        num: "18",
-        creator: "小黄人",
-        likes: "300000",
-        viewCounts: "3000万"
+        id: '2',
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
+        name: "范特西",
+        music_num: "18",
+        creator_name: "小黄人",
+        creator_id: 1,
+
     },
     {
-        cover: require('@/assets/img/homepageTest/test.jpg'),
-        title: "依然范特西",
-        num: "20",
-        creator: "小黄人",
-        likes: "309000",
-        viewCounts: "3600万"
+        id: '3',
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
+        name: "依然范特西",
+        music_num: "20",
+        creator_name: "小黄人",
+        creator_id: 1,
+
     }
 ];
 const ArtistsRes = [{
-        title: "林俊杰",
-        cover: require('@/assets/img/homepageTest/test.jpg'),
+        id: '1',
+        name: "林俊杰",
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
     },
     {
-        title: "周杰伦",
-        cover: require('@/assets/img/homepageTest/test.jpg'),
+        id: '2',
+        name: "周杰伦",
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
     },
     {
-        title: "陈奕迅",
-        cover: require('@/assets/img/homepageTest/test.jpg'),
+        id: '3',
+        name: "陈奕迅",
+        cover_path: require('@/assets/img/homepageTest/test.jpg'),
     }
 ];
 const UsersRes = [{
-        headPortrait: require('@/assets/img/homepageTest/icon.jpg'),
-        userName: "厄加特",
-        playLists: "18",
-        followers: "20000"
+        id: '0',
+        avatar_path: require('@/assets/img/homepageTest/icon.jpg'),
+        name: "厄加特",
+        follow_num: "18",
+        fan_num: "20000"
     },
     {
-        headPortrait: require('@/assets/img/homepageTest/icon.jpg'),
-        userName: "科加斯",
-        playLists: "18",
-        followers: "20000"
+        id: '1',
+        avatar_path: require('@/assets/img/homepageTest/icon.jpg'),
+        name: "科加斯",
+        follow_num: "18",
+        fan_num: "20000"
     },
     {
-        headPortrait: require('@/assets/img/homepageTest/icon.jpg'),
-        userName: "加里奥",
-        playLists: "18",
-        followers: "20000"
+        id: '2',
+        avatar_path: require('@/assets/img/homepageTest/icon.jpg'),
+        name: "加里奥",
+        follow_num: "18",
+        fan_num: "20000"
     }
 ];
 export {
     SongsRes,
     PlayListsRes,
     ArtistsRes,
-    UsersRes
+    UsersRes,
 }

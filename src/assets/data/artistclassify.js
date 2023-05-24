@@ -21,10 +21,7 @@ const artistClassification = [{
     },
     {
         category: '其他',
-        list: [{ name: '其他男歌手' },
-            { name: '其他女歌手' },
-            { name: '其他乐队' },
-        ]
+        list: [{ name: '其他歌手或乐队' }, ]
     },
 ]
 export {

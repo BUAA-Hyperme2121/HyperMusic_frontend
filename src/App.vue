@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <TopNav />
-    <router-view />
+    <router-view/>
+    <Audio />
+    <Aside />
     <PlayBar />
   </div>
 </template>
 
 <script>
+import Audio from './components/Audio.vue'
+import Aside from './components/Aside.vue'
 import TopNav from './components/TopNav.vue'
 import PlayBar from './components/PlayBar.vue'
 export default {
@@ -14,8 +18,15 @@ export default {
   components: {
     TopNav,
     PlayBar,
-  }
+    Audio,
+    Aside,
+  },
 }
+
+    
+    
+    
+
 </script>
 
 <style>

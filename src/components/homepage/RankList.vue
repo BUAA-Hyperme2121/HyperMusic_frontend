@@ -1,19 +1,21 @@
 <template>
    <div class="rank-list">
     <p style="color:rgb(212, 3, 3);font-size:18px;font-weight:700;">热搜榜</p>
-        <div style="width: 100%;border-top:2px solid rgb(212, 3, 3);border-bottom:2px solid rgb(212, 3, 3);">
-            <ul style="list-style-type: none;padding: 0;margin:0; ">
-            <li v-for="(item,index) in songsRankList" :key="index">
-                <div class="rank-style-one" v-if="index%2==1">
-                    <em style="margin-left:30%;font-size: 10px;font-weight: 700;">{{ index+1 }}</em>
-                    <a style="margin-left:15%;text-decoration: none; color: black;" href="#">{{ item.name }}</a>
-                </div>
-                <div class="rank-style-two" v-if="index%2==0">
-                    <em style="color:rgb(212, 3, 3);margin-left:30%;font-size: 10px;font-weight: 700;">{{ index+1 }}</em>
-                    <a style="margin-left:15%;text-decoration: none; color: black;" href="#">{{ item.name }}</a>
-                </div>           
-            </li>
-        </ul>
+        <div>
+            <el-table :data='rankList' style="width: 100%" :show-header="false" stripe :row-style="{height:'30px'}" :cell-style="{padding:'0px'}">
+                <el-table-column label="空白" width="60px">
+                </el-table-column>
+                <el-table-column label="序号" width="60px">
+                    <template slot-scope="scope">
+                        <p style="color: red; font-weight: 600;">{{ scope.$index + 1 }}</p>
+                    </template>
+                </el-table-column>
+                <el-table-column label="歌曲名称" width="160px">
+                    <template slot-scope="scope">
+                        <p style="cursor: pointer;" @click="goSong(scope.row)">{{ scope.row.name}}</p>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
         <div style="width:100%;text-align: right;">
             <router-link style="text-align:right;font-size:10px;color: black;text-decoration:none;" to="/homepage/toplist">查看更多></router-link>
@@ -21,16 +23,13 @@
    </div> 
 </template>
 <script>
-import {songsRankList} from "../../assets/data/songsRank";
 export default{
     name: "RankList",
-    data(){
-        return {
-            songsRankList: []
+    props: ['rankList'],
+    methods: {
+        goSong(item){
+            this.$router.push({path: `/song/${item.id}`});
         }
-    },
-    created (){
-        this.songsRankList = songsRankList;
     }
 }
 </script>
@@ -48,7 +47,7 @@ export default{
     width: 100%;
     height:30px;
     line-height: 30px;
-    background-color: white;
+    background-color: rgb(248, 248, 248);
     overflow: hidden;
 }
 .rank-style-two {
@@ -56,7 +55,7 @@ export default{
     width: 100%;
     height:30px;
     line-height: 30px;
-    background-color: rgb(248, 248, 248);
+    background-color: white;
     overflow: hidden;
 }
 </style>

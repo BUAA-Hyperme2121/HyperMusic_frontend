@@ -1,12 +1,12 @@
 //歌单类型数据
 const playListStyle = [
     { name: '全部歌单' },
-    { name: '华语' },
-    { name: '粤语' },
-    { name: '欧美' },
-    { name: '日韩' },
-    { name: '轻音乐' },
-    { name: '摇滚' },
+    { name: '怀旧' },
+    { name: '浪漫' },
+    { name: '伤感' },
+    { name: '放松' },
+    { name: '治愈' },
+    { name: '其他' },
 ]
 export {
     playListStyle
