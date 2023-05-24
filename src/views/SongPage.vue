@@ -1,7 +1,6 @@
 <template>
   <div class="fronthead-container">
     <div class="background" :style="{ backgroundImage: `url(${song.cover_path})` }"></div>
-    <el-container class="fronthead-container">
       <el-row :gutter="20">
         <el-col :span="6" :offset="1" style="position: sticky; top: 0px">
           <div class="fronthead-cover-big">
@@ -86,7 +85,6 @@
           <pre class="lyrics">{{ song.lyrics }}</pre>
         </el-col>
       </el-row>
-    </el-container>
   </div>
 </template>
 
