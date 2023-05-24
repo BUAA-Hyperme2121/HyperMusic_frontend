@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+// import { Message } from 'element-ui';
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: "/",
@@ -21,22 +21,8 @@ export default new VueRouter({
         {
           path: "music",
           component: () => import("../views/UserMusic.vue"),
-          children: [
-            {
-              path: "playlist/:id",
-              name: "Playlist",
-              component: () => import("../views/ListPage/PlaylistPage.vue"),
-              props: true,
-            },
-            {
-              path: "singerList/:id",
-              name: "Singerlist",
-              component: () => import("../views/ListPage/SingerListPage.vue"),
-              props: true,
-            },
-          ],
-        },
-      ],
+        }
+      ]
     },
     {
       path: "/homepage",
@@ -90,10 +76,26 @@ export default new VueRouter({
     {
       path: "/social",
       component: () => import("../views/SocialPage.vue"),
-    },
-    {
-      path: "/creator",
-      component: () => import("../views/Creator.vue"),
-    },
+    }
   ],
 });
+
+// router.beforeEach((to, from, next) => {
+//   // 获取用户登录信息
+//   const userInfo = localStorage.getItem("loginInfo").user;
+
+//   // 若用户未登录且访问的页面需要登录，则跳转至登录页面
+//   if (userInfo == null && to.meta.requireAuth) {
+//     Message({
+//       type: "warning",
+//       message: "请先登录！",
+//     });
+//     next({
+//       name: "LoginPage",
+//     });
+//   }
+
+//   next();
+// });
+
+export default router;

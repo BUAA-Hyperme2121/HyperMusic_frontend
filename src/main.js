@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-
+import axios from 'axios'
 import ElementUI from "element-ui";
 import "./assets/css/PageCss/Title.css"
 import "element-ui/lib/theme-chalk/index.css";
@@ -16,6 +16,10 @@ Vue.prototype.axios = axios;
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
+
+Vue.prototype.$axios = axios
+
+axios.defaults.baseURL = 'http://8.130.12.73/api/'
 
 new Vue({
     router,
