@@ -39,7 +39,7 @@
 
 <script>
 import { UsersRes } from '@/assets/data/searchRes';
-import { getUserRes } from '@/api/api';
+import { getUserRes,setLikes } from '@/api/api';
 export default{
     data(){
         return{
@@ -67,7 +67,7 @@ export default{
         getUsersRes(){
             getUserRes(this.$route.query.keywords)
                 .then(res => {
-                    this.UsersRes=res.data
+                    this.UsersRes=res.data.users
                 })
                 .catch(err => {
                     console.log(err)

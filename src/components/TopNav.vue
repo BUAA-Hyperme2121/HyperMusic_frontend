@@ -47,6 +47,7 @@
             </span>
             <el-dropdown-menu>
               <el-dropdown-item command="setting">设置</el-dropdown-item>
+              <el-dropdown-item command="upload">上传歌曲</el-dropdown-item>
               <el-dropdown-item command="msg">消息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -140,6 +141,11 @@ export default {
         //转到设置页面
         if (this.$route.path !== "/user/setting") {
           this.$router.push("/user/setting");
+        }
+      }else if(command === "upload"){
+        //转到上传歌曲页面
+        if (this.$route.path !== "/creator") {
+          this.$router.push("/creator");
         }
       }
     },

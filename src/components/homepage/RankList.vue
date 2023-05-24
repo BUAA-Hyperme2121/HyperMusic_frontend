@@ -10,7 +10,7 @@
                         <p style="color: red; font-weight: 600;">{{ scope.$index + 1 }}</p>
                     </template>
                 </el-table-column>
-                <el-table-column label="歌曲名称" width="160px">
+                <el-table-column label="歌曲名称" >
                     <template slot-scope="scope">
                         <p style="cursor: pointer;" @click="goSong(scope.row)">{{ scope.row.name}}</p>
                     </template>

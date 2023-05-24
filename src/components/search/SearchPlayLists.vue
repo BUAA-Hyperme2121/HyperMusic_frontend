@@ -64,7 +64,7 @@ export default{
         getPlaylistsRes(){
             getPlaylistRes(this.$route.query.keywords)
                 .then(res => {
-                    this.PlayListsRes=res.data
+                    this.PlayListsRes=res.data.musiclists
                 })
                 .catch(err => {
                     console.log(err)
