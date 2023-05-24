@@ -2,38 +2,63 @@
   <div class="act-item">
     <!-- 发布者者头像 -->
     <div class="acter-avatar">
-      <img src="../assets/avatar.png" alt="头像" />
+      <el-avatar
+        shape="square"
+        fit="fill"
+        :src="activityInfo.avatar_path"
+        style="height: 100%; width: 100%"
+      ></el-avatar>
     </div>
     <!-- 发布-->
     <div class="act-right">
       <div class="act-right-top">
         <!-- 发布者昵称 -->
         <span class="acter-name">
-          <a href="" style="color: cornflowerblue">shyJyt</a>
+          <a href="" style="color: cornflowerblue">{{
+            activityInfo.username
+          }}</a>
         </span>
         <!-- 发布类型 -->
-        <span class="act-type">上传单曲</span>
+        <span class="act-type" v-show="activityInfo.type == 1">分享单曲</span>
+        <span class="act-type" v-show="activityInfo.type == 2">分享歌单</span>
       </div>
 
       <!-- 发布时间 -->
       <div class="act-time">
-        <span>2020-12-12 12:12:12</span>
+        <span>{{ activityInfo.create_date }}</span>
       </div>
 
       <!-- 发布文案-->
-      <div class="act-content">我上传了一首歌，一起来听听吧！</div>
+      <div class="act-content">{{ activityInfo.content }}</div>
 
       <!-- 发布链接  -->
       <div class="act-src">
         <!-- 封面 -->
         <div class="src-img">
-          <img src="../assets/avatar.png" alt="" />
+          <el-avatar
+            shape="square"
+            fit="fill"
+            :src="activityInfo.cover_path"
+            style="height: 100%; width: 100%"
+          ></el-avatar>
         </div>
         <div class="src-info">
           <!-- 歌名 -->
-          <div class="src-name">歌名</div>
-          <!-- 歌手/歌单所有者 -->
-          <el-link type="info" class="src-owner">演唱者或歌单拥有者</el-link>
+          <div class="src-name">{{ activityInfo.name }}</div>
+          <!-- 歌手 -->
+          <el-link
+            type="info"
+            class="src-owner"
+            v-show="activityInfo.type == 1"
+            >{{ activityInfo.singer_name }}</el-link
+          >
+          <!-- 歌单 -->
+          <el-link
+            type="info"
+            class="src-owner"
+            v-show="activityInfo.type == 2"
+            >{{ activityInfo.creator_name }}</el-link
+          >
         </div>
       </div>
 
@@ -42,12 +67,24 @@
         <!-- 点赞按钮 -->
         <el-button
           type="text"
-          icon="el-icon-thumb"
+          icon="el-icon-caret-top"
           size="mini"
           class="like-btn"
-          @click.once="like"
+          @click="addLike"
+          v-if="!activityInfo.is_liked"
         >
-          <span>点赞({{ likeCnt }})</span>
+          <span>点赞({{ activityInfo.like_num }})</span>
+        </el-button>
+        <!-- 取消点赞按钮 -->
+        <el-button
+          type="text"
+          icon="el-icon-caret-top"
+          size="mini"
+          class="like-btn"
+          @click="cancelLike"
+          v-else
+        >
+          <span>取消点赞({{ activityInfo.like_num }})</span>
         </el-button>
       </div>
     </div>
@@ -56,14 +93,118 @@
 
 <script>
 export default {
+  props: ["activityInfo", "user_id"],
   data() {
-    return {
-      likeCnt: 0,
-    };
+    return {};
   },
   methods: {
-    like() {
-      this.likeCnt++;
+    addlike() {
+      // 点赞该动态
+      //判断是否登录
+      if (localStorage.getItem("loginInfo") == null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+        return;
+      }
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      this.$axios({
+        path: "/like",
+        method: "post",
+        data: JSON.stringify({
+          JWT: jwt,
+          type: 3,
+          object_id: this.activityInfo.id,
+        }),
+      })
+        .then((res) => {
+          if (res.data.result == 0) {
+            this.$message({
+              message: "点赞成功",
+              type: "success",
+            });
+            // 更新点赞数
+            this.$emit("addLikeCnt", this.activityInfo.id);
+
+            // 向被点赞用户发送消息
+            this.$axios({
+              methods: "post",
+              url: "/message/send_message",
+              data: {
+                receiver_id: this.activityInfo.poster_id,
+                content: "点赞了你的动态",
+                poster_id: this.$store.state.userInfo.id,
+                object_id: -1,
+                type: 3,
+                message_type: 2,
+              },
+            });
+          } else {
+            this.$message({
+              message: "点赞失败",
+              type: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    cancelLike() {
+      // 取消点赞该动态
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      this.$axios({
+        path: "/like",
+        method: "delete",
+        data: JSON.stringify({
+          JWT: jwt,
+          // 1表示点赞动态
+          type: 1,
+          obj_id: this.activityInfo.activity_id,
+        }),
+      })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$message({
+              message: "取消点赞成功",
+              type: "success",
+            });
+            // 更新点赞数
+            this.$emit("subLikeCnt", this.activityInfo.activity_id);
+            // 删除消息，防止再次点赞后再次收到消息
+            this.$axios({
+              path: "/message",
+              method: "delete",
+              data: JSON.stringify({
+                JWT: jwt,
+                // 1表示点赞类型的消息
+                msg_type: 1,
+                // 1表示点赞对象为动态
+                type: 1,
+                obj_id: this.activityInfo.activity_id,
+              }),
+            })
+              .then((res) => {
+                if (res.data.code == 200) {
+                  console.log("删除消息成功");
+                } else {
+                  console.log("删除消息失败");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            this.$message({
+              message: "取消点赞失败",
+              type: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
@@ -79,10 +220,7 @@ export default {
   height: 45px;
   margin-right: 10px;
 }
-.acter-avatar img {
-  width: 100%;
-  height: 100%;
-}
+
 .act-right {
   width: 100%;
 }
@@ -114,10 +252,6 @@ export default {
   width: 45px;
   height: 45px;
   margin-right: 10px;
-}
-.src-img img {
-  width: 100%;
-  height: 100%;
 }
 .src-name {
   font-size: 14px;

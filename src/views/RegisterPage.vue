@@ -16,16 +16,16 @@
           placeholder="3~10个字符"
         ></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="密码" prop="password_1">
         <el-input
-          v-model="registerForm.password"
+          v-model="registerForm.password_1"
           placeholder="6~16位密码"
           show-password
         ></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="password2">
+      <el-form-item label="确认密码" prop="password_2">
         <el-input
-          v-model="registerForm.password2"
+          v-model="registerForm.password_2"
           placeholder="请再次输入密码"
           show-password
         ></el-input>
@@ -40,7 +40,7 @@
       <el-form-item label="邮箱验证码" prop="emailCode">
         <div style="display: flex">
           <el-input
-            v-model="registerForm.emailCode"
+            v-model="registerForm.sms_code"
             placeholder="请输入邮箱验证码"
             style="margin-right: 20px"
           ></el-input>
@@ -73,10 +73,10 @@ export default {
       // 注册表单
       registerForm: {
         username: "",
-        password: "",
-        password2: "",
+        password_1: "",
+        password_2: "",
         email: "",
-        emailCode: "",
+        sms_code: "",
       },
       rules: {
         username: [
@@ -88,7 +88,7 @@ export default {
             trigger: "blur",
           },
         ],
-        password: [
+        password_1: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
             min: 6,
@@ -97,7 +97,7 @@ export default {
             trigger: "blur",
           },
         ],
-        password2: [
+        password_2: [
           { required: true, message: "请再次输入密码", trigger: "blur" },
           {
             validator: (rule, value, callback) => {
@@ -142,12 +142,12 @@ export default {
         if (valid) {
           this.$axios({
             method: "post",
-            url: "/register",
+            url: "/user/register",
             data: JSON.stringify(this.registerForm),
           })
             .then((res) => {
               // 注册成功
-              if (res.data.code === 200) {
+              if (res.data.result == 0) {
                 this.$message({
                   message: "注册成功",
                   type: "success",
@@ -186,7 +186,7 @@ export default {
     },
     //两次输入密码是否相同
     isSamePassword() {
-      return this.registerForm.password === this.registerForm.password2;
+      return this.registerForm.password_1 === this.registerForm.password_2;
     },
     //发送邮箱验证码
     postEmailCode() {

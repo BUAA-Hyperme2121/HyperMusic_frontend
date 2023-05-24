@@ -31,9 +31,13 @@
     </div>
 
     <div class="title2">精彩评论</div>
-    <!-- 评论列表 -->
+    <!-- 评论列表，全部都是一级评论 -->
     <div class="comment-list">
-      <CommentItem v-for="item in commentList" :key="item.id" :comment="item" />
+      <CommentItem
+        v-for="item in commentList"
+        :key="item.id"
+        :commentInfo="item"
+      />
     </div>
   </div>
 </template>
@@ -49,7 +53,11 @@ export default {
   data() {
     return {
       comment: "",
-      commentList: [],
+      commentList: [
+        {
+          //评论id,评论对象类型(歌曲/歌单/动态),评论对象id,是否是回复，父评论id(如果是回复的话),评论内容,评论时间,点赞数
+        },
+      ],
     };
   },
   methods: {
@@ -63,6 +71,21 @@ export default {
       };
       this.commentList.unshift(commentObj);
     },
+  },
+  mounted() {
+    //获取评论列表
+    this.$axios({
+      url: "/comment",
+      methods: "post",
+      data: {
+        //评论对象类型(歌曲/歌单/动态)
+        obj_type: 0,
+        //评论对象id
+        // obj_id: this.obj_id,
+      },
+    }).then((res) => {
+      this.commentList = res.data.comment_list;
+    });
   },
 };
 </script>

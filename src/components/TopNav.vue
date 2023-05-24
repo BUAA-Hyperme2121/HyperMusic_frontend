@@ -13,11 +13,11 @@
           background-color="#242424"
           text-color="#ccc"
           active-text-color="#fff"
-          :router="true"
+          @select="handleSelect"
         >
-          <el-menu-item index="/homepage">音乐馆</el-menu-item>
-          <el-menu-item index="/user/music">我的音乐</el-menu-item>
-          <el-menu-item index="/social">关注</el-menu-item>
+          <el-menu-item index="1">音乐馆</el-menu-item>
+          <el-menu-item index="2">我的音乐</el-menu-item>
+          <el-menu-item index="3">关注</el-menu-item>
         </el-menu>
       </el-col>
       <!-- 搜索框 -->
@@ -32,13 +32,13 @@
 
       <el-col :span="4">
         <!-- 登录注册 -->
-        <div class="nav-right" v-if="!isLogin">
+        <div class="nav-right" v-if="!$store.state.userInfo.isLogin">
           <router-link to="/login" class="login-link">登录</router-link>
           <el-divider direction="vertical"></el-divider>
           <router-link to="/register" class="register-link">注册</router-link>
         </div>
         <!-- 用户信息 -->
-        <div class="nav-right" v-if="isLogin">
+        <div class="nav-right" v-if="$store.state.userInfo.isLogin">
           <el-dropdown trigger="hover" @command="handleCommand">
             <span class="user-image">
               <img src="../assets/avatar.png" @click="goUserHome" />
@@ -58,30 +58,71 @@
 <script>
 export default {
   data() {
-    return {
-      // 获取登录状态
-      isLogin: false,
-      
-    };
+    return {};
   },
   methods: {
     //点击logo，转到首页
     goHomePage() {
       // 防止重复跳转飘红
       if (this.$route.path !== "/homepage") {
-        this.$router.push("/homepage");
+        this.$router.push({
+          path: "/homepage",
+        });
       }
     },
     //点击头像，转到个人主页
     goUserHome() {
       // 防止重复跳转飘红
       if (this.$route.path !== "/user/home") {
-        this.$router.push("/user/home");
+        this.$router.push({
+          path: "/user/home",
+          query: {
+            user_id: this.$store.state.userInfo.id,
+          },
+        });
       }
     },
+    //点击导航栏，转到对应页面
+    handleSelect(index) {
+      if (index === "1") {
+        //转到音乐馆
+        if (this.$route.path !== "/homepage") {
+          this.$router.push("/homepage");
+        }
+      } else if (index === "2") {
+        //转到我的音乐
+        if (this.$route.path !== "/user/music") {
+          this.$router.push("/user/music");
+        }
+      } else if (index === "3") {
+        //直接转到关注，如果未登录则提示登录，游客不可以通过点击导航栏进入关注页面
+        let loginInfo = localStorage.getItem("loginInfo");
+        if(loginInfo === null){
+          this.$message({
+            message: "请先登录",
+            type: "warning",
+          });
+          return;
+        }
+        if (this.$route.path !== "/social") {
+          this.$router.push("/social");
+        }
+      }
+    },
+    //点击下拉菜单，处理命令
     handleCommand(command) {
       if (command === "logout") {
         //处理退出登录的逻辑
+        //清除信息
+        this.$store.state.userInfo.isLogin = false;
+        localStorage.clear();
+        //跳转到主页
+        this.$router.push("/homepage");
+        //提示退出成功
+        this.$message({
+          message: "记得回来Oh~",
+          type: "success",
+        });
       } else if (command === "msg") {
         //转到消息页面
         if (this.$route.path !== "/user/message") {
@@ -96,8 +137,10 @@ export default {
     },
   },
   mounted() {
-    // localStorage获取登录状态
-    this.isLogin = JSON.parse(localStorage.getItem("isLogin"));
+    // 从localStorage中获取登录状态
+    this.$store.state.userInfo.isLogin = JSON.parse(
+      localStorage.getItem("isLogin")
+    );
   },
 };
 </script>

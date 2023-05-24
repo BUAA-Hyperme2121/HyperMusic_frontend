@@ -62,20 +62,21 @@ export default {
   },
   methods: {
     login() {
-
+      // 将用户信息存储到vuex中
+      this.$store.state.userInfo.isLogin = true;
+      // 将登录状态存储到localStorage中
       localStorage.setItem("isLogin", true);
 
-      
       // 处理登录逻辑
       this.$refs["loginForm"].validate((valid) => {
         if (valid) {
           this.$axios({
             method: "post",
-            url: "/login",
+            url: "/user/login",
             data: JSON.stringify(this.loginForm),
           })
             .then((res) => {
-              if (res.data.code === 200) {
+              if (res.data.code === 0) {
                 // 登录成功
                 this.$message({
                   message: "登录成功",
@@ -83,7 +84,8 @@ export default {
                 });
                 // 保存登录信息(用户信息、token、状态码及msg)
                 localStorage.setItem("loginInfo", res.data);
-                
+                // Vuex中保存用户信息
+                this.$store.state.userInfo = res.data.user;
                 // 跳转到首页
                 this.$router.push("/homepage");
               } else {

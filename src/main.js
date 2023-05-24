@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$axios = axios
 
-axios.defaults.baseURL = 'https://hypermusic.com/api/'
+axios.defaults.baseURL = 'http://8.130.12.73/api/'
 
 new Vue({
   router,

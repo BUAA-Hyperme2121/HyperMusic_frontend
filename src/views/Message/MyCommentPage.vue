@@ -3,7 +3,7 @@
     <div class="title">我的评论</div>
     <!-- 我的评论列表 -->
     <div class="my-comment-list">
-      <CommentItem v-for="item in commentList" :key="item.id" :comment="item" />
+      <CommentItem v-for="item in commentList" :key="item.id" :commentInfo="item" />
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
       commentList: [
         {
           id: 1,
-          content: "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
+          content: "测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本",
           time: new Date().toLocaleString(),
           likeCnt: 0,
         },
