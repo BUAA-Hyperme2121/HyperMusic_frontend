@@ -1,0 +1,39 @@
+.label-container {
+    padding-bottom: 30px;
+}
+.activeLabel {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
+.activeLabel:active {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
+.activeLabel:hover {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
+.activeLabel:focus {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
+.label:active {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
+.label:hover {
+    background-color: cadetblue;
+    border-color: cadetblue;
+    font-weight: bold;
+    color: white;
+}
