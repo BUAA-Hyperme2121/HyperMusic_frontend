@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
@@ -43,8 +44,8 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" },
           {
             min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
+            max: 20,
+            message: "长度在 3 到 20 个字符",
             trigger: "blur",
           },
         ],
@@ -62,26 +63,25 @@ export default {
   },
   methods: {
     login() {
-      // 将用户信息存储到vuex中
-      this.$store.state.userInfo.isLogin = true;
-      // 将登录状态存储到localStorage中
-      localStorage.setItem("isLogin", true);
-
       // 处理登录逻辑
       this.$refs["loginForm"].validate((valid) => {
         if (valid) {
           this.$axios({
             method: "post",
-            url: "/user/login",
-            data: JSON.stringify(this.loginForm),
+            url: "/user/login/",
+            data: qs.stringify({
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+            }),
           })
             .then((res) => {
-              if (res.data.code === 0) {
+              if (res.data.result == 1) {
                 // 登录成功
                 this.$message({
                   message: "登录成功",
                   type: "success",
                 });
+                console.log(res.data);
                 // 保存登录信息(用户信息、token、状态码及msg)
                 localStorage.setItem("loginInfo", res.data);
                 // Vuex中保存用户信息
@@ -91,7 +91,7 @@ export default {
               } else {
                 // 登录失败
                 this.$message({
-                  message: res.data.msg,
+                  message: res.data.message,
                   type: "error",
                 });
               }

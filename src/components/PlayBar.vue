@@ -65,7 +65,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import {download} from '../api/api';
+import {setLikes} from '../api/api';
 export default {
     data (){
         return {

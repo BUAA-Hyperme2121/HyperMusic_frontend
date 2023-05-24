@@ -34,19 +34,20 @@
 
       <el-col :span="4">
         <!-- 登录注册 -->
-        <div class="nav-right" v-if="!$store.state.userInfo.isLogin">
+        <div class="nav-right" v-if="Object.keys($store.state.userInfo).length == 0">
           <router-link to="/login" class="login-link">登录</router-link>
           <el-divider direction="vertical"></el-divider>
           <router-link to="/register" class="register-link">注册</router-link>
         </div>
         <!-- 用户信息 -->
-        <div class="nav-right" v-if="$store.state.userInfo.isLogin">
+        <div class="nav-right" v-if="!Object.keys($store.state.userInfo).length == 0">
           <el-dropdown trigger="hover" @command="handleCommand">
             <span class="user-image">
               <img src="../assets/avatar.png" @click="goUserHome" />
             </span>
             <el-dropdown-menu>
               <el-dropdown-item command="setting">设置</el-dropdown-item>
+              <el-dropdown-item command="upload">上传歌曲</el-dropdown-item>
               <el-dropdown-item command="msg">消息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -104,7 +105,7 @@ export default {
       } else if (index === "3") {
         //直接转到关注，如果未登录则提示登录，游客不可以通过点击导航栏进入关注页面
         let loginInfo = localStorage.getItem("loginInfo");
-        if(loginInfo === null){
+        if (loginInfo === null) {
           this.$message({
             message: "请先登录",
             type: "warning",
@@ -121,8 +122,9 @@ export default {
       if (command === "logout") {
         //处理退出登录的逻辑
         //清除信息
-        this.$store.state.userInfo.isLogin = false;
+        this.isLogin = false;
         localStorage.clear();
+        this.$store.state.userInfo = {};
         //跳转到主页
         this.$router.push("/homepage");
         //提示退出成功
@@ -140,6 +142,11 @@ export default {
         if (this.$route.path !== "/user/setting") {
           this.$router.push("/user/setting");
         }
+      }else if(command === "upload"){
+        //转到上传歌曲页面
+        if (this.$route.path !== "/creator") {
+          this.$router.push("/creator");
+        }
       }
     },
     //搜索内容
@@ -147,12 +154,6 @@ export default {
       this.$router.push({path:'/search',query:{keywords:this.keywords}});
       this.$store.commit('setSearchRender',false);
     },
-  },
-  mounted() {
-    // 从localStorage中获取登录状态
-    this.$store.state.userInfo.isLogin = JSON.parse(
-      localStorage.getItem("isLogin")
-    );
   },
 };
 </script>
