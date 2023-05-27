@@ -1,35 +1,46 @@
 <template>
   <div>
     <div class="title">投诉详情</div>
-    <h2>请求下架xx歌曲</h2>
+    <h2>{{ examInfo.title }}</h2>
     <div>
       <span class="acter-name">
-        <a href="" style="color: cornflowerblue">shyJyt</a>
+        <a href="" style="color: cornflowerblue">{{ examInfo.poster_name }}</a>
       </span>
 
-      <span>2020-12-12 12:12:12</span>
+      <span>{{ examInfo.create_date }}</span>
     </div>
     <!-- 详情 -->
     <div class="detail">
       <!-- 举报原因 -->
-      <div class="detail-reason">含有色情暴力信息</div>
+      <div class="detail-reason">{{ examInfo.content }}</div>
       <!-- 要举报的链接 -->
       <div class="act-src">
         <!-- 封面 -->
         <div class="src-img">
-          <img src="../../assets/avatar.png" alt="" />
+          <el-avatar
+            shape="square"
+            fit="fill"
+            :src="examInfo.cover_path"
+            style="height: 100%; width: 100%"
+          ></el-avatar>
         </div>
         <div class="src-info">
           <!-- 歌名 -->
-          <div class="src-name">歌名</div>
-          <!-- 歌手/歌单所有者 -->
-          <el-link type="info" class="src-owner">演唱者或歌单拥有者</el-link>
+          <div class="src-name">{{ examInfo.name }}</div>
+          <!-- 歌手 -->
+          <el-link type="info" class="src-owner" v-show="examInfo.type == 1">{{
+            examInfo.singer_name
+          }}</el-link>
+          <!-- 歌单 -->
+          <el-link type="info" class="src-owner" v-show="examInfo.type == 2">{{
+            examInfo.creator_name
+          }}</el-link>
         </div>
       </div>
     </div>
 
-    <!-- 审核 -->
-    <div class="exam-form" v-show="!isExamed">
+    <!-- 审核表单 -->
+    <div class="exam-form" v-show="examInfo.state == 1">
       <el-select v-model="pass" placeholder="是否通过" class="select-pass">
         <el-option
           v-for="item in options"
@@ -44,7 +55,7 @@
       <el-select
         v-model="reason"
         placeholder="拒绝原因"
-        v-show="pass == 0"
+        v-show="pass == 2"
         class="select-reason"
       >
         <el-option
@@ -59,8 +70,24 @@
 
       <el-button @click="finishExam">完成审核</el-button>
     </div>
-    <div v-show="isExamed">
-      <i class="el-icon-check">已审核</i>
+
+    <!-- 审核结果 -->
+    <div v-show="examInfo.state == 2">
+      <!-- 审核时间 -->
+      <div class="exam-time">
+        <span>审核时间：</span>
+        <span>{{ examInfo.audit_time }}</span>
+      </div>
+      <!-- 审核结果 -->
+      <div class="exam-result">
+        <span>审核结果：</span>
+        <span>{{ examInfo.result == 1 ? "通过" : "拒绝" }}</span>
+      </div>
+      <!-- 审核原因 -->
+      <div class="exam-reason">
+        <span>审核原因：</span>
+        <span>{{ examInfo.reason }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -69,7 +96,12 @@
 export default {
   data() {
     return {
-      isExamed: false,
+      examInfo: {},
+      examForm: {
+        pass: "",
+        reason: "",
+      },
+
       pass: "",
       options: [
         {
@@ -77,18 +109,18 @@ export default {
           label: "通过",
         },
         {
-          value: "0",
+          value: "2",
           label: "拒绝",
         },
       ],
       reason: "",
       reason_options: [
         {
-          value: "1",
+          value: "原因1",
           label: "原因1",
         },
         {
-          value: "2",
+          value: "原因2",
           label: "原因2",
         },
       ],
@@ -96,8 +128,53 @@ export default {
   },
   methods: {
     finishExam() {
-      this.isExamed = true;
+      //验证审核表单
+      if (this.pass == "") {
+        this.$message.error("请选择是否通过");
+        return;
+      }
+      if (this.pass == 2 && this.reason == "") {
+        this.$message.error("请选择拒绝原因");
+        return;
+      }
+      this.$axios({
+        method: "post",
+        url: "/message/audit",
+        data: {
+          complain_id: this.$route.query.id,
+          result: this.pass,
+          reason: this.reason,
+          JWT: JSON.parse(localStorage.getItem("loginInfo")).JWT,
+        },
+      }).then((res) => {
+        if (res.data.result == 1) {
+          this.$message.success("审核成功");
+          this.$router.push("/message/exam");
+        } else {
+          this.$message.error(res.data.message);
+        }
+      });
+      //若通过，删除歌曲/取消分享歌单
+      //并向用户发送消息（投诉和被投诉的都发？）
     },
+  },
+  mounted() {
+    // 获取举报详情
+    let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+    this.$axios({
+      method: "get",
+      url: "/message/get_complain_detail/",
+      params: {
+        complain_id: this.$route.query.id,
+        JWT: jwt,
+      },
+    }).then((res) => {
+      if (res.data.result == 1) {
+        this.examInfo = res.data.complain_info;
+      } else {
+        this.$message.error(res.data.message);
+      }
+    });
   },
 };
 </script>

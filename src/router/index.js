@@ -34,42 +34,45 @@ const router = new VueRouter({
               component: () => import("../views/ListPage/SingerListPage.vue"),
               props: true,
             },
+          ],
+        },
+        {
+          path: "setting",
+          component: () => import("../views/UserSetting.vue"),
+        },
+        {
+          path: "message",
+          component: () => import("../views/UserMessage.vue"),
+          // redirect: "/user/message/comment",
+          children: [
             {
-              path: "setting",
-              component: () => import("../views/UserSetting.vue"),
+              path: "comment",
+              component: () => import("../views/Message/MyCommentPage.vue"),
             },
             {
-              path: "message",
-              component: () => import("../views/UserMessage.vue"),
-              // redirect: "/user/message/comment",
-              children: [
-                {
-                  path: "comment",
-                  component: () => import("../views/Message/MyCommentPage.vue"),
-                },
-                {
-                  path: "complaint",
-                  component: () => import("../views/Message/ComplaintPage.vue"),
-                },
-                {
-                  path: "complaint-detail",
-                  component: () =>
-                    import("../views/Message/ComplaintDetailPage.vue"),
-                },
-                {
-                  path: "notice",
-                  component: () => import("../views/Message/NoticePage.vue"),
-                },
-                {
-                  path: "exam",
-                  component: () => import("../views/Message/ExamPage.vue"),
-                },
-                {
-                  path: "exam-detail",
-                  component: () =>
-                    import("../views/Message/ExamDetailPage.vue"),
-                },
-              ],
+              path:"reply",
+              component:()=>import("../views/Message/ReplyToMe.vue")
+            },
+            {
+              path: "complaint",
+              component: () => import("../views/Message/ComplaintPage.vue"),
+            },
+            {
+              path: "complaint-detail",
+              component: () =>
+                import("../views/Message/ComplaintDetailPage.vue"),
+            },
+            {
+              path: "notice",
+              component: () => import("../views/Message/NoticePage.vue"),
+            },
+            {
+              path: "exam",
+              component: () => import("../views/Message/ExamPage.vue"),
+            },
+            {
+              path: "exam-detail",
+              component: () => import("../views/Message/ExamDetailPage.vue"),
             },
           ],
         },
@@ -141,7 +144,6 @@ const router = new VueRouter({
     {
       path: "/creator",
       component: () => import("../views/Creator.vue"),
-      
     },
     {
       path: "/login",

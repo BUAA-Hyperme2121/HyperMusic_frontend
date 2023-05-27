@@ -133,8 +133,8 @@ export default {
     addLikeCnt(activity_id) {
       // 更新动态列表中的点赞数
       for (let i = 0; i < this.activityList.length; i++) {
-        if (this.activityList[i].activity_id == activity_id) {
-          this.activityList[i].like_cnt++;
+        if (this.activityList[i].id == activity_id) {
+          this.activityList[i].like_num++;
           break;
         }
       }
@@ -142,12 +142,22 @@ export default {
     subLikeCnt(activity_id) {
       // 更新动态列表中的点赞数
       for (let i = 0; i < this.activityList.length; i++) {
-        if (this.activityList[i].activity_id == activity_id) {
-          this.activityList[i].like_cnt--;
+        if (this.activityList[i].id == activity_id) {
+          this.activityList[i].like_num--;
           break;
         }
       }
     },
+    changeLikeStatus(activity_id) {
+      // 更新动态列表中的点赞状态
+      for (let i = 0; i < this.activityList.length; i++) {
+        if (this.activityList[i].id == activity_id) {
+          this.activityList[i].is_liked = !this.activityList[i].is_liked;
+          break;
+        }
+      }
+    },
+
   },
   data() {
     return {

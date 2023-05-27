@@ -11,7 +11,6 @@
       >
         <el-table-column
           type="index"
-          label="序号"
           width="50"
           align="center"
         ></el-table-column>
@@ -19,25 +18,41 @@
         <el-table-column
           prop="title"
           label="标题"
-          width="200"
+          width="250"
         ></el-table-column>
 
         <el-table-column
-          prop="user"
+          prop="poster_name"
           label="发起人"
           width="180"
         ></el-table-column>
+
         <el-table-column
           prop="time"
           label="时间"
           width="160"
           sortable
         ></el-table-column>
+
         <el-table-column
-          prop="status"
+          prop="state"
           label="状态"
           width="80"
-        ></el-table-column>
+          :filters="[
+            { text: '待审核', value: 1 },
+            { text: '已审核', value: 2 },
+          ]"
+          :filter-method="filterState"
+          filter-placement="bottom-end"
+        >
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.state == 1 ? 'primary' : 'success'"
+              disable-transitions
+              >{{ scope.row.state == 1 ? "待审核" : "已审核" }}</el-tag
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -48,53 +63,13 @@ export default {
   data() {
     return {
       //审核列表
-      examList: [
-        {
-          id: 1,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 2,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-        {
-          id: 3,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 4,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-        {
-          id: 5,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 6,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-      ],
+      examList: [],
     };
   },
   methods: {
+    filterState(value, row) {
+      return row.state === value;
+    },
     handleRowClick(row) {
       this.$router.push({
         path: "/user/message/exam-detail",
@@ -103,6 +78,26 @@ export default {
         },
       });
     },
+  },
+  mounted() {
+    //获取审核列表
+    let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+    this.$axios({
+      method: "get",
+      url: "/message/list_complain/",
+      params: {
+        JWT: jwt,
+      },
+    }).then((res) => {
+      if (res.data.result == 1) {
+        this.examList = res.data.music_complain_list;
+      } else {
+        this.$message({
+          type: "error",
+          message: res.data.message,
+        });
+      }
+    });
   },
 };
 </script>
