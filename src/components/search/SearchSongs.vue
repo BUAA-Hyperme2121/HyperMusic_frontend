@@ -12,7 +12,7 @@
                 </el-table-column>
                 <el-table-column label="歌曲名称" width="500px">
                     <template slot-scope="scope">
-                        <p style="cursor: pointer;" @click="goSong(scope.row)">{{ scope.row.name}}</p>
+                        <p style="cursor: pointer;" @click="goSong(scope.row)">{{ scope.row.music_name}}</p>
                     </template>
                 </el-table-column>
                 <el-table-column label="歌手" width="270px">
@@ -38,12 +38,12 @@
                             </el-tooltip>
                             <el-dialog title="收藏到你的收藏夹中" :visible.sync="starSongFormVisible" center :close-on-click-modal="false" :show-close="false">
                                 <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
-                                    <div style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); width: 300px;">
+                                    <div style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); min-width: 300px;">
                                         <div style="float:left">
-                                            <img  style="width: 70px;height: 100%;display: block;" :src="starSongForm.cover_path" alt="">
+                                            <img  style="width: 70px;height: 70px;display: block;" :src="starSongForm.cover_path" alt="">
                                         </div>
-                                        <div style="float:left; margin-left: 26px;  height: 100%; line-height: 70px; font-size: 15px;">
-                                            <p style="margin:0;">{{ starSongForm.name }} by {{ starSongForm.singer_name }}</p>
+                                        <div style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
+                                            <p style="margin:0;">{{ starSongForm.music_name }} by {{ starSongForm.singer_name }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -69,12 +69,12 @@
                                     <el-input v-model="shareSongForm.description" placeholder="说点什么吧"></el-input>
                                 </div>
                                 <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
-                                    <div style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); width: 300px;">
+                                    <div style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); min-width: 300px;">
                                         <div style="float:left">
-                                            <img  style="width: 70px;height: 100%;display: block;" :src="shareSongForm.cover_path" alt="">
+                                            <img  style="width: 70px;height: 70px;display: block;" :src="shareSongForm.cover_path" alt="">
                                         </div>
-                                        <div style="float:left; margin-left: 26px;  height: 100%; line-height: 70px; font-size: 15px;">
-                                            <p style="margin:0;">{{ shareSongForm.name }} by {{ shareSongForm.singer_name }}</p>
+                                        <div style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
+                                            <p style="margin:0;">{{ shareSongForm.music_name }} by {{ shareSongForm.singer_name }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +101,6 @@
 </template>
 <script>
 import { SongsRes } from '@/assets/data/searchRes';
-import {favorites} from '@/assets/data/favorites'
 import { getSongRes,setFavorites,setLikes,setPosts,getFavorites,setMessages } from '@/api/api';
 import {mixin} from '../../mixins'
 export default{
@@ -116,14 +115,14 @@ export default{
                 description:'',
                 cover_path:'',
                 id:'',
-                name:'',
+                music_name:'',
                 singer_name:'',
             },
             starSongFormVisible: false,
             starSongForm: {
                 cover_path:'',
                 id:'',
-                name:'',
+                music_name:'',
                 singer_name:'',
                 favorites_id:'',
             },
@@ -132,8 +131,7 @@ export default{
         }
     },
     mounted(){
-        this.SongsRes=SongsRes;
-       //this.getSongsRes()
+        this.getSongsRes()
     },
     computed:{   //获取当前页面的歌单数据
         data(){
@@ -157,7 +155,7 @@ export default{
             this.playlater(row);
         },
         getSongsRes(){
-            getSongRes(this.$router.query.keywords)
+            getSongRes(this.$route.query.keywords)
                 .then(res => {
                     this.SongsRes=res.data.musics
                 })
@@ -166,7 +164,7 @@ export default{
                 })
         },
         downloadSong(row){
-            this.handleDownload(row.name,row.music_path)
+            this.handleDownload(row.music_name,row.music_path)
         },
         addToLikes(row){
             if(localStorage.getItem('loginInfo')!=null){
@@ -176,7 +174,7 @@ export default{
                 setLikes(formData)
                 .then(res => {
                     //根据res进行区分
-                    if(res.status==200){
+                    if(res.data.flag==2){
                         this.$message.success("成功添加到喜欢的音乐")
                     }else{
                         this.$message.success("取消喜欢")
@@ -192,7 +190,7 @@ export default{
         changeShareSongForm(row){
             this.shareSongForm.cover_path=row.cover_path
             this.shareSongForm.id=row.id
-            this.shareSongForm.name=row.name
+            this.shareSongForm.music_name=row.music_name
             this.shareSongForm.singer_name=row.singer_name
         },
         clearShareSongForm(){
@@ -222,17 +220,16 @@ export default{
         changeStarSongForm(row){
             this.starSongForm.cover_path=row.cover_path
             this.starSongForm.id=row.id
-            this.starSongForm.name=row.name
+            this.starSongForm.music_name=row.music_name
             this.starSongForm.singer_name=row.singer_name
             if(localStorage.getItem('loginInfo')!=null){
-                /*getFavorites()
+                getFavorites()
                 .then(res => {
-                    this.favorites=res.data.play_list;
+                    this.favorites=res.data.create_music_list;
                 })
                 .catch(err => {
-                    this.$message.success("获取收藏夹失败")
-                })*/
-                this.favorites=favorites.play_list
+                    this.$message.error("获取收藏夹失败")
+                })
             }else{
                 this.disabled=true
             }

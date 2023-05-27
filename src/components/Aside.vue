@@ -13,7 +13,7 @@
             </div>
             <ul class="menus">
                 <li v-for="(item,index) in listOfSongs" :key="index" :class="{'is-play': id==item.id}" >
-                    <div style="display: inline-block; width: 190px;" @click="toplay(item.id,item.music_path,item.cover_path,item.name)">{{item.name}}</div>
+                    <div style="display: inline-block; width: 190px;" @click="toplay(item.id,item.music_path,item.cover_path,item.music_name)">{{item.music_name}}</div>
                     <div style="display: inline-block; margin-left: 0px;" v-if="id!=item.id">
                         <el-link @click="deleteFromPlayList(item)" class="operation-link" style="">
                             <el-tooltip content="删除" placement="top" >
@@ -37,12 +37,12 @@ export default {
         ])
     },
     methods:{
-        toplay: function(id, music_path, cover_path, name) {
+        toplay: function(id, music_path, cover_path, music_name) {
             this.$store.commit('setIsPlay', true)
             this.$store.commit('setId', id);
             this.$store.commit('setPicUrl',cover_path);
             this.$store.commit('setUrl',music_path);
-            this.$store.commit('setTitle', name)
+            this.$store.commit('setTitle', music_name)
         },
         deleteFromPlayList(item){
             this.$store.commit('deleteListOfSongs',item)

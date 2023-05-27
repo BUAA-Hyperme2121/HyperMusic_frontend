@@ -9,6 +9,7 @@ import "element-ui/lib/theme-chalk/index.css";
 import '@/assets/iconfont/iconfont.css';
 ElementUI.Dialog.props.lockScroll.default = false; //解决dialog遮罩层抖动问题
 import "./assets/css/PageCss/Label.css";
+import "../theme/index.css"
 // 挂载到vue原型链上
 Vue.prototype.axios = axios;
 

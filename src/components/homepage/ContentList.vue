@@ -3,12 +3,12 @@
         <ul class="content">
             <li class="content-item" v-for="(item,index) in contentList" :key="index">
                 <div class="item-outline" @click="goSpecific(item,item.type)">
-                    <img class="item-img" :src="item.cover_path">
+                    <img class="item-img" :src="item.cover_path" >
                 </div>
                 <div class="mask" @click="goSpecific(item)">
                     <i class="icon iconfont icon-bofang1"></i>
                 </div>
-                <p class="item-title">{{item.name}}</p>
+                <p class="item-name">{{item.name}}</p>
             </li>
         </ul>
     </div>
@@ -66,7 +66,11 @@ export default {
 }
 
 .item-img {
+    position: absolute;
     width: 100%;
+    height: 82%;
+    top: 0;
+    bottom: 0;
     transition: all 0.4s ease;
 }
 

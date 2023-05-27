@@ -7,7 +7,7 @@ export const mixin = {
             this.$store.commit('setId', song.id); //歌曲id
             this.$store.commit('setPicUrl', song.cover_path); //歌曲封面
             this.$store.commit('setUrl', song.music_path); //歌曲url
-            this.$store.commit('setTitle', song.name) //歌曲名
+            this.$store.commit('setTitle', song.music_name) //歌曲名
             this.$store.commit('playListOfSongs', song)
         },
         //加入播放列表尾端

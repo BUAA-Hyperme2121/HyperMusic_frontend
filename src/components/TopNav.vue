@@ -67,6 +67,9 @@ export default {
       keywords: '',
     };
   },
+  mounted(){
+    this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginInfo")).user;
+  },
   methods: {
     //点击logo，转到首页
     goHomePage() {

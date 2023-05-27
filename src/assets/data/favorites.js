@@ -2,7 +2,7 @@ export const favorites = {
 
     "result": 0,
     "message": "string",
-    "play_list": [{
+    "create_music_list": [{
             "id": 1,
             "name": "我喜欢的音乐",
             "description": "string",

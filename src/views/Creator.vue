@@ -63,7 +63,7 @@ import {uploadSong} from "@/api/api"
           introduction:'',
           audio:null,
           cover:null,
-          lyrics: null,
+          lyrics:null,
           labels: [],
         },
         uploadDisabled: false,   //控制upload组件
@@ -71,7 +71,6 @@ import {uploadSong} from "@/api/api"
     },
     methods: {
       onSubmit() {
-        console.log(this.form)
         if(localStorage.getItem('loginInfo')!=null){
           if(this.form.name==''||this.form.singer_name==''||this.form.introduction==''||this.form.cover==null||this.form.audio==null||this.form.labels.length==0){
             alert("内容不能为空");
@@ -88,9 +87,11 @@ import {uploadSong} from "@/api/api"
             uploadSong(formData)
               .then(res => {
                 alert("上传成功")
+                console.log(res)
               })
               .catch(err => {
                 alert("上传失败")
+                console.log(err)
               })
               this.$router.push("/homepage");
           }

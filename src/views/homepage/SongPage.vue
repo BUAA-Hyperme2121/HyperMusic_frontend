@@ -84,7 +84,7 @@
   <style scoped>
   .main-div-two {
     display: block;
-    width: 80%;
+    width: 75%;
     min-height: 200px;
     background-color: white;
     overflow: hidden;

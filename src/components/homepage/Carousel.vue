@@ -25,7 +25,7 @@ export default{
 <style scoped>
 
 .carousel {
-    width: 85%;
+    width: 80%;
     margin: auto;
 }
 .carousel img {

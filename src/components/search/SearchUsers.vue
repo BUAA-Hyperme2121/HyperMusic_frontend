@@ -8,17 +8,10 @@
                 </el-table-column>
                 <el-table-column label="用户昵称" width="400px">
                     <template slot-scope="scope">
-                        <p style="cursor: pointer;" @click="goUser(scope.row)">{{ scope.row.name}}</p>
+                        <p style="cursor: pointer;" @click="goUser(scope.row)">{{ scope.row.username}}</p>
                     </template>
                 </el-table-column>
-                <el-table-column label="关注" width="100px">
-                    <template slot-scope="scope">
-                        <el-button size="small" @click="follow(scope.row)">
-                            <i class="el-icon-plus" style="color:rgb(212, 3, 3);font-weight: 800;"></i> 关注
-                        </el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column label="关注" >
+                <el-table-column label="关注" width="200px">
                     <template slot-scope="scope">
                         关注：{{ scope.row.follow_num}}
                     </template>
@@ -39,7 +32,7 @@
 
 <script>
 import { UsersRes } from '@/assets/data/searchRes';
-import { getUserRes,setLikes } from '@/api/api';
+import { getUserRes } from '@/api/api';
 export default{
     data(){
         return{
@@ -54,8 +47,7 @@ export default{
         }
     },
     mounted(){
-        this.UsersRes=UsersRes
-        //this.getUsersRes()
+        this.getUsersRes()
     },
     methods:{
         changeCurrentPage(val){     //改变当前页
@@ -73,26 +65,6 @@ export default{
                     console.log(err)
                 })
         },
-        follow(row){
-            if(localStorage.getItem('loginInfo')!=null){
-                var formData = new FormData();
-                formData.append('JWT',JSON.parse(localStorage.getItem("loginInfo")).JWT)
-                formData.append('follow_user_id',row.id)
-                setLikes(formData)
-                .then(res => {
-                    if(res.status==200){
-                        this.$message.success("关注成功")
-                    }else{
-                        this.$message.success("取消关注")
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            }else{
-                this.$message.error("请先登录")
-            }
-        }
     }
 }
 </script>

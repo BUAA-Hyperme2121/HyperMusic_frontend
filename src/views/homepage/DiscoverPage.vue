@@ -1,6 +1,6 @@
 <template>
     <div>
-        <carousel />
+        <Swiper/>
         <div class="main-div">
             <div class="left">
                 <div class="section">
@@ -30,14 +30,14 @@
             </div>
             <div class="right">
                 <div class="login-section">
-                    <div v-if="!$store.state.userInfo.isLogin">
+                    <div v-if="Object.keys($store.state.userInfo).length == 0">
                       <div style="margin-bottom: 20px;">
                         <em>登录HyperMusic，开始你的音乐之旅</em>
                       </div>     
                       <el-button type="danger" @click="goLogin">用户登录</el-button>
                     </div>
                     <div v-else>
-                      <img :src="$store.state.userInfo.avatarUrl" style="height: 100px;width: 100px; border-radius: 15%;">
+                      <img :src="$store.state.userInfo.avatar_path" style="height: 100px;width: 100px; border-radius: 15%;">
                       <p style="color:brown;font-weight:700;margin:0;">欢迎你，{{$store.state.userInfo.username}}</p>
                     </div>
                 </div>
@@ -51,15 +51,16 @@
 import ContentList from "../../components/homepage/ContentList.vue";
 import Carousel from "../../components/homepage/Carousel.vue";
 import {recommendsongs, recommendsingers,recommendplaylists} from "../../assets/data/discoverlist";
-import {songsRankList} from "../../assets/data/songsRank"
 import RankList from "../../components/homepage/RankList.vue";
-import {getAllPlaylists,getAllSingers,getAllSongs,getRankList1,getUserImf} from "@/api/api";
+import {getAllPlaylists,getAllSingers,getAllSongs,getRankList1} from "@/api/api";
+import Swiper from "@/components/homepage/Swiper.vue";
 export default {
     components:{
-        Carousel,
-        ContentList,
-        RankList,
-    },
+    Carousel,
+    ContentList,
+    RankList,
+    Swiper
+},
     data (){
       return{
         recommendsongs: [],
@@ -174,14 +175,14 @@ export default {
 .left{
   padding:1%;
   float:left;
-  width: 75%;
+  width: 78%;
   height: auto;
   background-color: white;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
 }
 .right{
   float:right;
-  width: 23%;
+  width: 20%;
   flex: 1;
   background-color: white;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
@@ -189,7 +190,7 @@ export default {
 
 .main-div {
   display: flex;
-  width: 80%;
+  width: 74%;
   background-color: white;
   overflow: hidden;
   margin:auto;
