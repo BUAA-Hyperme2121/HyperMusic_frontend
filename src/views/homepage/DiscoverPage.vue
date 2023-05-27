@@ -67,6 +67,7 @@ export default {
         recommendsingers: [],
         recommendplaylists: [],
         rankList: [],
+        isLogin:false,
       }
     },
     mounted (){                      
@@ -80,7 +81,11 @@ export default {
       this.getPlaylists()
       this.getSingers()
       this.getRankList()
-      
+      if(localStorage.getItem('loginInfo')!=null){
+        this.isLogin=true;
+      }else{
+        this.isLogin=false;
+      }
     },
     methods:{
         getSongs(){
@@ -121,7 +126,7 @@ export default {
         },
         goLogin(){
           this.$router.push('/login');
-        }
+        },
     }
 }
 </script>
