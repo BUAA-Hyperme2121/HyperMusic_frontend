@@ -9,10 +9,10 @@
         height="400"
         :default-sort="{ prop: 'time', order: 'descending' }"
         @row-click="handleRowClick"
+        :row-class-name="tableRowClassName"
       >
         <el-table-column
           type="index"
-          label="序号"
           width="50"
           align="center"
         ></el-table-column>
@@ -29,16 +29,12 @@
           width="180"
         ></el-table-column>
         <el-table-column
-          prop="time"
-          label="时间"
+          prop="create_date"
+          label="发起时间"
           width="160"
           sortable
         ></el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="80"
-        ></el-table-column>
+        <el-table-column prop="state" label="状态" width="80"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -96,6 +92,20 @@ export default {
     };
   },
   methods: {
+    //根据状态显示不同的颜色
+    tableRowClassName({ row }) {
+      if (row.state == 1) {
+        return "warning-row";
+      } else if (row.state == 2) {
+        if (row.result == 1) {
+          return "success-row";
+        } else {
+          return "danger-row";
+        }
+      }
+      return "";
+    },
+    //点击行跳转到详情页
     handleRowClick(row) {
       this.$router.push({
         path: "/user/message/complaint-detail",
@@ -104,6 +114,23 @@ export default {
         },
       });
     },
+  },
+  mounted() {
+    //获取发起的投诉列表
+    let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+    this.$axios({
+      method: "get",
+      url: "/message/list_user_complain/",
+      params: {
+        JWT: jwt,
+      },
+    }).then((res) => {
+      if (res.data.result == 1) {
+        this.complaintList = res.data.complaintList;
+      } else {
+        this.$message.error(res.data.message);
+      }
+    });
   },
 };
 </script>
@@ -115,5 +142,14 @@ export default {
   font-size: 20px;
   font-weight: bold;
   border-bottom: 2px solid #c20c0c;
+}
+.el-table .success-row {
+  background: #f0f9eb;
+}
+.el-table .warning-row {
+  background: #fffbe6;
+}
+.el-table .danger-row {
+  background: #fef0f0;
 }
 </style>

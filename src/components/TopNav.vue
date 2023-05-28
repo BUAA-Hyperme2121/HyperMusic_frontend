@@ -34,16 +34,28 @@
 
       <el-col :span="4">
         <!-- 登录注册 -->
-        <div class="nav-right" v-if="Object.keys($store.state.userInfo).length == 0">
+        <div
+          class="nav-right"
+          v-if="Object.keys($store.state.userInfo).length == 0"
+        >
           <router-link to="/login" class="login-link">登录</router-link>
           <el-divider direction="vertical"></el-divider>
           <router-link to="/register" class="register-link">注册</router-link>
         </div>
         <!-- 用户信息 -->
-        <div class="nav-right" v-if="!Object.keys($store.state.userInfo).length == 0">
+        <div
+          class="nav-right"
+          v-if="!Object.keys($store.state.userInfo).length == 0"
+        >
           <el-dropdown trigger="hover" @command="handleCommand">
             <span class="user-image">
-              <img src="../assets/avatar.png" @click="goUserHome" />
+              <el-avatar
+                shape="square"
+                fit="fill"
+                :src="$store.state.userInfo.avatar_path"
+                style="height: 100%; width: 100%"
+                @click="goUserHome"
+              ></el-avatar>
             </span>
             <el-dropdown-menu>
               <el-dropdown-item command="setting">设置</el-dropdown-item>
@@ -64,11 +76,8 @@ export default {
     return {
       // 获取登录状态
       isLogin: false,
-      keywords: '',
+      keywords: "",
     };
-  },
-  mounted(){
-    this.$store.state.userInfo = JSON.parse(localStorage.getItem("loginInfo")).user;
   },
   methods: {
     //点击logo，转到首页
@@ -92,7 +101,7 @@ export default {
         });
       }
     },
-    
+
     //点击导航栏，转到对应页面
     handleSelect(index) {
       if (index === "1") {
@@ -145,7 +154,7 @@ export default {
         if (this.$route.path !== "/user/setting") {
           this.$router.push("/user/setting");
         }
-      }else if(command === "upload"){
+      } else if (command === "upload") {
         //转到上传歌曲页面
         if (this.$route.path !== "/creator") {
           this.$router.push("/creator");
@@ -153,10 +162,20 @@ export default {
       }
     },
     //搜索内容
-    goSearch(){
-      this.$router.push({path:'/search',query:{keywords:this.keywords}});
-      this.$store.commit('setSearchRender',false);
+    goSearch() {
+      this.$router.push({
+        path: "/search",
+        query: { keywords: this.keywords },
+      });
+      this.$store.commit("setSearchRender", false);
     },
+  },
+
+  mounted() {
+    //获取登录信息（发请求重新获取个人信息？？）
+    this.$store.state.userInfo = JSON.parse(
+      localStorage.getItem("loginInfo")
+    ).user;
   },
 };
 </script>
@@ -206,19 +225,12 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  border-radius: 5%;
   height: 40px;
   width: 40px;
-  border-radius: 50%;
   overflow: hidden;
   background-color: #999;
   cursor: pointer;
-}
-
-.user-image img {
-  display: block;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
 }
 </style>
 

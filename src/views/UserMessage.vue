@@ -22,12 +22,12 @@
           <!-- 投诉进度 -->
           <el-menu-item index="/user/message/complaint"
             ><i class="el-icon-s-flag"></i>
-            <span>投诉进度(用步骤条?时间线?</span>
+            <span>投诉进度</span>
           </el-menu-item>
           <!-- 审核，管理员可见-->
           <el-menu-item
             index="/user/message/exam"
-            v-show="$store.state.userInfo.isAdmin"
+            v-show="$store.state.userInfo.is_admin"
             ><i class="el-icon-s-custom"></i>
             <span>审核</span>
           </el-menu-item>

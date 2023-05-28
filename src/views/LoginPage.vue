@@ -85,7 +85,9 @@ export default {
                 // 保存登录信息(用户信息、token、状态码及msg)
                 localStorage.setItem("loginInfo", JSON.stringify(res.data));
                 // Vuex中保存用户信息
-                this.$store.state.userInfo = res.data.user;
+                this.$store.state.userInfo = JSON.parse(
+                  localStorage.getItem("loginInfo")
+                ).user;
                 // 跳转到首页
                 this.$router.push("/homepage");
               } else {

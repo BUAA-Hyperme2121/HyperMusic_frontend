@@ -53,7 +53,7 @@
         <ul class="user-relate">
           <!-- 动态数  -->
           <li>
-            <span @click="goSocial">动态 {{ userInfo.activity_num }}</span>
+            <span @click="goSocial">动态 {{ userInfo.post_num }}</span>
           </li>
           <el-divider direction="vertical"></el-divider>
           <!-- 关注数 -->
@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   name: "UserHome",
   methods: {
@@ -448,17 +449,18 @@ export default {
       } else {
         jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       }
+      console.log(jwt);
       this.$axios({
-        method: "post",
-        url: "/user/get_user_info/",
-        data: JSON.stringify({
+        method: "get",
+        url: "/page/get_user_info/",
+        params: qs.stringify({
           JWT: jwt,
           user_id: this.user_id,
         }),
       })
         .then((res) => {
           // 获取成功
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             this.userInfo = res.data.user_info;
           }
           // 获取失败
@@ -477,9 +479,9 @@ export default {
           });
         });
     }
-    // 获取听歌排行
-    this.getRankList(1);
-    this.getRankList(2);
+    // // 获取听歌排行
+    // this.getRankList(1);
+    // this.getRankList(2);
   },
   data() {
     return {

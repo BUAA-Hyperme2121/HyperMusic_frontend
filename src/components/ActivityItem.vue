@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   props: ["activityInfo", "user_id"],
   data() {
@@ -110,39 +111,41 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/like",
+        path: "/message/like",
         method: "post",
-        data: JSON.stringify({
+        data: qs.stringify({
           JWT: jwt,
           type: 3,
           object_id: this.activityInfo.id,
         }),
       })
         .then((res) => {
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             this.$message({
               message: "点赞成功",
               type: "success",
             });
             // 更新点赞数
             this.$emit("addLikeCnt", this.activityInfo.id);
+            // 修改点赞状态
+            this.$emit("changeLikeStatus", this.activityInfo.id);
 
             // 向被点赞用户发送消息
             this.$axios({
               methods: "post",
               url: "/message/send_message",
-              data: {
+              data: qs.stringify({
                 receiver_id: this.activityInfo.poster_id,
                 content: "点赞了你的动态",
                 poster_id: this.$store.state.userInfo.id,
-                object_id: -1,
+                object_id: this.activityInfo.id,
                 type: 3,
                 message_type: 2,
-              },
+              }),
             });
           } else {
             this.$message({
-              message: "点赞失败",
+              message: this.res.message,
               type: "error",
             });
           }
@@ -155,49 +158,50 @@ export default {
       // 取消点赞该动态
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/like",
-        method: "delete",
-        data: JSON.stringify({
+        path: "/message/cancel_like",
+        method: "post",
+        data: qs.stringify({
           JWT: jwt,
-          // 1表示点赞动态
-          type: 1,
-          obj_id: this.activityInfo.activity_id,
+          type: 3,
+          obj_id: this.activityInfo.id,
         }),
       })
         .then((res) => {
-          if (res.data.code == 200) {
+          if (res.data.result == 1) {
             this.$message({
               message: "取消点赞成功",
               type: "success",
             });
             // 更新点赞数
-            this.$emit("subLikeCnt", this.activityInfo.activity_id);
-            // 删除消息，防止再次点赞后再次收到消息
-            this.$axios({
-              path: "/message",
-              method: "delete",
-              data: JSON.stringify({
-                JWT: jwt,
-                // 1表示点赞类型的消息
-                msg_type: 1,
-                // 1表示点赞对象为动态
-                type: 1,
-                obj_id: this.activityInfo.activity_id,
-              }),
-            })
-              .then((res) => {
-                if (res.data.code == 200) {
-                  console.log("删除消息成功");
-                } else {
-                  console.log("删除消息失败");
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            this.$emit("subLikeCnt", this.activityInfo.id);
+            // 修改点赞状态
+            this.$emit("changeLikeStatus", this.activityInfo.id);
+            // // 删除消息，防止再次点赞后再次收到消息
+            // this.$axios({
+            //   path: "/message",
+            //   method: "delete",
+            //   data: JSON.stringify({
+            //     JWT: jwt,
+            //     // 1表示点赞类型的消息
+            //     msg_type: 1,
+            //     // 1表示点赞对象为动态
+            //     type: 1,
+            //     obj_id: this.activityInfo.activity_id,
+            //   }),
+            // })
+            //   .then((res) => {
+            //     if (res.data.code == 200) {
+            //       console.log("删除消息成功");
+            //     } else {
+            //       console.log("删除消息失败");
+            //     }
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
           } else {
             this.$message({
-              message: "取消点赞失败",
+              message: res.data.message,
               type: "error",
             });
           }
