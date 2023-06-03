@@ -62,11 +62,9 @@
 
 .fronthead-actions {
   display: flex;
+  margin-top: 20px;
 }
 
-.fronthead-actions button {
-  margin-left: 10px;
-}
 
 .fronthead-description {
   margin-top: 20px;

@@ -5,6 +5,7 @@ import store from "./store";
 import axios from 'axios'
 import ElementUI from "element-ui";
 import "./assets/css/PageCss/Title.css"
+import "./assets/css/PageCss/Layout.css"
 import "element-ui/lib/theme-chalk/index.css";
 import '@/assets/iconfont/iconfont.css';
 ElementUI.Dialog.props.lockScroll.default = false; //解决dialog遮罩层抖动问题

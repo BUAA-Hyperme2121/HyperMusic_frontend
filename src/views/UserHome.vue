@@ -101,7 +101,7 @@
                 <el-tooltip
                   content="加入播放列表"
                   placement="top"
-                  :open-delay="1000"
+                  ::open-delay="1000"
                 >
                   <i class="el-icon-plus"></i>
                 </el-tooltip>
@@ -110,22 +110,22 @@
                 @click="addToFavorites(scope.row)"
                 class="operation-link"
               >
-                <el-tooltip content="收藏" placement="top" :open-delay="1000">
+                <el-tooltip content="收藏" placement="top" ::open-delay="1000">
                   <i class="el-icon-star-on"></i>
                 </el-tooltip>
               </el-link>
               <el-link @click="shareSong(scope.row)" class="operation-link">
-                <el-tooltip content="分享" placement="top" :open-delay="1000">
+                <el-tooltip content="分享" placement="top" ::open-delay="1000">
                   <i class="el-icon-share"></i>
                 </el-tooltip>
               </el-link>
               <el-link @click="downloadSong(scope.row)" class="operation-link">
-                <el-tooltip content="下载" placement="top" :open-delay="1000">
+                <el-tooltip content="下载" placement="top" ::open-delay="1000">
                   <i class="el-icon-download"></i>
                 </el-tooltip>
               </el-link>
               <el-link @click="deleteSong(scope.row)" class="operation-link">
-                <el-tooltip content="删除" placement="top" :open-delay="1000">
+                <el-tooltip content="删除" placement="top" ::open-delay="1000">
                   <i class="el-icon-delete"></i>
                 </el-tooltip>
               </el-link>

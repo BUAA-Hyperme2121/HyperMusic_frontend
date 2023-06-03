@@ -1,0 +1,15 @@
+.content-box {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.menu-item {
+  min-height: 60px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ml{
+    margin-left: 5px;
+}
