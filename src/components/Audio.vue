@@ -51,11 +51,9 @@ export default {
       let player = this.$refs.player
       //  记录音乐时长
       this.$store.commit('setDuration', player.duration)
-      console.log("enter successfully")
       if(this.isPlay){
           player.play()
           if(localStorage.getItem('loginInfo')!=null){
-            console.log("add successfully")
             var formData = new FormData()
             formData.append('music_id',this.id)
             formData.append('JWT',JSON.parse(localStorage.getItem("loginInfo")).JWT)

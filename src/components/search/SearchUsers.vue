@@ -3,7 +3,7 @@
             <el-table :data="data" style="width: 100%;font-size: 10px;" :show-header="false" stripe >
                 <el-table-column label="用户头像" width="80px">
                     <template slot-scope="scope">
-                        <el-image style="width: 60px;height: 60px; cursor: pointer;" :src="scope.row.avatar_path" @click="goUser(scope.row)"></el-image>
+                        <el-image style="width: 60px;height: 60px; cursor: pointer; border-radius: 10%;" :src="scope.row.avatar_path" @click="goUser(scope.row)"></el-image>
                     </template>
                 </el-table-column>
                 <el-table-column label="用户昵称" width="400px">

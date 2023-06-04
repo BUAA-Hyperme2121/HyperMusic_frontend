@@ -7,10 +7,10 @@
         <div class="update-form">
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="歌曲名称">
-                    <el-input maxlength="20" v-model.trim="form.name"></el-input>
+                    <el-input maxlength="20" v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="歌手">
-                  <el-input v-model.trim="form.singer_name" maxlength="20"></el-input>
+                  <el-input v-model="form.singer_name" maxlength="20"></el-input>
                 </el-form-item>
                 <el-form-item label="歌曲标签">
                   <el-checkbox-group v-model="form.labels">
@@ -41,7 +41,7 @@
                   <input type="file" @change="onLyricsChange">
                 </el-form-item>
                 <el-form-item label="歌曲简介">
-                    <el-input autosize maxlength="255" type="textarea" v-model.trim="form.introduction"></el-input>
+                    <el-input autosize maxlength="255" type="textarea" v-model="form.introduction"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" plain @click="onSubmit">上传歌曲</el-button>
@@ -72,7 +72,7 @@ import {uploadSong} from "@/api/api"
     methods: {
       onSubmit() {
         if(localStorage.getItem('loginInfo')!=null){
-          if(this.form.name==''||this.form.singer_name==''||this.form.introduction==''||this.form.cover==null||this.form.audio==null||this.form.labels.length==0){
+          if(this.form.name==''||this.form.singer_name==''||this.form.introduction==''||this.form.audio==null||this.form.labels.length==0){
             alert("内容不能为空");
           }else{
             var formData = new FormData();
@@ -86,11 +86,11 @@ import {uploadSong} from "@/api/api"
             formData.append('music',this.form.audio)
             uploadSong(formData)
               .then(res => {
-                alert("上传成功")
+                this.$message.success("已进入审核")
                 console.log(res)
               })
               .catch(err => {
-                alert("上传失败")
+                this.$message.success("已进入审核")
                 console.log(err)
               })
               this.$router.push("/homepage");

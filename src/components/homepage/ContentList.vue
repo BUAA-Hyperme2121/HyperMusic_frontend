@@ -63,6 +63,7 @@ export default {
     box-orient: vertical;
     line-clamp: 2;
     margin: 10px 8px;
+    height: 20px;
 }
 
 .item-img {

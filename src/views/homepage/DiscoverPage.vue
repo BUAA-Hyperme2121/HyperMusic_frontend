@@ -91,7 +91,7 @@ export default {
         getSongs(){
           getAllSongs()
             .then(res => {
-              this.recommendsongs=res.data.music_list.slice(0,10)
+              this.recommendsongs=res.data.music_list.slice(0,5)
             })
             .catch(err => {
               console.log(err)
@@ -100,7 +100,7 @@ export default {
         getPlaylists(){
           getAllPlaylists()
             .then(res => {
-              this.recommendplaylists=res.data.music_list_all.slice(0,10)
+              this.recommendplaylists=res.data.music_list_all.slice(0,5)
             })
             .catch(err => {
               console.log(err)
@@ -109,7 +109,7 @@ export default {
         getSingers(){
           getAllSingers()
             .then(res => {
-              this.recommendsingers=res.data.singer_list.slice(0,10)
+              this.recommendsingers=res.data.singer_list.slice(0,5)
             })
             .catch(err => {
               console.log(err)
@@ -118,7 +118,7 @@ export default {
         getRankList(){
           getRankList1()
             .then(res => {
-              this.rankList=res.data.hot_music_rank.slice(0,20)
+              this.rankList=res.data.hot_music_rank.slice(0,10)
             })
             .catch(err => {
               console.log(err)
