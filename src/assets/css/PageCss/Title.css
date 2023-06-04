@@ -65,10 +65,11 @@
   margin-top: 20px;
 }
 
-
 .fronthead-description {
   margin-top: 20px;
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .font-title {
   font-size: 30px;

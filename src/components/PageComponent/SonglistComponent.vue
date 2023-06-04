@@ -1,20 +1,15 @@
 <template>
   <div>
     <!-- playlistcomponent -->
-    <el-table
-      :data="songlist"
-      class="songlist-list-container"
-      style="width: 100%"
-      stripe
-    >
+    <el-table :data="songlist" class="songlist-list-container" style="width: 100%" stripe>
       <el-table-column width="80px" label="序号">
         <template slot-scope="scope">
           <span>{{ scope.$index + 1 }}</span>
-          <el-link @click="playSong(scope.row)" class="songlist-operation-link">
+          <el-link @click="Play(scope.row)" class="songlist-operation-link">
             <i class="el-icon-video-play" style="padding-bottom: 10px;"></i>
           </el-link>
         </template>
-        
+
       </el-table-column>
       <el-table-column prop="name" label="歌曲名称">
         <template slot-scope="scope">
@@ -30,11 +25,8 @@
       </el-table-column>
       <el-table-column prop="singer" label="歌手" v-if="!noSinger">
         <template slot-scope="scope">
-          <router-link
-            class="songlist-table-link"
-            :to="'/singer/' + scope.row.singer_name"
-            >{{ scope.row.singer_name }}</router-link
-          >
+          <router-link class="songlist-table-link" :to="'/singer/' + scope.row.singer_name">{{ scope.row.singer_name
+          }}</router-link>
         </template>
       </el-table-column>
       <!-- <el-table-column prop="album" label="专辑" v-if="!noAlbum">
@@ -44,13 +36,10 @@
           }}</router-link>
         </template>
       </el-table-column> -->
-      <el-table-column label="操作"  fixed="right">
+      <el-table-column label="操作" fixed="right">
         <div class="operation">
           <el-link @click="addToPlaylist(scope.row)" class="songlist-operation-link">
-            <el-tooltip
-              content="加入播放列表"
-              placement="top"
-            >
+            <el-tooltip content="加入播放列表" placement="top">
               <i class="el-icon-plus"></i>
             </el-tooltip>
           </el-link>
@@ -81,8 +70,10 @@
 </template>
 
 <script>
+import { mixin } from '../../mixins'
 export default {
   name: "songlistComponent",
+  mixins: [mixin],
   props: {
     songlist: {
       type: Array,
@@ -99,6 +90,15 @@ export default {
       default: false,
     }
   },
+  methods: {
+    Play(row) {
+      console.log("play\n");
+      this.toplay(row);
+    },
+    addToPlaylist(row) {
+      this.playlater(row);
+    },
+  }
 };
 </script>
 
@@ -108,13 +108,16 @@ export default {
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 .songlist-operation-link {
   padding: 5px;
 }
+
 .songlist-table-link {
   text-decoration: none;
   color: black;
 }
+
 .songlist-table-link:hover {
   color: #666;
   font-size: 14px;
