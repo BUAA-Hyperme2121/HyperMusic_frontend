@@ -31,8 +31,8 @@ export default{
         }
     },
     mounted(){
-        this.ArtistsRes=ArtistsRes
-        //this.getSingersRes()
+        //this.ArtistsRes=ArtistsRes
+        this.getSingersRes()
     },
     computed:{   //获取当前页面的歌单数据
         data(){

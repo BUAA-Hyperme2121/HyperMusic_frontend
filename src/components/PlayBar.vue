@@ -294,7 +294,7 @@ export default {
                 setLikes(formData)
                 .then(res => {
                     //根据res进行区分
-                    if(res.status==200){
+                    if(res.data.flag==2){
                         this.$message.success("成功添加到喜欢的音乐")
                     }else{
                         this.$message.success("取消喜欢")

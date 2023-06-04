@@ -3,7 +3,7 @@
             <el-table :data="data" style="width: 100%;font-size: 10px;" :show-header="false" stripe >
                 <el-table-column label="歌单封面" width="80px">
                     <template slot-scope="scope">
-                        <el-image style="width: 60px;height: 60px; cursor: pointer;" :src="scope.row.cover_path" @click="goPlaylist(scope.row)"></el-image>
+                        <el-image style="width: 60px;height: 60px; cursor: pointer; border-radius: 10%;" :src="scope.row.cover_path" @click="goPlaylist(scope.row)"></el-image>
                     </template>
                 </el-table-column>
                 <el-table-column label="歌单名" width="400px">
@@ -48,8 +48,8 @@ export default{
         }
     },
     mounted(){
-        this.PlayListsRes=PlayListsRes
-        //this.getPlaylistsRes()
+        //this.PlayListsRes=PlayListsRes
+        this.getPlaylistsRes()
     },
     methods:{
         changeCurrentPage(val){     //改变当前页
