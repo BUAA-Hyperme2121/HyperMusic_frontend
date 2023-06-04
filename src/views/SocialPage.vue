@@ -157,7 +157,6 @@ export default {
         }
       }
     },
-
   },
   data() {
     return {
@@ -166,9 +165,7 @@ export default {
       userInfo: {},
       // 动态列表
       activityList: [
-        {
-          
-        }
+        {},
         // {
         //   // 动态类型，1为分享歌曲，2为分享歌单
         //   activity_type: 1,
@@ -200,11 +197,11 @@ export default {
       // 发送请求查找关注用户的动态,更新左边动态列表
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/message/get_follow_post",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
-        }),
+        },
       }).then((res) => {
         this.activityList = res.data.posts;
       });
@@ -223,23 +220,23 @@ export default {
       }
       // 发送请求查找该用户的信息，更新右边用户信息
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/user/get_user_info/",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
           user_id: this.user_id,
-        }),
+        },
       }).then((res) => {
         this.userInfo = res.data.user_info;
       });
       // 发送请求查找该用户的动态,更新左边动态列表
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/message/get_user_post",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
           user_id: this.user_id,
-        }),
+        },
       }).then((res) => {
         this.activityList = res.data.posts;
       });
