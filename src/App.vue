@@ -2,7 +2,7 @@
   <div id="app">
     <TopNav />
     <router-view/>
-    <!-- <Audio /> -->
+    <Audio />
     <Aside />
     <PlayBar />
   </div>
