@@ -54,7 +54,7 @@
                 fit="fill"
                 :src="$store.state.userInfo.avatar_path"
                 style="height: 100%; width: 100%"
-                @click="goUserHome"
+                @click.native="goUserHome"
               ></el-avatar>
             </span>
             <el-dropdown-menu>
