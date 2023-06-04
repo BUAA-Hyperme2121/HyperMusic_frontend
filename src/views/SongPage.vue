@@ -200,6 +200,8 @@
 </style>
 
 <script>
+import qs from "qs";
+import pageJS from "../assets/js/PageJs/page.js";
 export default {
   name: "SongPage",
   data() {
@@ -225,8 +227,8 @@ export default {
         },
       ],
       song: {
-        id: "1",
-        singer_id: "1",
+        id: 4,
+        singer_id: 1,
         singer_name: "Taylor Swift",
         music_path: "/music/love_story.mp3",
         cover_path:
@@ -299,22 +301,60 @@ export default {
       });
     },
   },
+  mounted() {
+      this.isLike = true;
+      this.getSongData();
+    },
   methods: {
+    getSongData() {
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      this.$axios.get("/music/get_music_info/", {
+        params: {
+          JWT: jwt,
+          music_id: this.song.id,          
+        }
+      })
+      .then(
+        (res)=>{
+          console.log(res.data);
+        }
+      )
+      .catch(
+        (err)=>{
+          this.$message("获取歌曲失败！");
+        }
+      )
+
+      
+    },
     like_song() {
       console.log(this.isLike);
       this.isLike = !this.isLike;
+      if (localStorage.getItem("loginInfo") == null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+        return;
+      }
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      console.log(jwt);
       this.$axios
-        .post("/api/user/like_music/", {
+        .post("/user/like_music/", qs.stringify({
+          JWT: jwt,
           music_id: this.song.id,
-        })
+        }))
         .then(
-          (response) => {
-            console.log("/a1", response.data);
+          (res) => {
+            console.log(res.data);
           },
-          (error) => {
-            console.log("错误", error.message);
+        )
+        .catch(
+          (err) => {
+            console.log(err.data);
+            this.$message("点赞失败");
           }
-        );
+        )
     },
 
     modifyLabel() {

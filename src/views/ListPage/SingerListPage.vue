@@ -21,6 +21,7 @@
 
 <script>
 export default {
+  inject: ['reload'],
   props: ["id"],
   created() {
     // 通过 this.id 获取参数 id

@@ -23,9 +23,9 @@ const router = new VueRouter({
           component: () => import("../views/UserMusic.vue"),
           children: [
             {
-              path: "playlist/:id",
-              name: "Playlist",
-              component: () => import("../views/ListPage/PlaylistPage.vue"),
+              path: "musiclist/:id",
+              name: "Musiclist",
+              component: () => import("../views/ListPage/MusiclistPage.vue"),
               props: true,
             },
             {
@@ -164,6 +164,12 @@ const router = new VueRouter({
       path: "*",
       redirect: "/404",
     },
+    {
+      path: "/dev/:id",
+      name: "Dev",
+      props: true,
+      component: () => import("../views/dev.vue"),
+    }
   ],
 });
 
