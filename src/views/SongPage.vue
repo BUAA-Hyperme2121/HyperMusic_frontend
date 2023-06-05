@@ -150,7 +150,13 @@
         </div>
       </el-col>
       <el-col :span="15" :offset="1" class="lyrics-container">
-        <pre class="lyrics"></pre>
+        <div class="lyrics-outline">
+          <ul class="lyrics" v-if="lyrics.length" >
+            <li v-for="(item,index) in lyrics" v-bind:key="index">
+              {{ item[1] }}
+            </li>
+          </ul>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -189,8 +195,15 @@
   /* overflow-y: scroll; */
 }
 
+.lyrics-outline {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 600px;
+  width: 300px;
+}
+
 .lyrics {
-  overflow: auto;
+  list-style-type: none;
   white-space: pre-wrap;
   font-size: 20px;
   line-height: 2;
@@ -203,18 +216,14 @@
 import qs from "qs";
 import pageJS from "../assets/js/PageJs/page.js";
 import {mixin} from '../mixins'
+import { mapGetters } from 'vuex'
 export default {
   mixins: [mixin],
   name: "SongPage",
-  computed: {
-    ...mapGetters([
-      'curTime',
-      'id', 
-      'lyric', 
-    ])
-  },
   data() {
     return {
+      music_info:[],
+      lyrics:[],
       isLike: false,
       isModifyLabel: false,
       complaintForm: {
@@ -265,42 +274,115 @@ export default {
       },
     };
   },
+  created() {
+    this.isLike = true;
+    this.getSongData(); 
+  },
   computed: {
     activeLabel: function () {
       return this.song.labels.filter((item) => {
         return item.isSelect;
       });
     },
+    ...mapGetters([
+      'curTime',
+      'id',
+    ])
   },
-  mounted() {
-      this.isLike = true;
-      this.getSongData();   
+  watch: { 
+    //监听歌词变化
+    curTime() {
+      if (this.lyrics.length !== 0) {
+        for (let i = 0; i < this.lyrics.length; i++) {
+          if (this.curTime >= this.lyrics[i][0]) {
+            for (let j = 0; j < this.lyrics.length; j++) {
+              document.querySelectorAll('.lyrics li')[j].style.color = '#FAEBD7'
+              document.querySelectorAll('.lyrics li')[j].style.fontSize = '20px'
+            }
+            if (i >= 0) {
+              document.querySelectorAll('.lyrics li')[i].style.color = '#FFA1A8'
+              document.querySelectorAll('.lyrics li')[i].style.fontSize = '25px'
+              document.querySelector('.lyrics').style.transform= `translateY(${250 - (40 * (i + 1))}px)`
+            }
+          }
+        }
+      }
     },
+    //监听歌曲id变化
+    id(){
+      this.$message.success("跳转")
+      if(this.id!=this.song.id){
+        this.$router.push({path: `/song/${this.id}`});
+        this.$forceUpdate;
+      }
+    }
+  },
+  
   methods: {
     getSongData() {
+      //下面这几行是算id的
+      let num = 0;
+      const routePath = this.$route.path;
+      const matches = routePath.match(/\/(\d+)$/);
+      if (matches && matches.length > 1) {
+        num = parseInt(matches[1], 10);
+      }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios.get("/music/get_music_info/", {
         params: {
           JWT: jwt,
-          music_id: 7,          
+          music_id: num,          
         }
       })
       .then(
         (res)=>{
+          console.log(res.data.music_info)
           this.song.lyrics_path=res.data.music_info.lyrics_path;
           this.song.music_path=res.data.music_info.music_path;
           this.song.music_name=res.data.music_info.music_name;
-          this.playlyric(this.song.lyrics_path)
+          this.song.cover_path=res.data.music_info.cover_path;
+          this.song.id=res.data.music_info.id;
           this.toplay(this.song)
-          }
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = 'text';
+          xhr.open('GET', this.song.lyrics_path);
+          xhr.send();
+          xhr.onload = () => {
+              const lyricsText = xhr.response;
+              let lines = lyricsText.split('\n')
+              let pattern = /\[\d{2}:\d{2}.(\d{3}|\d{2})\]/g
+              let result = []
+              if (!(/\[.+\]/.test(lyricsText))) {
+                  return [
+                      [0, lyricsText]
+                  ]
+              }
+              while (!pattern.test(lines[0])) {
+                  lines = lines.slice(1)
+              }
+              lines[lines.length - 1].length === 0 && lines.pop()
+              for (let item of lines) {
+                  let time = item.match(pattern)
+                  let value = item.replace(pattern, '')
+                  for (let item1 of time) {
+                      let t = item1.slice(1, -1).split(':')
+                      if (value !== '') {
+                          result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value])
+                      }
+                  }
+              }
+              result.sort(function(a, b) {
+                  return a[0] - b[0]
+              })
+              this.lyrics=result
+            };
+        }
       )
       .catch(
         (err)=>{
           this.$message("获取歌曲失败！");
         }
       )
-
-      
     },
     like_song() {
       console.log(this.isLike);

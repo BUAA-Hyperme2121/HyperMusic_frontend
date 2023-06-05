@@ -11,8 +11,6 @@ const song = {
         picUrl: '', // 歌曲图片
         autoNext: true, // 用于触发自动播放下一首
         listOfSongs: [], // 当前播放列表
-        tempList: {}, // 单个歌单信息
-        lyric: [], // 歌词数据
         volume: 100
     },
     getters: {
@@ -80,13 +78,6 @@ const song = {
             }
             return autoNext
         },
-        tempList: state => {
-            let tempList = state.tempList
-            if (JSON.stringify(tempList) === '{}') {
-                tempList = JSON.parse(window.localStorage.getItem('tempList') || null)
-            }
-            return tempList
-        },
         listOfSongs: state => {
             let listOfSongs = state.listOfSongs
             if (!listOfSongs.length) {
@@ -100,13 +91,6 @@ const song = {
                 volume = JSON.parse(window.localStorage.getItem('volume') || null)
             }
             return volume
-        },
-        lyric: state => {
-            let lyric = state.lyric
-            if (lyric.length === 0) {
-                lyric = JSON.parse(window.sessionStorage.getItem('lyric') || null)
-            }
-            return lyric
         },
 
     },
@@ -149,10 +133,6 @@ const song = {
         setAutoNext: (state, autoNext) => {
             state.autoNext = autoNext
             window.localStorage.setItem('autoNext', JSON.stringify(autoNext))
-        },
-        setTempList: (state, tempList) => {
-            state.tempList = tempList
-            window.localStorage.setItem('tempList', JSON.stringify(tempList))
         },
         setListOfSongs: (state, listOfSongs) => {
             state.listOfSongs = listOfSongs
@@ -209,10 +189,6 @@ const song = {
         deleteAll: (state) => {
             state.listOfSongs.splice(0, state.listOfSongs.length)
             window.localStorage.setItem('listOfSongs', JSON.stringify(state.listOfSongs))
-        },
-        setLyric: (state, lyric) => {
-            state.lyric = lyric
-            window.sessionStorage.setItem('lyric', JSON.stringify(lyric))
         },
     },
     actions: {}

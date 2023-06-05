@@ -235,10 +235,8 @@ export default {
         changeAside(){
             if(this.showAside==true){
                 this.$store.commit('setShowAside',false);
-                console.log(this.showAside);
             }else{
                 this.$store.commit('setShowAside',true);
-                console.log(this.showAside);
             }
         },
         prev(){
@@ -284,7 +282,7 @@ export default {
             this.$store.commit('setId', this.listOfSongs[index].id);
             this.$store.commit('setPicUrl',this.listOfSongs[index].cover_path);
             this.$store.commit('setUrl', this.listOfSongs[index].music_path);
-            this.$store.commit('setTitle', this.listOfSongs[index].name)
+            this.$store.commit('setTitle', this.listOfSongs[index].music_name);
         },
         addToLikes(){
             if(localStorage.getItem('loginInfo')!=null&&this.id!=null){

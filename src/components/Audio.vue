@@ -59,7 +59,7 @@ export default {
             formData.append('JWT',JSON.parse(localStorage.getItem("loginInfo")).JWT)
             playSong(formData)
                 .then(res => {
-                    console.log(res)
+                    
                 })
                 .catch(err => {
                     console.log(err)
