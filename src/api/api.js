@@ -39,3 +39,8 @@ export const getFavorites = function() {
     let JWT = JSON.parse(localStorage.getItem("loginInfo")).JWT
     return get(`/user/get_create_music_list/?JWT=${JWT}`);
 }
+
+export const createList = (formdata)=> post(`/user/create_favorites/`, formdata);
+export const deleteList = (formdata) => post(`/user/del_favorites/`, formdata);
+export const setPublic = (formdata) => post(`/user/share_favorites/`, formdata);
+export const delFromList = (formdata) => post(`/user/unmark_music/`, formdata);

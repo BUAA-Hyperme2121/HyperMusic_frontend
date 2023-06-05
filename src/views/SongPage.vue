@@ -2,12 +2,12 @@
   <div class="fronthead-container">
     <div
       class="background"
-      :style="{ backgroundImage: `url(${song.cover_path})` }"
+      :style="{ backgroundImage: `url(${music_info.cover_path})` }"
     ></div>
     <el-row :gutter="20">
       <el-col :span="6" :offset="1" style="position: sticky; top: 0px">
         <div class="fronthead-cover-big">
-          <img :src="song.cover_path" alt="album cover" />
+          <img :src="music_info.cover_path" alt="album cover" />
           <div class="fronthead-play-btn"></div>
         </div>
         <!--name, description-->
@@ -17,7 +17,7 @@
               class="font-title"
               style="color: white; font-size: 40px; padding-left: 40px"
             >
-              {{ song.music_name }}
+              {{ music_info.music_name }}
             </span>
             <a-button type="link" ghost @click="like_song">
               <img
@@ -28,10 +28,10 @@
               <img v-else src="../assets/notlike.png" style="height: 40px" />
             </a-button>
           </div>
-          <div class="font-description">歌手：{{ song.singer_name }}</div>
+          <div class="font-description">歌手：{{ music_info.singer_name }}</div>
 
           <div class="font-description" style="padding-bottom: 20px">
-            播放量：{{ song.listen_nums }}
+            播放量：{{ music_info.listen_nums }}
           </div>
           <!--歌曲标签-->
           <div class="label-container">
@@ -39,7 +39,7 @@
               <el-button
                 size="mini"
                 round
-                v-for="(label, index) in song.labels"
+                v-for="(label, index) in music_info.labels"
                 :key="label._id"
                 :class="{ activeLabel: label.isSelect, label: !label.isSelect }"
                 @click="selectLabel(index)"
@@ -145,7 +145,7 @@
             </el-popover>
           </div>
           <div class="fronthead-description font-description">
-            {{ song.description }}
+            {{ music_info.description }}
           </div>
         </div>
       </el-col>
@@ -177,6 +177,7 @@
   background-repeat: no-repeat;
   filter: blur(10px) brightness(70%);
   z-index: -1;
+  overflow-x:hidden
 }
 
 .song-cover {
@@ -214,11 +215,11 @@
 
 <script>
 import qs from "qs";
-import pageJS from "../assets/js/PageJs/page.js";
 import {mixin} from '../mixins'
 import { mapGetters } from 'vuex'
 export default {
   mixins: [mixin],
+  props: ["id"],
   name: "SongPage",
   data() {
     return {
@@ -244,34 +245,7 @@ export default {
           id: 3,
         },
       ],
-      song: {
-        id: 5,
-        singer_id: 1,
-        singer_name: "Taylor Swift",
-        music_path: "",
-        cover_path:
-          "https://img.zcool.cn/community/01fd635e875573a801216518e19acd.png@2o.png",
-        music_name: "Love Story",
-        lyrics_path: "",
-        listen_nums: "1000000",
-        labels: [
-          {
-            label_name: "label1",
-            isSelect: false,
-          },
-          {
-            label_name: "label2",
-            isSelect: true,
-          },
-          {
-            label_name: "label3",
-            isSelect: false,
-          },
-        ],
-        description:
-          "Love Story is a song by American singer-songwriter Taylor Swift. It was released on September 12, 2008.",
-        lyrics: null,
-      },
+      music_info: [],
     };
   },
   mounted() {
@@ -280,7 +254,7 @@ export default {
   },
   computed: {
     activeLabel: function () {
-      return this.song.labels.filter((item) => {
+      return this.music_info.labels.filter((item) => {
         return item.isSelect;
       });
     },
@@ -401,7 +375,7 @@ export default {
       this.$axios
         .post("/user/like_music/", qs.stringify({
           JWT: jwt,
-          music_id: this.song.id,
+          music_id: this.music_info.id,
         }))
         .then(
           (res) => {
@@ -416,16 +390,16 @@ export default {
         )
     },
 
-    modifyLabel() {
-      console.log(this.isModifyLabel);
-      this.isModifyLabel = !this.isModifyLabel;
-    },
-    selectLabel(index) {
-      this.song.labels[index].isSelect = !this.song.labels[index].isSelect;
-    },
-    submitComplaintForm() {
-      console.log("提交表单：", this.form);
-    },
+    // modifyLabel() {
+    //   console.log(this.isModifyLabel);
+    //   this.isModifyLabel = !this.isModifyLabel;
+    // },
+    // selectLabel(index) {
+    //   this.song.labels[index].isSelect = !this.song.labels[index].isSelect;
+    // },
+    // submitComplaintForm() {
+    //   console.log("提交表单：", this.form);
+    // },
   },
 };
 </script>

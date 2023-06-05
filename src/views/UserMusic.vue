@@ -36,7 +36,7 @@
                             <img :src="music_list.cover_path" alt="music_list.cover_path" style="height: 40px;">
                             <span class="ml">{{ music_list.name }}</span>
                             <span class="ml">({{ music_list.music_num }})</span>
-                            <i class="el-icon-setting ml"></i>
+                            <!-- <i class="el-icon-setting ml"></i> -->
                         </el-menu-item>
 
                     </el-submenu>
@@ -83,6 +83,7 @@
 
 <script>
 import qs from "qs";
+import {createList} from '@/api/api.js'
 export default ({
     data() {
         return {
@@ -97,11 +98,12 @@ export default ({
             form: {
                 favorites_name: '',
                 description: '',
-                cover:null,
+                cover: null,
             }
         }
     },
-    mounted() {
+    created() {
+        this.reload();
         this.fetchMenus();
     },
     provide() {
@@ -109,6 +111,13 @@ export default ({
             reload: this.reload
         }
     },
+    // beforeRouteUpdate(to, from, next) {
+    //     if (to.fullPath != from.fullPath) {
+    //         console.log("111");
+    //         next()
+    //         this.fetchMenus();
+    //     }
+    // },
     methods: {
         fetchMenus() {
             if (localStorage.getItem("loginInfo") == null) {
@@ -149,7 +158,7 @@ export default ({
                 // jump to the people i follow
                 console.log("jump to the people i follow");
                 this.$router.push({ name: "Singerlist", params: { id: "1" } });
-                this.reload();
+                // this.reload();
             } else if (index == "2") {
                 this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
                 this.reload();
@@ -184,22 +193,37 @@ export default ({
                 if (this.form.favorites_name == '') {
                     alert("内容不能为空");
                 } else {
-                    this.$axios
-                        .post("/user/create_favorites/", qs.stringify({
-                            JWT: JSON.parse(localStorage.getItem("loginInfo")).JWT,
-                            favorites_name: this.form.favorites_name,
-                            description: this.form.description,
-                            cover: this.form.cover,
-                        }))
+                    var formData = new FormData();
+                    formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+                    formData.append('favorites_name', this.form.favorites_name)
+                    formData.append('description', this.form.description)
+                    formData.append('cover', this.form.cover)
+                    createList(formData)
                         .then(res => {
-                            this.$message("已创建歌单！");
-                            console.log(res);
-                            this.$forceUpdate();
+                            this.$message.success("已创建新歌单")
+                            console.log(res)
                         })
                         .catch(err => {
-                            this.$message("创建失败，请重试")
+                            this.$message.success("创建失败，请重试")
                             console.log(err)
                         })
+                    // this.$router.push("/homepage");
+                    // this.$axios
+                    //     .post("/user/create_favorites/", qs.stringify({
+                    //         JWT: JSON.parse(localStorage.getItem("loginInfo")).JWT,
+                    //         favorites_name: this.form.favorites_name,
+                    //         description: this.form.description,
+                    //         cover: this.form.cover,
+                    //     }))
+                    //     .then(res => {
+                    //         this.$message("已创建歌单！");
+                    //         console.log(res);
+                    //         this.$forceUpdate();
+                    //     })
+                    //     .catch(err => {
+                    //         this.$message("创建失败，请重试")
+                    //         console.log(err)
+                    //     })
 
                 }
             } else {

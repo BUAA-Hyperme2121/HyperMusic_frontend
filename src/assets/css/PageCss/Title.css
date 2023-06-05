@@ -1,6 +1,7 @@
 .fronthead-container {
   padding: 20px;
   border-radius: 20px;
+  overflow-x: hidden;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
 }
 
@@ -62,7 +63,7 @@
 
 .fronthead-actions {
   display: flex;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .fronthead-description {
