@@ -253,7 +253,7 @@ export default {
         }),
       })
         .then((res) => {
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             this.historyList = res.data.music_list;
           } else {
             this.$message({
