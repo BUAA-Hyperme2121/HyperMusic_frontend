@@ -274,7 +274,7 @@ export default {
       },
     };
   },
-  created() {
+  mounted() {
     this.isLike = true;
     this.getSongData(); 
   },
@@ -310,14 +310,16 @@ export default {
     },
     //监听歌曲id变化
     id(){
-      this.$message.success("跳转")
       if(this.id!=this.song.id){
+        this.$message.success("跳转")
         this.$router.push({path: `/song/${this.id}`});
-        this.$forceUpdate;
       }
     }
   },
-  
+  beforeRouteUpdate(to,from,next){
+     next()
+     this.getSongData()
+  },
   methods: {
     getSongData() {
       //下面这几行是算id的
