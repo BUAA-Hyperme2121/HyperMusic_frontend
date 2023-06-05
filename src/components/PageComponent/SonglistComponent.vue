@@ -37,33 +37,36 @@
         </template>
       </el-table-column> -->
       <el-table-column label="操作" fixed="right">
-        <div class="operation">
-          <el-link @click="addToPlaylist(scope.row)" class="songlist-operation-link">
-            <el-tooltip content="加入播放列表" placement="top">
-              <i class="el-icon-plus"></i>
-            </el-tooltip>
-          </el-link>
-          <el-link @click="addToFavorites(scope.row)" class="songlist-operation-link">
-            <el-tooltip content="收藏" placement="top" :open-delay="1000">
-              <i class="el-icon-star-on"></i>
-            </el-tooltip>
-          </el-link>
-          <el-link @click="shareSong(scope.row)" class="songlist-operation-link">
-            <el-tooltip content="分享" placement="top" :open-delay="1000">
-              <i class="el-icon-share"></i>
-            </el-tooltip>
-          </el-link>
-          <el-link @click="downloadSong(scope.row)" class="songlist-operation-link">
-            <el-tooltip content="下载" placement="top" :open-delay="1000">
-              <i class="el-icon-download"></i>
-            </el-tooltip>
-          </el-link>
-          <el-link @click="deleteSong(scope.row)" class="songlist-operation-link">
-            <el-tooltip content="删除" placement="top" :open-delay="1000">
-              <i class="el-icon-delete"></i>
-            </el-tooltip>
-          </el-link>
-        </div>
+
+        <template slot-scope="scope">
+          <div class="operation">
+            <el-link @click="addToPlaylist(scope.row)" class="songlist-operation-link">
+              <el-tooltip content="加入播放列表" placement="top">
+                <i class="el-icon-plus"></i>
+              </el-tooltip>
+            </el-link>
+            <el-link @click="addToFavorites(scope.row)" class="songlist-operation-link">
+              <el-tooltip content="收藏" placement="top" :open-delay="1000">
+                <i class="el-icon-star-on"></i>
+              </el-tooltip>
+            </el-link>
+            <el-link @click="shareSong(scope.row)" class="songlist-operation-link">
+              <el-tooltip content="分享" placement="top" :open-delay="1000">
+                <i class="el-icon-share"></i>
+              </el-tooltip>
+            </el-link>
+            <el-link @click="downloadSong(scope.row)" class="songlist-operation-link">
+              <el-tooltip content="下载" placement="top" :open-delay="1000">
+                <i class="el-icon-download"></i>
+              </el-tooltip>
+            </el-link>
+            <el-link @click="deleteSong(scope.row)" class="songlist-operation-link">
+              <el-tooltip content="删除" placement="top" :open-delay="1000">
+                <i class="el-icon-delete"></i>
+              </el-tooltip>
+            </el-link>
+          </div>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -96,6 +99,7 @@ export default {
       this.toplay(row);
     },
     addToPlaylist(row) {
+      console.log("addtolist\n");
       this.playlater(row);
     },
   }
@@ -122,7 +126,6 @@ export default {
   color: #666;
   font-size: 14px;
 }
-.operation {
-  
-}
+
+.operation {}
 </style>
