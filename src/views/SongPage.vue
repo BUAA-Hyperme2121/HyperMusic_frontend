@@ -150,7 +150,7 @@
         </div>
       </el-col>
       <el-col :span="15" :offset="1" class="lyrics-container">
-        <pre class="lyrics">{{ song.lyrics }}</pre>
+        <pre class="lyrics"></pre>
       </el-col>
     </el-row>
   </div>
@@ -206,6 +206,13 @@ import {mixin} from '../mixins'
 export default {
   mixins: [mixin],
   name: "SongPage",
+  computed: {
+    ...mapGetters([
+      'curTime',
+      'id', 
+      'lyric', 
+    ])
+  },
   data() {
     return {
       isLike: false,
