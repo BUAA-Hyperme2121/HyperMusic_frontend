@@ -1,13 +1,10 @@
 <template>
   <div>
     <!-- playlistcomponent -->
-    <el-table :data="songlist" class="songlist-list-container" style="width: 100%" stripe>
-      <el-table-column width="80px" label="序号">
+    <el-table :data="songlist" class="songlist-list-container" style="width: 100%;" stripe>
+      <el-table-column width="80px" label="">
         <template slot-scope="scope">
-          <span>{{ scope.$index + 1 }}</span>
-          <el-link @click="Play(scope.row)" class="songlist-operation-link">
-            <i class="el-icon-video-play" style="padding-bottom: 10px;"></i>
-          </el-link>
+          <span style="margin-left: 10px;">{{ scope.$index + 1 }}</span>
         </template>
 
       </el-table-column>
@@ -29,25 +26,16 @@
           }}</router-link>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="album" label="专辑" v-if="!noAlbum">
-        <template slot-scope="scope">
-          <router-link class="songlist-table-link" :to="'/album/' + scope.row.albumId">{{
-            scope.row.album
-          }}</router-link>
-        </template>
-      </el-table-column> -->
       <el-table-column label="操作" fixed="right">
 
         <template slot-scope="scope">
           <div class="operation">
+            <el-link @click="Play(scope.row)" class="songlist-operation-link" style="margin-left: 20px;">
+              <i class="el-icon-video-play" style="padding-bottom: 5px;"></i>
+            </el-link>
             <el-link @click="addToPlaylist(scope.row)" class="songlist-operation-link">
               <el-tooltip content="加入播放列表" placement="top">
                 <i class="el-icon-plus"></i>
-              </el-tooltip>
-            </el-link>
-            <el-link @click="addToFavorites(scope.row)" class="songlist-operation-link">
-              <el-tooltip content="收藏" placement="top" :open-delay="1000">
-                <i class="el-icon-star-on"></i>
               </el-tooltip>
             </el-link>
             <el-link @click="shareSong(scope.row)" class="songlist-operation-link">
@@ -55,11 +43,11 @@
                 <i class="el-icon-share"></i>
               </el-tooltip>
             </el-link>
-            <el-link @click="downloadSong(scope.row)" class="songlist-operation-link">
+            <!-- <el-link @click="downloadSong(scope.row)" class="songlist-operation-link">
               <el-tooltip content="下载" placement="top" :open-delay="1000">
                 <i class="el-icon-download"></i>
               </el-tooltip>
-            </el-link>
+            </el-link> -->
             <el-link @click="deleteSong(scope.row)" class="songlist-operation-link">
               <el-tooltip content="删除" placement="top" :open-delay="1000">
                 <i class="el-icon-delete"></i>
@@ -74,6 +62,7 @@
 
 <script>
 import { mixin } from '../../mixins'
+import { delFromList } from '@/api/api'
 export default {
   name: "songlistComponent",
   mixins: [mixin],
@@ -82,16 +71,31 @@ export default {
       type: Array,
       required: true,
     },
-    noAlbum: {
-      type: Boolean,
+    create_music_list: {
+      type: Array,
       required: false,
-      default: false,
     },
     noSinger: {
       type: Boolean,
       required: false,
       default: false,
+    },
+    fromList: {
+      type: Boolean,
+      default: true,
+    },
+    objectId: {
+      type: Number,
+      default: 0,
     }
+  },
+  data() {
+    return {
+
+    }
+  },
+  mounted() {
+
   },
   methods: {
     Play(row) {
@@ -102,6 +106,25 @@ export default {
       console.log("addtolist\n");
       this.playlater(row);
     },
+    deleteSong(row) {
+      if (this.fromList) {
+        var formData = new FormData();
+        formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+        formData.append('favorites_id', this.objectId);
+        formData.append('music_id', row.id);
+        console.log(this.objectId);
+        delFromList(formData)
+          .then(res => {
+            this.$message("已删除")
+            console.log(res)
+          })
+          .catch(err => {
+            this.$message("删除失败，请重试")
+            console.log(err)
+          })
+      }
+
+    }
   }
 };
 </script>
@@ -114,7 +137,7 @@ export default {
 }
 
 .songlist-operation-link {
-  padding: 5px;
+  padding-left: 5px;
 }
 
 .songlist-table-link {
