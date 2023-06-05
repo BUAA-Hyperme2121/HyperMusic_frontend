@@ -12,6 +12,7 @@ const song = {
         autoNext: true, // 用于触发自动播放下一首
         listOfSongs: [], // 当前播放列表
         tempList: {}, // 单个歌单信息
+        lyric: [], // 歌词数据
         volume: 100
     },
     getters: {
@@ -99,7 +100,15 @@ const song = {
                 volume = JSON.parse(window.localStorage.getItem('volume') || null)
             }
             return volume
-        }
+        },
+        lyric: state => {
+            let lyric = state.lyric
+            if (lyric.length === 0) {
+                lyric = JSON.parse(window.sessionStorage.getItem('lyric') || null)
+            }
+            return lyric
+        },
+
     },
     mutations: {
         setIsPlay: (state, isPlay) => {
@@ -200,7 +209,11 @@ const song = {
         deleteAll: (state) => {
             state.listOfSongs.splice(0, state.listOfSongs.length)
             window.localStorage.setItem('listOfSongs', JSON.stringify(state.listOfSongs))
-        }
+        },
+        setLyric: (state, lyric) => {
+            state.lyric = lyric
+            window.sessionStorage.setItem('lyric', JSON.stringify(lyric))
+        },
     },
     actions: {}
 }
