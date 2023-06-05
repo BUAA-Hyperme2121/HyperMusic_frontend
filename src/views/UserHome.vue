@@ -246,11 +246,11 @@ export default {
     getHistoryList() {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/user/get_recent_listen_music_list/",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
-        }),
+        },
       })
         .then((res) => {
           if (res.data.result == 1) {
