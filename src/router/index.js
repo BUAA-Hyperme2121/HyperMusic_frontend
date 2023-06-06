@@ -106,7 +106,7 @@ const router = new VueRouter({
       ],
     },
     {
-      path: "/album/:id",
+      path: "/playlist/:id",
       name: "AlbumPage",
       component: () => import("../views/AlbumPage.vue"),
       props: true,
@@ -118,7 +118,7 @@ const router = new VueRouter({
       props: true,
     },
     {
-      path: "/song/:id",
+      path: "/song/:music_id",
       name: "SongPage",
       component: () => import("../views/SongPage.vue"),
       props: true,
@@ -165,7 +165,7 @@ const router = new VueRouter({
       redirect: "/404",
     },
     {
-      path: "/dev/:id",
+      path: "/dev/:music_id",
       name: "Dev",
       props: true,
       component: () => import("../views/dev.vue"),

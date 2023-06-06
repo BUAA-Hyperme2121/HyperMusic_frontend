@@ -44,3 +44,6 @@ export const createList = (formdata)=> post(`/user/create_favorites/`, formdata)
 export const deleteList = (formdata) => post(`/user/del_favorites/`, formdata);
 export const setPublic = (formdata) => post(`/user/share_favorites/`, formdata);
 export const delFromList = (formdata) => post(`/user/unmark_music/`, formdata);
+export const changeMusiclist = (formdata) => post(`/music/change_favorites_info/`, formdata);
+
+export const complainMusic = (formdata) => post(`/message/cre_complain/`, formdata);

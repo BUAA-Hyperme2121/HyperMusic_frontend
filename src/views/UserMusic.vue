@@ -147,7 +147,7 @@ export default ({
                 })
                 .catch(
                     (err) => {
-                        this.$message("获取歌曲失败！");
+                        this.$message("获取我的音乐失败！");
                     }
                 )
         },
