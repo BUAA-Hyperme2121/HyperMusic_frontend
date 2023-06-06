@@ -115,13 +115,14 @@ export default {
         console.log(this.objectId);
         delFromList(formData)
           .then(res => {
-            this.$message("已删除")
+            this.$message("已删除,请刷新页面")
             console.log(res)
           })
           .catch(err => {
             this.$message("删除失败，请重试")
             console.log(err)
           })
+          
       }
 
     }
