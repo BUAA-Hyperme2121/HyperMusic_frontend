@@ -182,6 +182,7 @@
 <script>
 import { setFavorites, setLikes, setPosts, complainMusic } from '@/api/api';
 import { mixin } from '@/mixins'
+import {mapGetters} from 'vuex'
 export default ({
     mixins: [mixin],
     props: ["music_id"],
@@ -230,9 +231,46 @@ export default ({
             disabled: false,
         }
     },
+    computed: {
+      ...mapGetters([
+        'curTime',
+        'id',
+      ])
+    },
+    watch: { 
+    //监听歌词变化
+      curTime() {
+        if (this.lyrics.length !== 0) {
+          for (let i = 0; i < this.lyrics.length; i++) {
+            if (this.curTime >= this.lyrics[i][0]) {
+              for (let j = 0; j < this.lyrics.length; j++) {
+                document.querySelectorAll('.lyrics li')[j].style.color = '#FAEBD7'
+                document.querySelectorAll('.lyrics li')[j].style.fontSize = '20px'
+              }
+              if (i >= 0) {
+                document.querySelectorAll('.lyrics li')[i].style.color = '#FFA1A8'
+                document.querySelectorAll('.lyrics li')[i].style.fontSize = '25px'
+                document.querySelector('.lyrics').style.transform= `translateY(${250 - (40 * (i + 1))}px)`
+              }
+            }
+          }
+        }
+      },
+      //监听歌曲id变化
+      id(){
+        if(this.id!=this.music_info.id){
+          this.$router.push({path: `/song/${this.id}`});
+        }
+      }
+    },
     mounted() {
         this.fetchSong();
-
+    },
+    beforeRouteUpdate(to, from, next) {
+      next()
+      if (to.fullPath != from.fullPath) {
+          this.fetchSong();
+      }
     },
     methods: {
         changeComplaintForm() {
@@ -357,7 +395,6 @@ export default ({
             this.isDescription = !this.isDescription;
         },
         Play() {
-            console.log("play");
             this.toplay(this.music_info);
         },
         getlyrics() {
@@ -392,29 +429,35 @@ export default ({
                 result.sort(function (a, b) {
                     return a[0] - b[0]
                 })
-                this.lyrics = result
-                console.log(this.lyrics);
+                this.lyrics = Object.assign([],result)
             }
         },
         fetchSong() {
+            //this.$message.success("调用")
             let jwt = ''
             if (localStorage.getItem("loginInfo") == null) {
                 jwt = -1;
             }
             else {
                 jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
-                console.log(jwt);
+            }
+            let num = 0;
+            const routePath = this.$route.path;
+            const matches = routePath.match(/\/(\d+)$/);
+            if (matches && matches.length > 1) {
+              num = parseInt(matches[1], 10);
             }
             this.axios.get("/music/get_music_info/", {
                 params: {
                     JWT: jwt,
-                    music_id: this.music_id,
+                    music_id: num,
                 }
             })
                 .then((res) => {
                     this.music_info = res.data.music_info;
-                    
+                    this.toplay(this.music_info)
                     if (this.music_info.lyrics_path == "") {
+                        this.lyrics=[];
                         this.lyrics.push([0, "暂时没有歌词哦~"])
                     }
                     else {
@@ -433,6 +476,7 @@ export default ({
             // this.isLike = !this.isLike;
             if (localStorage.getItem('loginInfo') != null) {
                 var formData = new FormData();
+                this.$message.success(this.music_id)
                 formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
                 formData.append('music_id', this.music_id)
                 setLikes(formData)
@@ -460,7 +504,6 @@ export default ({
                 return;
             }
             let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
-            console.log(jwt);
             this.axios.get("/user/get_create_music_list/", {
                 params: {
                     JWT: jwt,
@@ -468,7 +511,6 @@ export default ({
             })
                 .then((res) => {
                     this.create_music_list = res.data.create_music_list.slice(1);
-                    console.log(this.create_music_list);
                 })
                 .catch(
                     (err) => {

@@ -8,11 +8,13 @@ export const mixin = {
             this.$store.commit('setPicUrl', song.cover_path); //歌曲封面
             this.$store.commit('setUrl', song.music_path); //歌曲url
             this.$store.commit('setTitle', song.music_name) //歌曲名
-            this.$store.commit('playListOfSongs', song) //加入播放列表
+            let newsong = Object.assign({}, song)
+            this.$store.commit('playListOfSongs', newsong) //加入播放列表
         },
         //加入播放列表尾端
         playlater(song) {
-            this.$store.commit('addListOfSongs', song)
+            let newsong = Object.assign({}, song)
+            this.$store.commit('addListOfSongs', newsong)
         },
         //播放歌单中的所有歌曲
         toplayList(list) {
