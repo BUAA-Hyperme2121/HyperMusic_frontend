@@ -9,7 +9,7 @@
                         <em>随便听听</em>
                         <router-link to="/homepage/song">更多></router-link>
                     </div>
-                    <content-list :contentList="recommendsongs" :type="1"></content-list>
+                    <content-list :contentList="recommendsongs" :type=1></content-list>
                 </div>
                 <div class="section">
                     <div class="section-title">
@@ -17,7 +17,7 @@
                         <em>推荐歌单</em>
                         <router-link to="/homepage/playlist">更多></router-link>
                     </div>
-                    <content-list :contentList="recommendplaylists" :type="2"></content-list>
+                    <content-list :contentList="recommendplaylists" :type=2></content-list>
                 </div>
                 <div class="section">
                     <div class="section-title">
@@ -25,7 +25,7 @@
                         <em>推荐歌手</em>
                         <router-link to="/homepage/artist">更多></router-link>
                     </div>
-                    <content-list :contentList="recommendsingers" :type="3"></content-list>
+                    <content-list :contentList="recommendsingers" :type=3></content-list>
                 </div>
             </div>
             <div class="right">

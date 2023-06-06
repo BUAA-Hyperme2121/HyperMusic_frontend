@@ -68,7 +68,7 @@
   <script>
   import SonglistComponent from "@/components/PageComponent/SonglistComponent.vue";
   export default {
-    name: "PlaylistPage",
+    name: "SingerPage",
     props: ["id"],
     components: {
       SonglistComponent,

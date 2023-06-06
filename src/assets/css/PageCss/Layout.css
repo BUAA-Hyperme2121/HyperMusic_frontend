@@ -10,6 +10,9 @@
   align-items: center;
   flex-direction: column;
 }
-.ml{
-    margin-left: 5px;
+.ml {
+  margin-left: 5px;
+}
+.dialogClass {
+  border-radius: 20px;
 }

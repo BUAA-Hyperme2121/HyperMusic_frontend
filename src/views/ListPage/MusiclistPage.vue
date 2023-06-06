@@ -56,7 +56,8 @@
                         <el-button v-else type="default" icon="el-icon-folder-add" @click="modifyInfo">修改</el-button>
 
                     </div>
-                    <div class="fronthead-description font-description" v-if="!isModify">{{ this.music_list_info.description
+                    <div class="fronthead-description font-description" style="width: 50vw;" v-if="!isModify">{{
+                        this.music_list_info.description
                     }}</div>
                     <div class="fronthead-description font-description" v-else>
                         <input type="text" v-bind:value="this.music_list_info.description" v-on:input="changeDescription"
@@ -68,7 +69,7 @@
             <!-- 歌单歌曲列表 -->
             <el-row>
                 <h2>歌曲列表</h2>
-                <SonglistComponent :songlist="this.music_list" :object-id="this.music_list_info.id"/>
+                <SonglistComponent :songlist="this.music_list" :object-id="this.music_list_info.id" />
             </el-row>
         </el-col>
 
@@ -79,7 +80,7 @@
 
 <script>
 import SonglistComponent from '@/components/PageComponent/SonglistComponent.vue';
-import { setPublic, deleteList } from "@/api/api.js";
+import { setPublic, deleteList, changeMusiclist } from "@/api/api.js";
 import { mixin } from '../../mixins'
 export default ({
     inject: ['reload'],
@@ -162,6 +163,19 @@ export default ({
             console.log("submitModifyInfo");
             this.isModify = false;
             //post
+            var formData = new FormData();
+            formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+            formData.append('favorites_id', this.music_list_info.id)
+            formData.append('name', this.music_list_info.name)
+            formData.append('description', this.music_list_info.description)
+            changeMusiclist(formData)
+                .then(res => {
+                    //根据res进行区分
+                    this.$message.success("修改成功")
+                })
+                .catch(err => {
+                    this.$message.error("修改失败，请重试")
+                })
         },
         fetchList() {
             //是否需要登录？

@@ -22,10 +22,10 @@
                 </el-tooltip>
             </div>
             <div class="item">
-                <img class="item-img" :src=picUrl alt="">
+                <img class="item-img" :src=picUrl alt="" @click="goSpecific">
             </div>
             <div class="item" style="width: 120px;">
-                <div class="item-song-title" style="width: 120px;">{{ this.title }}</div>
+                <div class="item-song-title" style="width: 120px;" @click="goSpecific">{{ this.title }}</div>
             </div>
             <div class="playing-speed"  @mouseup="mouseup" @mousemove="mousemove">
                 <div class="current-time">{{nowTime}}</div>
@@ -122,6 +122,9 @@ export default {
         },false);
     },
     methods: {
+        goSpecific(){
+            this.$router.push(`/song/${this.id}`)
+        },
         togglePlay(){
             if(this.isPlay){
                 this.$store.commit('setIsPlay',false);
