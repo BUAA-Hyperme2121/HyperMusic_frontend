@@ -12,9 +12,12 @@
               :activityInfo="activity"
               :key="activity.id"
               :user_id="user_id"
+              :addLikeCnt="addLikeCnt"
+              :subLikeCnt="subLikeCnt"
+              :changeLikeStatus="changeLikeStatus"
             ></ActivityItem>
             <el-divider></el-divider>
-            <CommentPage></CommentPage>
+            <!-- <CommentPage></CommentPage> -->
           </div>
         </div>
       </el-col>
@@ -36,7 +39,7 @@
           </div>
           <div class="user-info-foot">
             <el-link type="info" @click="showMyAct"
-              >动态 {{ userInfo.activity_num }}</el-link
+              >动态 {{ userInfo.post_num }}</el-link
             >
             <el-divider direction="vertical"></el-divider>
             <el-link type="info" @click="showFollow"
@@ -60,12 +63,10 @@
 
 <script>
 import ActivityItem from "../components/ActivityItem.vue";
-import CommentPage from "../components/CommentPage.vue";
 
 export default {
   components: {
     ActivityItem,
-    CommentPage,
   },
   methods: {
     // 展示指定用户发布的动态
@@ -164,28 +165,7 @@ export default {
       // 不完全的用户信息，只是用来在动态页展示
       userInfo: {},
       // 动态列表
-      activityList: [
-        {},
-        // {
-        //   // 动态类型，1为分享歌曲，2为分享歌单
-        //   activity_type: 1,
-        //   activity_id: 1,
-        //   activity_time: "2020-12-12 12:12:12",
-        //   activity_content: "我上传了一首歌，一起来听听吧！",
-        //   like_cnt: 10,
-        //   is_liked: false, //是否已经点赞
-        //   comment_cnt: 10,
-        //   acter_id: 1,
-        //   acter_name: "shyJyt",
-        //   acter_avatar_url:
-        //     "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        //   music_id: 1,
-        //   poster_url:
-        //     "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        //   music_name: "歌名/歌单名",
-        //   music_owner: "演唱者/歌单拥有者",
-        // },
-      ],
+      activityList: [],
     };
   },
   mounted() {
@@ -221,13 +201,20 @@ export default {
       // 发送请求查找该用户的信息，更新右边用户信息
       this.$axios({
         method: "get",
-        url: "/user/get_user_info/",
+        url: "/page/get_user_info/",
         params: {
           JWT: jwt,
           user_id: this.user_id,
         },
       }).then((res) => {
-        this.userInfo = res.data.user_info;
+        if (res.data.result == 1) {
+          this.userInfo = res.data.user_info;
+        } else {
+          this.$message({
+            type: "error",
+            message: res.data.message,
+          });
+        }
       });
       // 发送请求查找该用户的动态,更新左边动态列表
       this.$axios({

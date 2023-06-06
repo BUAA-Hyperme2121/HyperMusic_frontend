@@ -24,7 +24,7 @@
           type="text"
           size="mini"
           class="reply-btn"
-          @click="changeShowReply"
+          @click.native="changeShowReply"
           icon="el-icon-chat-line-round"
         >
           <span>回复</span>
@@ -35,7 +35,7 @@
           icon="el-icon-caret-top"
           size="mini"
           class="like-btn"
-          @click="addlike"
+          @click.native="addlike"
           v-if="!commentInfo.is_liked"
         >
           <span>点赞({{ commentInfo.like_num }})</span>
@@ -46,7 +46,7 @@
           icon="el-icon-caret-top"
           size="mini"
           class="like-btn"
-          @click="cancelLike"
+          @click.native="cancelLike"
           v-if="commentInfo.is_liked"
         >
           <span>取消点赞({{ commentInfo.like_num }})</span>
@@ -56,7 +56,7 @@
           type="text"
           size="mini"
           class="delete-btn"
-          @click="deleteComment"
+          @click.native="deleteComment"
           icon="el-icon-delete"
           v-if="commentInfo.poster_id == $store.state.userInfo.user_id"
         >
@@ -67,7 +67,7 @@
           type="text"
           size="mini"
           class="edit-btn"
-          @click="editComment"
+          @click.native="editComment"
           icon="el-icon-edit"
           v-if="commentInfo.poster_id == $store.state.userInfo.user_id"
         >
@@ -94,7 +94,7 @@
           <div class="comment-submit-foot">
             <el-button
               type="primary"
-              @click="submitReply"
+              @click.native="submitReply"
               class="comment-submit-btn"
               size="small"
               >发送</el-button

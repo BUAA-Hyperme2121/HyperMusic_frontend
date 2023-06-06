@@ -9,7 +9,12 @@
       <div class="comment-submit-top">
         <!-- 用户头像 -->
         <div class="user-avatar">
-          <img src="../assets/avatar.png" alt="" />
+          <el-avatar
+            shape="square"
+            fit="fill"
+            :src="$store.state.userInfo.avatar_path"
+            style="height: 100%; width: 100%"
+          ></el-avatar>
         </div>
         <!-- 评论输入框 -->
         <el-input
@@ -258,10 +263,6 @@ export default {
   width: 50px;
   height: 50px;
   margin-right: 20px;
-}
-.user-avatar img {
-  width: 100%;
-  height: 100%;
 }
 .comment-submit-top {
   display: flex;
