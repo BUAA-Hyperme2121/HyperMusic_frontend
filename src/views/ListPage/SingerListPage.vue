@@ -1,18 +1,16 @@
 <template>
   <div class="singer-page">
-    <h2 class="singer-count">歌手数量：{{ singers.length }}</h2>
+    <h2 class="singer-count">关注用户数量：{{ user.follow_num }}</h2>
     <ul class="singer-list">
-      <li v-for="singer in singers" :key="singer.id" class="singer-item">
-        <img :src="singer.avatar" class="singer-avatar" alt="" />
+      <li v-for="(singer, index) in this.follow_list" :key="singer._id" class="singer-item">
+        <img :src="singer.avatar_path" class="singer-avatar" alt="" />
         <div class="singer-info">
-          <router-link
-            class="songlist-table-link"
-            :to="'/singer/' + singer.singerId"
-            > <h3 class="singer-name">{{ singer.name }}</h3></router-link
-          >
-           
-          
-          <p class="singer-album-count">专辑数量：{{ singer.albums }}</p>
+          <router-link class="songlist-table-link" :to="'/singer/' + singer.id">
+            <h3 class="singer-name" @click="jumpToUser(index)">{{ singer.username }}</h3>
+          </router-link>
+          <i  @click="unfollow(index)">取消关注</i>
+
+          <p class="singer-album-count">上传数量：{{ singer.post_num }}</p>
         </div>
       </li>
     </ul>
@@ -22,7 +20,6 @@
 <script>
 export default {
   inject: ['reload'],
-  props: ["id"],
   created() {
     // 通过 this.id 获取参数 id
     console.log(this.id); // 输出 123
@@ -30,28 +27,36 @@ export default {
   },
   data() {
     return {
-      singers: [
-        {
-          id: 1,
-          name: "Taylor Swift",
-          avatar: "https://picsum.photos/id/1005/200/200",
-          albums: 9,
-        },
-        {
-          id: 2,
-          name: "Adele",
-          avatar: "https://picsum.photos/id/1011/200/200",
-          albums: 3,
-        },
-        {
-          id: 3,
-          name: "Ed Sheeran",
-          avatar: "https://picsum.photos/id/1012/200/200",
-          albums: 6,
-        },
-      ],
+      follow_list: [],
+      user: [],
     };
   },
+  mounted() {
+    this.fetchFollowing();
+  },
+  methods: {
+    fetchFollowing() {
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      console.log(jwt);
+      this.axios.get("/user/get_follow_list/", {
+        params: {
+          JWT: jwt,
+          user_id: "0",
+        }
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.user = res.data.user;
+          this.follow_list = res.data.follow_list;
+        })
+        .catch(
+          (err) => {
+            this.$message("获取我的音乐失败！");
+            console.log(err);
+          }
+        )
+    }
+  }
 };
 </script>
 
