@@ -12,7 +12,6 @@
                 style="display: flex;flex-direction:column; ;justify-content: center;align-items: center;">
                 <div class="fronthead-cover-big">
                     <img :src="music_info.cover_path" alt="album cover" @click="Play" />
-                    <div class="fronthead-play-btn"></div>
                 </div>
                 <!--name, description-->
                 <div class="fronthead-header">

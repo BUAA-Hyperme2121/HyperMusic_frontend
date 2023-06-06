@@ -12,7 +12,7 @@
                     <el-menu-item index="1">
                         <i class="el-icon-star-off"></i>
                         <span>关注用户</span>
-                        <span class="ml">({{ follow_num }})</span>
+                        <!-- <span class="ml">({{ follow_num }})</span> -->
                     </el-menu-item>
 
                     <!-- my favorite -->
@@ -51,7 +51,7 @@
                 <!-- create Musiclist -->
                 <div v-show="iscreatingList" class="menu-item content-box" style="margin-top: 20px;">
                     <h3>创建歌单</h3>
-                    <el-form ref="form" :model="form" label-width="auto" style="margin-top: 20px; width: 310px;">
+                    <el-form ref="form" :model="form" label-width="auto" style="margin-top: 20px; width: 20vw;">
                         <el-form-item label="歌单名称">
                             <el-input v-model="form.favorites_name"></el-input>
                         </el-form-item>
@@ -157,7 +157,7 @@ export default ({
             if (index === "1") {
                 // jump to the people i follow
                 console.log("jump to the people i follow");
-                this.$router.push({ name: "Singerlist", params: { id: "1" } });
+                this.$router.push({ name: "Singerlist", params: { id: "4" } });
                 // this.reload();
             } else if (index == "2") {
                 this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
@@ -202,6 +202,10 @@ export default ({
                         .then(res => {
                             this.$message.success("已创建新歌单")
                             console.log(res)
+                            this.form.cover =  null,
+                            this.form.description = '',
+                            this.form.favorites_name = ''
+                            this.iscreatingList = !this.iscreatingList;
                         })
                         .catch(err => {
                             this.$message.success("创建失败，请重试")

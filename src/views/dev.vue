@@ -413,7 +413,7 @@ export default ({
             })
                 .then((res) => {
                     this.music_info = res.data.music_info;
-                    
+
                     if (this.music_info.lyrics_path == "") {
                         this.lyrics.push([0, "暂时没有歌词哦~"])
                     }
@@ -421,7 +421,7 @@ export default ({
                         this.getlyrics();
                     }
                     console.log(this.music_info);
-                    this.fetchMenus();
+                    if (localStorage.getItem("loginInfo") != null) { this.fetchMenus(); }
                 })
                 .catch((err) => {
                     this.$message("获取歌曲失败！");

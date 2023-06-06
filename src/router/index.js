@@ -107,20 +107,25 @@ const router = new VueRouter({
     },
     {
       path: "/playlist/:id",
-      name: "AlbumPage",
-      component: () => import("../views/AlbumPage.vue"),
+      name: "PlaylistPage",
+      component: () => import("../views/PlaylistPage.vue"),
       props: true,
     },
     {
-      path: "/singer/:id",
+      path: "/singer",
       name: "SingerPage",
       component: () => import("../views/SingerPage.vue"),
-      props: true,
     },
     {
       path: "/song/:music_id",
       name: "SongPage",
       component: () => import("../views/SongPage.vue"),
+      props: true,
+    },
+    {
+      path: "/playing/:music_id",
+      name: "PlayingSongPage",
+      component: () => import("../views/PlayingSongPage.vue"),
       props: true,
     },
     {
