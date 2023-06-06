@@ -24,7 +24,7 @@
             icon="el-icon-edit"
             style="margin-left: auto"
             size="mini"
-            @click="goSetting"
+            @click.native="goSetting"
             v-show="user_id == $store.state.userInfo.id"
             >编辑信息</el-button
           >
@@ -33,7 +33,7 @@
             icon="el-icon-plus"
             style="margin-left: auto"
             size="mini"
-            @click="follow"
+            @click.native="follow"
             v-show="user_id != $store.state.userInfo.id && !userInfo.is_follow"
             >关注</el-button
           >
@@ -41,7 +41,7 @@
             icon="el-icon-check"
             style="margin-left: auto"
             size="mini"
-            @click="unFollow"
+            @click.native="unFollow"
             v-show="user_id != $store.state.userInfo.id && userInfo.is_follow"
             @mouseover.native="enterBtnText"
             @mouseout.native="outBtnText"
@@ -53,17 +53,17 @@
         <ul class="user-relate">
           <!-- 动态数  -->
           <li>
-            <span @click="goSocial">动态 {{ userInfo.post_num }}</span>
+            <span @click.native="goSocial">动态 {{ userInfo.post_num }}</span>
           </li>
           <el-divider direction="vertical"></el-divider>
           <!-- 关注数 -->
           <li>
-            <span @click="goFollow">关注 {{ userInfo.follow_num }}</span>
+            <span @click.native="goFollow">关注 {{ userInfo.follow_num }}</span>
           </li>
           <el-divider direction="vertical"></el-divider>
           <!-- 粉丝数 -->
           <li>
-            <span @click="goFan">粉丝 {{ userInfo.fan_num }}</span>
+            <span @click.native="goFan">粉丝 {{ userInfo.fan_num }}</span>
           </li>
         </ul>
 
@@ -77,7 +77,7 @@
     <div class="user-home-mid">
       <!-- 个人简介 -->
       <div class="user-intro">
-        <div class="title">个人简介(或许可以支持markdown??)</div>
+        <div class="title">个人简介</div>
         <div style="margin-top: 10px; margin-bottom: 10px">
           {{ userInfo.introduction }}
         </div>
@@ -91,46 +91,7 @@
         <!-- 歌曲列表 -->
         <el-table :data="historyList" style="width: 100%" stripe>
           <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="name" label="歌曲名称"></el-table-column>
-          <el-table-column prop="duration" label="时长"></el-table-column>
-          <el-table-column prop="singer" label="歌手"></el-table-column>
-          <el-table-column prop="album" label="专辑"></el-table-column>
-          <el-table-column label="操作">
-            <div class="operation">
-              <el-link @click="addToPlaylist(scope.row)" class="operation-link">
-                <el-tooltip
-                  content="加入播放列表"
-                  placement="top"
-                  ::open-delay="1000"
-                >
-                  <i class="el-icon-plus"></i>
-                </el-tooltip>
-              </el-link>
-              <el-link
-                @click="addToFavorites(scope.row)"
-                class="operation-link"
-              >
-                <el-tooltip content="收藏" placement="top" ::open-delay="1000">
-                  <i class="el-icon-star-on"></i>
-                </el-tooltip>
-              </el-link>
-              <el-link @click="shareSong(scope.row)" class="operation-link">
-                <el-tooltip content="分享" placement="top" ::open-delay="1000">
-                  <i class="el-icon-share"></i>
-                </el-tooltip>
-              </el-link>
-              <el-link @click="downloadSong(scope.row)" class="operation-link">
-                <el-tooltip content="下载" placement="top" ::open-delay="1000">
-                  <i class="el-icon-download"></i>
-                </el-tooltip>
-              </el-link>
-              <el-link @click="deleteSong(scope.row)" class="operation-link">
-                <el-tooltip content="删除" placement="top" ::open-delay="1000">
-                  <i class="el-icon-delete"></i>
-                </el-tooltip>
-              </el-link>
-            </div>
-          </el-table-column>
+          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
         </el-table>
       </div>
       <!-- 听歌排行，最近一周/全部时间，播放最多的10首-->
@@ -152,11 +113,10 @@
           v-show="showRankOption == 0"
         >
           <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="name" label="歌曲名称"></el-table-column>
-          <el-table-column prop="duration" label="时长"></el-table-column>
-          <el-table-column prop="singer" label="歌手"></el-table-column>
-          <el-table-column prop="album" label="专辑"></el-table-column>
-          <el-table-column label="播放次数">
+          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
+          <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
+          <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
+          <el-table-column prop="user_listen_times" label="播放次数">
             <template slot-scope="scope">
               <el-progress
                 :percentage="(scope.row.playCnt / rankList1[0].playCnt) * 100"
@@ -177,11 +137,10 @@
           v-show="showRankOption == 1"
         >
           <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="name" label="歌曲名称"></el-table-column>
-          <el-table-column prop="duration" label="时长"></el-table-column>
-          <el-table-column prop="singer" label="歌手"></el-table-column>
-          <el-table-column prop="album" label="专辑"></el-table-column>
-          <el-table-column label="播放次数">
+          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
+          <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
+          <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
+          <el-table-column prop="user_listen_times" label="播放次数">
             <template slot-scope="scope">
               <el-progress
                 :percentage="(scope.row.playCnt / rankList2[0].playCnt) * 100"
@@ -273,15 +232,15 @@ export default {
     // 获取听歌排行，op=1表示最近一周，op=2表示全部时间
     getRankList(op) {
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/user/get_most_listen_music_list/",
-        data: JSON.stringify({
+        params: {
           user_id: this.user_id,
           op: op,
-        }),
+        },
       })
         .then((res) => {
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             if (op == 1) {
               this.rankList1 = res.data.music_list;
             } else {
@@ -318,18 +277,24 @@ export default {
     },
     //关注用户
     follow() {
-      //没登录的判断交由后端处理，返回在message中???
+      if (localStorage.getItem("loginInfo") == null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+        return;
+      }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        methods: "post",
-        url: "/user/follow",
-        data: {
+        method: "post",
+        url: "/user/follow/",
+        data: qs.stringify({
           JWT: jwt,
-          follow_user_id: this.user_id,
-        },
+          follow_id: this.user_id,
+        }),
       })
         .then((res) => {
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             this.$message({
               message: "关注成功",
               type: "success",
@@ -341,36 +306,37 @@ export default {
             this.userInfo.fan_num++;
             //增加关注者(当前登录用户)关注数量
             this.$store.commit("addFollowNum");
-            // 向被关注用户发送消息
-            this.$axios({
-              methods: "post",
-              url: "/message/send_message",
-              data: {
-                receiver_id: this.user_id,
-                content: "关注了你",
-                poster_id: this.$store.state.userInfo.id,
-                object_id: -1,
-                type: -1,
-                message_type: 3,
-              },
-            })
-              .then((res) => {
-                if (res.data.result == 0) {
-                  console.log("关注消息发送成功");
-                } else {
-                  this.$message({
-                    message: res.data.message,
-                    type: "error",
-                  });
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-                this.$message({
-                  message: "服务器开摆了~(￣▽￣)~*",
-                  type: "error",
-                });
-              });
+          //   // 向被关注用户发送消息
+          //   this.$axios({
+          //     methods: "post",
+          //     url: "/message/send_message/",
+          //     data: qs.stringify({
+          //       receiver_id: this.user_id,
+          //       content: "关注了你",
+          //       poster_id: this.$store.state.userInfo.id,
+          //       object_id: -1,
+          //       type: -1,
+          //       message_type: 3,
+          //     }),
+          //   })
+          //     .then((res) => {
+          //       if (res.data.result == 1) {
+          //         console.log("关注消息发送成功");
+          //       } else {
+          //         this.$message({
+          //           message: res.data.message,
+          //           type: "error",
+          //         });
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       console.log(err);
+          //       this.$message({
+          //         message: "服务器开摆了~(￣▽￣)~*",
+          //         type: "error",
+          //       });
+          //     });
+          // 
           } else {
             this.$message({
               message: res.data.message,
@@ -387,18 +353,18 @@ export default {
         });
     },
     //取消关注
-    cancelFollow() {
+    unFollow() {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        methods: "post",
-        url: "/user/cancel_follow",
-        data: {
+        method: "post",
+        url: "/user/unfollow/",
+        data: qs.stringify({
           JWT: jwt,
-          follow_user_id: this.user_id,
-        },
+          follow_id: this.user_id,
+        }),
       })
         .then((res) => {
-          if (res.data.result == 0) {
+          if (res.data.result == 1) {
             this.$message({
               message: "取消关注成功",
               type: "success",
@@ -445,7 +411,7 @@ export default {
       // 如果是游客访问
       if (loginInfo == null) {
         jwt = "-1";
-      // 如果是登录用户访问
+        // 如果是登录用户访问
       } else {
         jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       }
@@ -453,10 +419,10 @@ export default {
       this.$axios({
         method: "get",
         url: "/page/get_user_info/",
-        params: qs.stringify({
+        params: {
           JWT: jwt,
           user_id: this.user_id,
-        }),
+        },
       })
         .then((res) => {
           // 获取成功
@@ -479,9 +445,9 @@ export default {
           });
         });
     }
-    // // 获取听歌排行
-    // this.getRankList(1);
-    // this.getRankList(2);
+    // 获取听歌排行
+    this.getRankList(1);
+    this.getRankList(2);
   },
   data() {
     return {
@@ -490,88 +456,13 @@ export default {
       // 不完全的用户信息，只是用来在主页展示
       userInfo: {},
       //最近播放歌单
-      historyList: [
-        {
-          id: 1,
-          name: "歌曲 1",
-          duration: "04:30",
-          singer: "歌手 A",
-          album: "专辑 A",
-          playCnt: 100,
-        },
-        {
-          id: 2,
-          name: "歌曲 2",
-          duration: "03:45",
-          singer: "歌手 B",
-          album: "专辑 B",
-          playCnt: 90,
-        },
-        {
-          id: 3,
-          name: "歌曲 3",
-          duration: "05:12",
-          singer: "歌手 C",
-          album: "专辑 C",
-          playCnt: 80,
-        },
-      ],
+      historyList: [],
       // 控制展示一周还是全部时间 0-week 1-all
       showRankOption: 0,
       //最近一周听歌排行歌单
-      rankList1: [
-        {
-          id: 1,
-          name: "歌曲 1",
-          duration: "04:30",
-          singer: "歌手 A",
-          album: "专辑 A",
-          playCnt: 10,
-        },
-        {
-          id: 2,
-          name: "歌曲 2",
-          duration: "03:45",
-          singer: "歌手 B",
-          album: "专辑 B",
-          playCnt: 9,
-        },
-        {
-          id: 3,
-          name: "歌曲 3",
-          duration: "05:12",
-          singer: "歌手 C",
-          album: "专辑 C",
-          playCnt: 1,
-        },
-      ],
+      rankList1: [],
       //全部时间听歌排行歌单
-      rankList2: [
-        {
-          id: 1,
-          name: "歌曲 1",
-          duration: "04:30",
-          singer: "歌手 A",
-          album: "专辑 A",
-          playCnt: 100,
-        },
-        {
-          id: 2,
-          name: "歌曲 2",
-          duration: "03:45",
-          singer: "歌手 B",
-          album: "专辑 B",
-          playCnt: 90,
-        },
-        {
-          id: 3,
-          name: "歌曲 3",
-          duration: "05:12",
-          singer: "歌手 C",
-          album: "专辑 C",
-          playCnt: 80,
-        },
-      ],
+      rankList2: [],
     };
   },
 };

@@ -36,6 +36,7 @@
                 <el-radio-group v-model="basicForm.gender">
                   <el-radio label="male">男</el-radio>
                   <el-radio label="female">女</el-radio>
+                  <el-radio label="secret">保密</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="所在地">
@@ -58,17 +59,12 @@
                   头像 (.jpg格式,大小不超过1M)</label
                 >
               </div>
-              <img
-                class="avatar"
-                src="../assets/avatar.png"
-                alt="avatar"
-                style="
-                  width: 100px;
-                  height: 100px;
-                  border-radius: 50%;
-                  margin-bottom: 10px;
-                "
-              />
+              <el-avatar
+                shape="square"
+                fit="fill"
+                :src="$store.state.userInfo.avatar_path"
+                style="height: 100px; width: 100px; margin:15px 0"
+              ></el-avatar>
               <el-upload
                 action="#"
                 :http-request="uploadAvatar"

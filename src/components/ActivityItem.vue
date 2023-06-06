@@ -5,7 +5,7 @@
       <el-avatar
         shape="square"
         fit="fill"
-        :src="activityInfo.avatar_path"
+        :src="activityInfo.poster_avatar_path"
         style="height: 100%; width: 100%"
       ></el-avatar>
     </div>
@@ -15,7 +15,7 @@
         <!-- 发布者昵称 -->
         <span class="acter-name">
           <a href="" style="color: cornflowerblue">{{
-            activityInfo.username
+            activityInfo.poster_name
           }}</a>
         </span>
         <!-- 发布类型 -->
@@ -38,26 +38,26 @@
           <el-avatar
             shape="square"
             fit="fill"
-            :src="activityInfo.cover_path"
+            :src="activityInfo.object_cover_path"
             style="height: 100%; width: 100%"
           ></el-avatar>
         </div>
         <div class="src-info">
           <!-- 歌名 -->
-          <div class="src-name">{{ activityInfo.name }}</div>
+          <div class="src-name">{{ activityInfo.object_name }}</div>
           <!-- 歌手 -->
           <el-link
             type="info"
             class="src-owner"
             v-show="activityInfo.type == 1"
-            >{{ activityInfo.singer_name }}</el-link
+            >{{ activityInfo.object_owner_name }}</el-link
           >
           <!-- 歌单 -->
           <el-link
             type="info"
             class="src-owner"
             v-show="activityInfo.type == 2"
-            >{{ activityInfo.creator_name }}</el-link
+            >{{ activityInfo.object_owner_name }}</el-link
           >
         </div>
       </div>
@@ -70,8 +70,8 @@
           icon="el-icon-caret-top"
           size="mini"
           class="like-btn"
-          @click="addLike"
-          v-if="!activityInfo.is_liked"
+          @click.native="addLike"
+          v-if="activityInfo.is_liked == 0"
         >
           <span>点赞({{ activityInfo.like_num }})</span>
         </el-button>
@@ -81,7 +81,7 @@
           icon="el-icon-caret-top"
           size="mini"
           class="like-btn"
-          @click="cancelLike"
+          @click.native="cancelLike"
           v-else
         >
           <span>取消点赞({{ activityInfo.like_num }})</span>
@@ -99,8 +99,9 @@ export default {
     return {};
   },
   methods: {
-    addlike() {
+    addLike() {
       // 点赞该动态
+      console.log(this.activityInfo);
       //判断是否登录
       if (localStorage.getItem("loginInfo") == null) {
         this.$message({
@@ -111,11 +112,11 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/like",
         method: "post",
+        url: "/message/like/",
         data: qs.stringify({
           JWT: jwt,
-          type: 3,
+          type: 1,
           object_id: this.activityInfo.id,
         }),
       })
@@ -130,19 +131,19 @@ export default {
             // 修改点赞状态
             this.$emit("changeLikeStatus", this.activityInfo.id);
 
-            // 向被点赞用户发送消息
-            this.$axios({
-              methods: "post",
-              url: "/message/send_message",
-              data: qs.stringify({
-                receiver_id: this.activityInfo.poster_id,
-                content: "点赞了你的动态",
-                poster_id: this.$store.state.userInfo.id,
-                object_id: this.activityInfo.id,
-                type: 3,
-                message_type: 2,
-              }),
-            });
+            // // 向被点赞用户发送消息
+            // this.$axios({
+            //   methods: "post",
+            //   url: "/message/send_message",
+            //   data: qs.stringify({
+            //     receiver_id: this.activityInfo.poster_id,
+            //     content: "点赞了你的动态",
+            //     poster_id: this.$store.state.userInfo.id,
+            //     object_id: this.activityInfo.id,
+            //     type: 1,
+            //     message_type: 2,
+            //   }),
+            // });
           } else {
             this.$message({
               message: this.res.message,
@@ -155,15 +156,16 @@ export default {
         });
     },
     cancelLike() {
+      console.log(this.activityInfo);
       // 取消点赞该动态
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/cancel_like",
+        path: "/message/cancel_like/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,
-          type: 3,
-          obj_id: this.activityInfo.id,
+          type: 1,
+          object_id: this.activityInfo.id,
         }),
       })
         .then((res) => {
