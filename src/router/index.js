@@ -92,7 +92,7 @@ const router = new VueRouter({
           component: () => import("../views/homepage/TopListPage.vue"),
         },
         {
-          path: "playlist/:id",
+          path: "playlist",
           component: () => import("../views/homepage/PlayListPage.vue"),
           props: true,
         },

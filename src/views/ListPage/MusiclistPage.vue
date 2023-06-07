@@ -5,7 +5,14 @@
             <el-row style="display: flex; flex: 1; margin-right: 20px;">
                 <!-- cover -->
                 <div>
-                    <img class="fronthead-cover" :src="this.music_list_info.cover_path" alt="music_list_info.cover_path" @click="addToPlaylistAll"/>
+                    <img class="fronthead-cover" :src="this.music_list_info.cover_path"
+                        alt="music_list_info.cover_path" @click="addToPlaylistAll" />
+                    <!-- <el-upload class="fronthead-cover" style=" display: flex;justify-content: center;align-items: center;" v-else list-type="picture-card" :auto-upload="false" :class="{ 'none-up': uploadDisabled }"
+                        accept="image/jpeg,image/jpg" :limit="1" action="" :on-change="handleLimit"
+                        :on-remove="handleRemove">
+                        <img class="fronthead-cover" style="width: 250px;height: 250px;" v-if="this.change_cover" :src="change_cover">
+                        <i v-else class="el-icon-plus"></i>
+                    </el-upload> -->
                     <div class="fronthead-play-btn">
 
                     </div>
@@ -30,12 +37,11 @@
                     </el-switch>
                     <!--歌曲标签-->
                     <div style=" padding-top: 10px;">
-                        <div v-if="isModifyLabel">
+                        <div v-if="isModify">
                             <el-button size="mini" round v-for="(label, index) in this.labels" :key="label._id"
                                 :class="{ activeLabel: label.isSelect, label: !label.isSelect }"
                                 @click="selectLabel(index)">
                                 {{ label.label_name }}</el-button>
-                            <el-button size="mini" round type="primary" @click="modifyLabel">完成</el-button>
                         </div>
                         <div v-else>
                             <el-button size="mini" round v-for="label in activeLabel" :key="label._id" disabled style="background-color: cadetblue;
@@ -43,7 +49,6 @@
                                 color: white;">
                                 {{ label.label_name }}
                             </el-button>
-                            <el-button size="mini" round type="primary" @click="modifyLabel">修改</el-button>
 
                         </div>
                     </div>
@@ -98,21 +103,31 @@ export default ({
             isModifyLabel: false,
             isPublic: false,
             music_labels: [],
+            uploadDisabled: false,
+            change_cover: null,
             labels: [
                 {
-                    label_name: "轻音乐",
+                    label_name: "怀旧",
                     isSelect: false,
                 },
                 {
-                    label_name: "流行",
+                    label_name: "浪漫",
                     isSelect: false,
                 },
                 {
-                    label_name: "摇滚",
+                    label_name: "伤感",
                     isSelect: false,
                 },
                 {
-                    label_name: "民谣",
+                    label_name: "放松",
+                    isSelect: false,
+                },
+                {
+                    label_name: "治愈",
+                    isSelect: false,
+                },
+                {
+                    label_name: "其他",
                     isSelect: false,
                 }
             ],
@@ -136,16 +151,15 @@ export default ({
         },
     },
     methods: {
+        
         addToPlaylistAll() {
             var i;
             if (this.music_list.length) {
-                for(i=0; i <this.music_list.length; i++) {
-                this.playlater(this.music_list[i]);
-                this.toplay(this.music_list[0])
+                for (i = 0; i < this.music_list.length; i++) {
+                    this.playlater(this.music_list[i]);
+                    this.toplay(this.music_list[0])
+                }
             }
-            }
-            
-            
         },
         changePublic() {
             console.log("setPublic");
@@ -193,6 +207,7 @@ export default ({
         },
         modifyInfo() {
             this.isModify = true;
+            this.old_labels = this.labels;
         },
         submitModifyInfo() {
             console.log("submitModifyInfo");
@@ -203,6 +218,7 @@ export default ({
             formData.append('favorites_id', this.music_list_info.id)
             formData.append('name', this.music_list_info.name)
             formData.append('description', this.music_list_info.description)
+            // formData.append('old_labels', this.change_cover)
             changeMusiclist(formData)
                 .then(res => {
                     //根据res进行区分
@@ -210,6 +226,7 @@ export default ({
                 })
                 .catch(err => {
                     this.$message.error("修改失败，请重试")
+                    location.reload(true);
                 })
         },
         fetchList() {
@@ -231,24 +248,28 @@ export default ({
                 .then((res) => {
                     console.log(this.id);
                     this.music_list_info = res.data.music_list_info;
-                    if( res.data.music_list != "此歌单尚无歌曲") {
+                    if (res.data.music_list != "此歌单尚无歌曲") {
                         this.music_list = res.data.music_list;
                     }
                     console.log(this.music_list_info);
                     console.log(this.music_list);
                     this.isPublic = res.data.music_list_info.is_public;
                     this.music_labels = res.data.music_list_info.labels;
-                    if (music_labels != []) {
-                        for (i = 0; i < labels.length; i++) {
-                            for (j = 0; j < res.data.music_list_info.labels.length; i++) {
-                                if(labels[i].label_name == res.data.music_list_info.labels[j]) {
-                                    labels[i].isSelect == true;
-                                }
+                    console.log(this.music_labels);
+                    var j, i;
+                    console.log("labels.length: " + this.labels.length)
+                    for (i = 0; i < this.labels.length; i++) {
+                        for (j = 0; j < this.music_labels.length; j++) {
+                            if (this.labels[i].label_name == this.music_labels[j]) {
+                                this.labels[i].isSelect = true;
+                                // console.log(this.labels[i]);
                             }
+
                         }
                     }
 
-                    
+
+
                 })
                 .catch(
                     (err) => {
@@ -264,6 +285,7 @@ export default ({
                 .then(res => {
                     this.$message.success("删除成功")
                     console.log(res)
+                    this.$router.push("/user/music");
                 })
                 .catch(err => {
                     this.$message.success("删除失败，请重试")
@@ -278,8 +300,26 @@ export default ({
         selectLabel(index) {
             this.labels[index].isSelect = !this.labels[index].isSelect;
         },
+        onCoverChange(file) {
+            this.change_cover = file;
+        },
+        handleLimit(file, fileList) {
+            if (fileList.length >= 1) {
+                console.log("handleLimit");
+                this.uploadDisabled = true;
+                this.$set(this, 'uploadDisabled', true);
+                this.onCoverChange(file.raw);
+            }
+        },
+        handleRemove() {
+            this.uploadDisabled = false;
+            this.$set(this, 'uploadDisabled', false);
+            this.change_cover = '';
+        },
+        
     }
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
