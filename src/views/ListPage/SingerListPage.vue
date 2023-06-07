@@ -1,6 +1,6 @@
 <template>
   <div class="singer-page">
-    <h2 class="singer-count">关注用户数量：{{ user.follow_num }}</h2>
+    <h2 class="singer-count">关注的歌手：</h2>
     <ul class="singer-list">
       <li v-for="(singer, index) in this.follow_list" :key="singer._id" class="singer-item">
         <img :src="singer.avatar_path" class="singer-avatar" alt="" />
@@ -8,7 +8,7 @@
           <router-link class="songlist-table-link" :to="'/singer/' + singer.id">
             <h3 class="singer-name" @click="jumpToUser(index)">{{ singer.username }}</h3>
           </router-link>
-          <i  @click="unfollow(index)">取消关注</i>
+          <el-button size="mini" round @click="unfollow(index)" style="margin: 10px 0 10px 0;">取消关注</el-button>
 
           <p class="singer-album-count">上传数量：{{ singer.post_num }}</p>
         </div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { unfollowing } from "@/api/api.js";
 export default {
   inject: ['reload'],
   created() {
@@ -55,6 +56,22 @@ export default {
             console.log(err);
           }
         )
+    },
+    unfollow(index) {
+      if (localStorage.getItem('loginInfo') != null) {
+        var formData = new FormData();
+        formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+        formData.append('follow_id', this.follow_list[index].id)
+        console.log(this.form);
+        unfollowing(formData)
+        .then((res)=>{
+          this.$message.success("已取消关注")
+          location.reload(true)
+        })
+        .catch((err)=>{
+          this.$message.error("取消失败，请重试")
+        })
+      }
     }
   }
 };

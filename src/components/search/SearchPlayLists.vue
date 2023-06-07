@@ -56,7 +56,7 @@ export default{
             this.currentPage=val;
         },
         goPlaylist(row){
-            this.$router.push({path: `/album/${row.id}`});
+            this.$router.push({path: `/playlist/${row.id}`});
         },
         goUser(row){
             this.$router.push({path: `/user/home`,query:{user_id:row.creator_id}});

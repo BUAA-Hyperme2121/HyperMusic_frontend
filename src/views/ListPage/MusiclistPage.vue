@@ -5,9 +5,9 @@
             <el-row style="display: flex; flex: 1; margin-right: 20px;">
                 <!-- cover -->
                 <div>
-                    <img class="fronthead-cover" :src="this.music_list_info.cover_path" alt="music_list_info.cover_path" />
+                    <img class="fronthead-cover" :src="this.music_list_info.cover_path" alt="music_list_info.cover_path" @click="addToPlaylistAll"/>
                     <div class="fronthead-play-btn">
-                        
+
                     </div>
                     <!-- <el-button type="primary" icon="el-icon-play">播放全部</el-button> -->
 
@@ -97,19 +97,24 @@ export default ({
             isModify: false,
             isModifyLabel: false,
             isPublic: false,
+            music_labels: [],
             labels: [
                 {
-                    label_name: "label1",
+                    label_name: "轻音乐",
                     isSelect: false,
                 },
                 {
-                    label_name: "label2",
-                    isSelect: true,
-                },
-                {
-                    label_name: "label3",
+                    label_name: "流行",
                     isSelect: false,
                 },
+                {
+                    label_name: "摇滚",
+                    isSelect: false,
+                },
+                {
+                    label_name: "民谣",
+                    isSelect: false,
+                }
             ],
         }
     },
@@ -131,6 +136,17 @@ export default ({
         },
     },
     methods: {
+        addToPlaylistAll() {
+            var i;
+            if (this.music_list.length) {
+                for(i=0; i <this.music_list.length; i++) {
+                this.playlater(this.music_list[i]);
+                this.toplay(this.music_list[0])
+            }
+            }
+            
+            
+        },
         changePublic() {
             console.log("setPublic");
             if (this.isPublic) {
@@ -215,10 +231,24 @@ export default ({
                 .then((res) => {
                     console.log(this.id);
                     this.music_list_info = res.data.music_list_info;
-                    this.music_list = res.data.music_list;
-                    this.isPublic = res.data.music_list_info.is_public;
+                    if( res.data.music_list != "此歌单尚无歌曲") {
+                        this.music_list = res.data.music_list;
+                    }
                     console.log(this.music_list_info);
                     console.log(this.music_list);
+                    this.isPublic = res.data.music_list_info.is_public;
+                    this.music_labels = res.data.music_list_info.labels;
+                    if (music_labels != []) {
+                        for (i = 0; i < labels.length; i++) {
+                            for (j = 0; j < res.data.music_list_info.labels.length; i++) {
+                                if(labels[i].label_name == res.data.music_list_info.labels[j]) {
+                                    labels[i].isSelect == true;
+                                }
+                            }
+                        }
+                    }
+
+                    
                 })
                 .catch(
                     (err) => {

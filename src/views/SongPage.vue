@@ -28,7 +28,7 @@
                             <img v-else src="../assets/notlike.png" style="height: 40px" />
                         </a-button>
                         <div style="padding-left: 20px;">
-                            <div class="font-description">歌手：{{ this.music_info.singer_name }}</div>
+                            <router-link class="font-description" style="text-decoration: none;" :to="'/singer/' + this.music_info.singer_id">歌手：{{ this.music_info.singer_name }}</router-link>
                             <div class="font-description" style="">
                                 播放量：{{ music_info.listen_nums }}
                             </div>
@@ -121,7 +121,7 @@
                                 <el-button type="default" icon="el-icon-folder-add" size="mini"
                                     @click="complaintFormVisible = true; changeComplaintForm()">投诉</el-button>
                             </el-tooltip>
-                            <el-dialog title="分享到你的动态" :visible.sync="complaintFormVisible" center
+                            <el-dialog title="投诉信息" :visible.sync="complaintFormVisible" center
                                 :close-on-click-modal="false" :show-close="false">
 
                                 <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
@@ -181,7 +181,7 @@
 <script>
 import { setFavorites, setLikes, setPosts, complainMusic } from '@/api/api';
 import { mixin } from '@/mixins'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default ({
     mixins: [mixin],
     props: ["music_id"],
@@ -226,50 +226,51 @@ export default ({
                 content: '',
                 title: '',
             },
-            create_music_list: [],
             disabled: false,
+            create_music_list: [],
+
         }
     },
     computed: {
-      ...mapGetters([
-        'curTime',
-        'id',
-      ])
+        ...mapGetters([
+            'curTime',
+            'id',
+        ])
     },
-    watch: { 
-    //监听歌词变化
-      curTime() {
-        if (this.lyrics.length !== 0) {
-          for (let i = 0; i < this.lyrics.length; i++) {
-            if (this.curTime >= this.lyrics[i][0]) {
-              for (let j = 0; j < this.lyrics.length; j++) {
-                document.querySelectorAll('.lyrics li')[j].style.color = '#FAEBD7'
-                document.querySelectorAll('.lyrics li')[j].style.fontSize = '20px'
-              }
-              if (i >= 0) {
-                document.querySelectorAll('.lyrics li')[i].style.color = '#FFA1A8'
-                document.querySelectorAll('.lyrics li')[i].style.fontSize = '25px'
-                document.querySelector('.lyrics').style.transform= `translateY(${250 - (40 * (i + 1))}px)`
-              }
+    watch: {
+        //监听歌词变化
+        curTime() {
+            if (this.lyrics.length !== 0) {
+                for (let i = 0; i < this.lyrics.length; i++) {
+                    if (this.curTime >= this.lyrics[i][0]) {
+                        for (let j = 0; j < this.lyrics.length; j++) {
+                            document.querySelectorAll('.lyrics li')[j].style.color = '#FAEBD7'
+                            document.querySelectorAll('.lyrics li')[j].style.fontSize = '20px'
+                        }
+                        if (i >= 0) {
+                            document.querySelectorAll('.lyrics li')[i].style.color = '#FFA1A8'
+                            document.querySelectorAll('.lyrics li')[i].style.fontSize = '25px'
+                            document.querySelector('.lyrics').style.transform = `translateY(${250 - (40 * (i + 1))}px)`
+                        }
+                    }
+                }
             }
-          }
+        },
+        //监听歌曲id变化
+        id() {
+            if (this.id != this.music_info.id) {
+                this.$router.push({ path: `/song/${this.id}` });
+            }
         }
-      },
-      //监听歌曲id变化
-      id(){
-        if(this.id!=this.music_info.id){
-          this.$router.push({path: `/song/${this.id}`});
-        }
-      }
     },
     mounted() {
         this.fetchSong();
     },
     beforeRouteUpdate(to, from, next) {
-      next()
-      if (to.fullPath != from.fullPath) {
-          this.fetchSong();
-      }
+        next()
+        if (to.fullPath != from.fullPath) {
+            this.fetchSong();
+        }
     },
     methods: {
         changeComplaintForm() {
@@ -428,7 +429,7 @@ export default ({
                 result.sort(function (a, b) {
                     return a[0] - b[0]
                 })
-                this.lyrics = Object.assign([],result)
+                this.lyrics = Object.assign([], result)
             }
         },
         fetchSong() {
@@ -444,7 +445,7 @@ export default ({
             const routePath = this.$route.path;
             const matches = routePath.match(/\/(\d+)$/);
             if (matches && matches.length > 1) {
-              num = parseInt(matches[1], 10);
+                num = parseInt(matches[1], 10);
             }
             this.axios.get("/music/get_music_info/", {
                 params: {
@@ -456,7 +457,7 @@ export default ({
                     this.music_info = res.data.music_info;
                     this.toplay(this.music_info)
                     if (this.music_info.lyrics_path == "") {
-                        this.lyrics=[];
+                        this.lyrics = [];
                         this.lyrics.push([0, "暂时没有歌词哦~"])
                     }
                     else {

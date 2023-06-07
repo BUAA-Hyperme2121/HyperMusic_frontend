@@ -20,9 +20,9 @@
           <span>{{ scope.row.listen_nums }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="singer" label="歌手" v-if="!noSinger">
+      <el-table-column prop="singer" label="歌手">
         <template slot-scope="scope">
-          <router-link class="songlist-table-link" :to="'/singer/' + scope.row.singer_name">{{ scope.row.singer_name
+          <router-link class="songlist-table-link" :to="'/singer/' + scope.row.singer_id">{{ scope.row.singer_name
           }}</router-link>
         </template>
       </el-table-column>
@@ -48,7 +48,7 @@
                 <i class="el-icon-download"></i>
               </el-tooltip>
             </el-link> -->
-            <el-link @click="deleteSong(scope.row)" class="songlist-operation-link">
+            <el-link v-if="!noAccess" @click="deleteSong(scope.row)" class="songlist-operation-link">
               <el-tooltip content="删除" placement="top" :open-delay="1000">
                 <i class="el-icon-delete"></i>
               </el-tooltip>
@@ -62,7 +62,7 @@
 
 <script>
 import { mixin } from '../../mixins'
-import { delFromList } from '@/api/api'
+import { delFromList, setPosts } from '@/api/api'
 export default {
   name: "songlistComponent",
   mixins: [mixin],
@@ -75,7 +75,7 @@ export default {
       type: Array,
       required: false,
     },
-    noSinger: {
+    noAccess: {
       type: Boolean,
       required: false,
       default: false,
@@ -87,7 +87,7 @@ export default {
     objectId: {
       type: Number,
       default: 0,
-    }
+    },
   },
   data() {
     return {
@@ -115,17 +115,38 @@ export default {
         console.log(this.objectId);
         delFromList(formData)
           .then(res => {
-            this.$message("已删除,请刷新页面")
+            this.$message("已删除")
+            location.reload(true)
             console.log(res)
           })
           .catch(err => {
             this.$message("删除失败，请重试")
             console.log(err)
           })
-          
+
       }
 
-    }
+    },
+    shareSong(row) {
+      if (localStorage.getItem('loginInfo') != null) {
+        var formData = new FormData();
+        formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+        formData.append('object_id', row.id)
+        formData.append('type', '1')
+        formData.append('content', "我分享了一首歌曲，快来看看吧~")
+        setPosts(formData)
+          .then(res => {
+            //根据res进行区分
+            this.$message.success("分享成功")
+          })
+          .catch(err => {
+            this.$message.error("分享失败")
+          })
+
+      } else {
+        this.$message.error("请先登录")
+      }
+    },
   }
 };
 </script>

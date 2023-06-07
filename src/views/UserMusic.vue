@@ -63,6 +63,21 @@
                                 <i v-else class="el-icon-plus"></i>
                             </el-upload>
                         </el-form-item>
+                        <el-form-item label="歌曲标签">
+                            <el-checkbox-group v-model="form.labels">
+                                <el-checkbox label="流行" name="type"></el-checkbox>
+                                <el-checkbox label="摇滚" name="type"></el-checkbox>
+                                <el-checkbox label="民谣" name="type"></el-checkbox>
+                                <el-checkbox label="电子" name="type"></el-checkbox>
+                                <el-checkbox label="说唱" name="type"></el-checkbox>
+                                <el-checkbox label="轻音乐" name="type"></el-checkbox>
+                                <el-checkbox label="古风" name="type"></el-checkbox>
+                                <el-checkbox label="爵士" name="type"></el-checkbox>
+                                <el-checkbox label="金属" name="type"></el-checkbox>
+                                <el-checkbox label="拉丁" name="type"></el-checkbox>
+                                <el-checkbox label="其他" name="type"></el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
                         <el-form-item label="歌单简介">
                             <el-input v-model="form.description"></el-input>
                         </el-form-item>
@@ -83,7 +98,7 @@
 
 <script>
 import qs from "qs";
-import {createList} from '@/api/api.js'
+import { createList } from '@/api/api.js'
 export default ({
     data() {
         return {
@@ -99,6 +114,7 @@ export default ({
                 favorites_name: '',
                 description: '',
                 cover: null,
+                labels: [],
             }
         }
     },
@@ -157,11 +173,11 @@ export default ({
             if (index === "1") {
                 // jump to the people i follow
                 console.log("jump to the people i follow");
-                this.$router.push({ name: "Singerlist", params: { id: "4" } });
+                this.$router.push({ name: "Singerlist" });
                 // this.reload();
             } else if (index == "2") {
                 this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
-                this.reload();
+                location.reload(true)
             } else if (index == "4") {
                 // this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
                 // this.reload();
@@ -170,7 +186,7 @@ export default ({
                 // jump to other playlist
                 const playlistId = index.split("-")[1];
                 this.$router.push({ name: "Musiclist", params: { id: playlistId } });
-                this.reload();
+                // location.reload(true)
             }
             this.activeIndex = index;
             window.scroll({
@@ -198,14 +214,17 @@ export default ({
                     formData.append('favorites_name', this.form.favorites_name)
                     formData.append('description', this.form.description)
                     formData.append('cover', this.form.cover)
+                    formData.append('labels', this.form.labels)
+                    console.log(this.form);
                     createList(formData)
                         .then(res => {
                             this.$message.success("已创建新歌单")
                             console.log(res)
-                            this.form.cover =  null,
-                            this.form.description = '',
-                            this.form.favorites_name = ''
+                            this.form.cover = null,
+                                this.form.description = '',
+                                this.form.favorites_name = ''
                             this.iscreatingList = !this.iscreatingList;
+                            location.reload(true)
                         })
                         .catch(err => {
                             this.$message.success("创建失败，请重试")
@@ -240,14 +259,14 @@ export default ({
                 this.uploadDisabled = true;
                 this.$set(this, 'uploadDisabled', true);
                 this.onCoverChange(file.raw);
-                this.$forceUpdate();
+                location.reload(true)
             }
         },
         handleRemove() {
             this.uploadDisabled = false;
             this.$set(this, 'uploadDisabled', false);
             this.form.cover = '';
-            this.$forceUpdate();
+            location.reload(true)
         },
         onCoverChange(file) {
             this.form.cover = file;

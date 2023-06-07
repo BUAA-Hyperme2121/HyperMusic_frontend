@@ -92,8 +92,9 @@ const router = new VueRouter({
           component: () => import("../views/homepage/TopListPage.vue"),
         },
         {
-          path: "playlist",
+          path: "playlist/:id",
           component: () => import("../views/homepage/PlayListPage.vue"),
+          props: true,
         },
         {
           path: "artist",
@@ -112,9 +113,10 @@ const router = new VueRouter({
       props: true,
     },
     {
-      path: "/singer",
+      path: "/singer/:id",
       name: "SingerPage",
       component: () => import("../views/SingerPage.vue"),
+      props: true,
     },
     {
       path: "/song/:music_id",

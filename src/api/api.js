@@ -48,3 +48,5 @@ export const delFromList = (formdata) => post(`/user/unmark_music/`, formdata);
 export const changeMusiclist = (formdata) => post(`/music/change_favorites_info/`, formdata);
 
 export const complainMusic = (formdata) => post(`/message/cre_complain/`, formdata);
+export const unfollowing = (formdata) => post(`/user/unfollow/`, formdata);
+export const following = (formdata) => post(`/user/follow/`, formdata);

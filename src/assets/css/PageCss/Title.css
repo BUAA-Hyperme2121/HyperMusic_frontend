@@ -4,7 +4,24 @@
   overflow-x: hidden;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
 }
+.fronthead-cover-round {
+  width: 100%;
+  height: 0;
 
+  padding-bottom: 100%;
+  position: relative;
+  margin-top: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+.fronthead-cover-round:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+.fronthead-cover-round:active {
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
 .fronthead-cover {
   width: 250px;
   height: 250px;
@@ -13,7 +30,7 @@
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.fronthead-cover-big {
+.fronthead-cover-big{
   width: 100%;
   height: 0;
   padding-bottom: 100%;
