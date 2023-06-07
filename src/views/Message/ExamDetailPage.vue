@@ -129,6 +129,9 @@ export default {
         this.$message.error("请选择拒绝原因");
         return;
       }
+      console.log(this.pass);
+      console.log(this.reason);
+      console.log(this.$route.query.id);
       this.$axios({
         method: "post",
         url: "/message/audit/",

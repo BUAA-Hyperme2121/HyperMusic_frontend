@@ -23,8 +23,7 @@
           show-word-limit
           :rows="3"
           placeholder="来说两句吧"
-          v-model="comment_content"
-          class="comment-input"
+          v-model="comment"
         ></el-input>
       </div>
       <!-- 发表按钮  -->
@@ -83,7 +82,8 @@ export default {
   props: ["object_id", "type", "owner_id"],
   data() {
     return {
-      comment_content: "", //评论内容
+      //评论内容
+      comment: "",
       commentList: [],
     };
   },
@@ -111,7 +111,7 @@ export default {
         return;
       }
       //判断评论是否为空
-      if (this.comment_content.trim() == "") {
+      if (this.comment.trim() == "") {
         this.$message({
           message: "评论不能为空噢",
           type: "warning",
@@ -125,7 +125,7 @@ export default {
         data: qs.stringify({
           object_id: this.object_id,
           type: this.type,
-          content: this.comment_content,
+          content: this.comment,
           JWT: jwt,
         }),
       })
@@ -204,7 +204,7 @@ export default {
       }
       this.$axios({
         url: "/message/list_object_comment/",
-        methods: "get",
+        method: "get",
         params: {
           object_id: this.object_id,
           type: this.type,
@@ -213,7 +213,7 @@ export default {
       })
         .then((res) => {
           if (res.data.result == 1) {
-            this.commentList = res.data.list_music_comment;
+            this.commentList = res.data.music_comment_list;
           } else {
             this.$message({
               message: res.data.message,

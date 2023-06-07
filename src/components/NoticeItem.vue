@@ -38,10 +38,10 @@
         <!-- 动态 -->
         <ActivityItemReadOnly :activityInfo="noticeInfo.like_info" />
       </div>
-    </div>
-    <!-- 消息发布时间 -->
-    <div class="notice-item-time">
-      <span>{{ noticeInfo.create_date }}</span>
+      <!-- 消息发布时间 -->
+      <div class="notice-item-time">
+        <span>{{ noticeInfo.create_date }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +71,7 @@ export default {
 <style scoped>
 .notice-item {
   display: flex;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 .notice-item-avatar {
