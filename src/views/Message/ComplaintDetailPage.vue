@@ -3,8 +3,14 @@
     <!-- 投诉进度 -->
     <div class="progress">
       <el-steps :active="complainInfo.state" finish-status="success">
-        <el-step title="发起审核" :description="complainInfo.create_date"></el-step>
-        <el-step title="审核完成" :description="complainInfo.audit_time"></el-step>
+        <el-step
+          title="发起审核"
+          :description="complainInfo.create_date"
+        ></el-step>
+        <el-step
+          title="审核完成"
+          :description="complainInfo.audit_time"
+        ></el-step>
       </el-steps>
     </div>
     <!-- 投诉详情 -->
@@ -30,27 +36,17 @@
           <el-avatar
             shape="square"
             fit="fill"
-            :src="complainInfo.cover_path"
+            :src="complainInfo.object_cover_path"
             style="height: 100%; width: 100%"
           ></el-avatar>
         </div>
         <div class="src-info">
           <!-- 歌名 -->
-          <div class="src-name">{{ complainInfo.name }}</div>
+          <div class="src-name">{{ complainInfo.object_name }}</div>
           <!-- 歌手 -->
-          <el-link
-            type="info"
-            class="src-owner"
-            v-show="complainInfo.type == 1"
-            >{{ complainInfo.singer_name }}</el-link
-          >
-          <!-- 歌单 -->
-          <el-link
-            type="info"
-            class="src-owner"
-            v-show="complainInfo.type == 2"
-            >{{ complainInfo.creator_name }}</el-link
-          >
+          <el-link type="info" class="src-owner">{{
+            complainInfo.object_owner_name
+          }}</el-link>
         </div>
       </div>
     </div>
@@ -104,7 +100,7 @@ export default {
         },
       }).then((res) => {
         if (res.data.result == 1) {
-          this.complainInfo = res.data.complain_info;
+          this.complainInfo = res.data.complain;
         } else {
           this.$message.error(res.data.message);
         }

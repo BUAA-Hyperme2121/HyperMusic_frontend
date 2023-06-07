@@ -27,12 +27,15 @@
           width="180"
         ></el-table-column>
 
-        <el-table-column
-          prop="create_date"
-          label="时间"
-          width="160"
-          sortable
-        ></el-table-column>
+        <el-table-column prop="create_date" label="时间" width="160" sortable>
+          <template slot-scope="scope">
+            {{
+              scope.row.create_date.slice(0, 10) +
+              "" +
+              scope.row.create_date.slice(11, 19)
+            }}
+          </template>
+        </el-table-column>
 
         <el-table-column
           prop="state"

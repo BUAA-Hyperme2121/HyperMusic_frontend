@@ -2,11 +2,12 @@
   <div class="my-comment-page">
     <div class="title">我的评论</div>
     <!-- 我的评论列表 -->
-    <div class="my-comment-list">
+    <div class="my-comment-list" v-if="refresh">
       <CommentItem
         v-for="item in commentList"
         :key="item.id"
         :commentInfo="item"
+        
       />
     </div>
   </div>
@@ -23,7 +24,17 @@ export default {
     return {
       //评论列表
       commentList: [],
+      refresh: true,
     };
+  },
+  methods: {
+    //更新评论列表
+    refreshing() {
+      this.refresh = false;
+      this.$nextTick(() => {
+        this.refresh = true;
+      });
+    },
   },
   mounted() {
     // 获取评论列表
@@ -38,7 +49,7 @@ export default {
     })
       .then((res) => {
         if (res.data.result == 1) {
-          this.commentList = res.data.comments;
+          this.commentList = res.data.music_comment_list;
         } else {
           this.$message({
             message: res.data.message,

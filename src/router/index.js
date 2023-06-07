@@ -154,6 +154,10 @@ const router = new VueRouter({
       path: "/register",
       component: () => import("../views/RegisterPage.vue"),
     },
+    {
+      path: "/findpsw",
+      component: () => import("../views/FindPSW.vue"),
+    },
     // 404页面
     {
       path: "/404",

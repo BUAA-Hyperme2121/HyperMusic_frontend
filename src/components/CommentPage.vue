@@ -123,7 +123,7 @@ export default {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
         url: "/message/cre_comment/",
-        methods: "post",
+        method: "post",
         data: qs.stringify({
           object_id: this.object_id,
           type: this.type,

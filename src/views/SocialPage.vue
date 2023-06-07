@@ -17,7 +17,7 @@
               @changeLikeStatus="changeLikeStatus"
             ></ActivityItem>
             <el-divider></el-divider>
-            <!-- <CommentPage></CommentPage> -->
+            <CommentPage></CommentPage>
           </div>
         </div>
       </el-col>
@@ -63,9 +63,10 @@
 
 <script>
 import ActivityItem from "../components/ActivityItem.vue";
-
+import CommentPage from "../components/CommentPage.vue";
 export default {
   components: {
+    CommentPage,
     ActivityItem,
   },
   methods: {
