@@ -20,9 +20,12 @@
                         <i class="el-icon-star-off"></i>
                         <span>我喜欢的音乐</span>
                     </el-menu-item>
-
+                    <el-menu-item index="3">
+                        <i class="el-icon-star-off"></i>
+                        <span>我上传的音乐</span>
+                    </el-menu-item>
                     <!-- created playlist -->
-                    <el-submenu index="3">
+                    <el-submenu index="4">
                         <!-- title -->
                         <template slot="title">
                             <i class="el-icon-notebook-2"></i>
@@ -32,7 +35,7 @@
 
                         <!--  created-music-list-->
                         <el-menu-item v-for="music_list in create_music_list" :key="music_list.id"
-                            :index="'3-' + music_list.id">
+                            :index="'4-' + music_list.id">
                             <img :src="music_list.cover_path" alt="music_list.cover_path" style="height: 40px;">
                             <span class="ml">{{ music_list.name }}</span>
                             <span class="ml">({{ music_list.music_num }})</span>
@@ -41,7 +44,7 @@
 
                     </el-submenu>
                     <!-- add musiclist -->
-                    <el-menu-item index="4" @click="createList">
+                    <el-menu-item index="5" @click="createList">
                         <i class="el-icon-plus"></i>
                         <span>创建歌单</span>
                     </el-menu-item>
@@ -172,11 +175,11 @@ export default ({
                 // this.reload();
             } else if (index == "2") {
                 this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
-                location.reload(true)
-            } else if (index == "4") {
-                // this.$router.push({ name: "Musiclist", params: { id: this.favorite_music_list.id } });
-                // this.reload();
-            }
+                // location.reload(true)
+            } else if (index == "3") {
+                this.$router.push({ name: "MyUpload"});
+                // location.reload(true)
+            } 
             else {
                 // jump to other playlist
                 const playlistId = index.split("-")[1];
@@ -209,7 +212,9 @@ export default ({
                     formData.append('favorites_name', this.form.favorites_name)
                     formData.append('description', this.form.description)
                     formData.append('cover', this.form.cover)
-                    formData.append('labels', this.form.labels)
+                    this.form.labels.forEach(function (e) {
+                        formData.append('labels', e)
+                    })
                     console.log(this.form);
                     createList(formData)
                         .then(res => {

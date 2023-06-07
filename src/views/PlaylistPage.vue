@@ -37,23 +37,14 @@
                             </div>
                             <!--歌曲标签-->
                             <div style=" padding-top: 10px;">
-                                <div v-if="isModifyLabel">
-                                    <el-button size="mini" round v-for="(label, index) in this.labels" :key="label._id"
-                                        :class="{ activeLabel: label.isSelect, label: !label.isSelect }"
-                                        @click="selectLabel(index)">
-                                        {{ label.label_name }}</el-button>
-                                    <el-button size="mini" round type="primary" @click="modifyLabel">完成</el-button>
-                                </div>
-                                <div v-else>
-                                    <el-button size="mini" round v-for="label in activeLabel" :key="label._id" disabled
-                                        style="background-color: cadetblue;
+                                <div>
+                            <el-button size="mini" round v-for="label in this.music_list_info.labels" :key="label._id" disabled style="background-color: cadetblue;
                                 border-color: cadetblue;
                                 color: white;">
-                                        {{ label.label_name }}
-                                    </el-button>
-                                    <el-button size="mini" round type="primary" @click="modifyLabel">修改</el-button>
+                                {{ label.label_name }}
+                            </el-button>
 
-                                </div>
+                        </div>
                             </div>
 
                             <div class="fronthead-actions" style="padding-top: 10px;">

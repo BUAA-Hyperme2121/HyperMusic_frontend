@@ -1,9 +1,6 @@
 <template>
   <div class="fronthead-container">
-    <div
-      class="background"
-      :style="{ backgroundImage: `url(${music_info.cover_path})` }"
-    ></div>
+    <div class="background" :style="{ backgroundImage: `url(${music_info.cover_path})` }"></div>
     <el-row :gutter="20">
       <el-col :span="6" :offset="1" style="position: sticky; top: 0px">
         <div class="fronthead-cover-big">
@@ -13,18 +10,11 @@
         <!--name, description-->
         <div class="fronthead-header">
           <div class="fronthead-title">
-            <span
-              class="font-title"
-              style="color: white; font-size: 40px; padding-left: 40px"
-            >
+            <span class="font-title" style="color: white; font-size: 40px; padding-left: 40px">
               {{ music_info.music_name }}
             </span>
             <a-button type="link" ghost @click="like_song">
-              <img
-                v-if="isLike"
-                src="../assets/like.png"
-                style="height: 40px"
-              />
+              <img v-if="isLike" src="../assets/like.png" style="height: 40px" />
               <img v-else src="../assets/notlike.png" style="height: 40px" />
             </a-button>
           </div>
@@ -35,38 +25,13 @@
           </div>
           <!--歌曲标签-->
           <div class="label-container">
-            <div v-if="isModifyLabel">
-              <el-button
-                size="mini"
-                round
-                v-for="(label, index) in music_info.labels"
-                :key="label._id"
-                :class="{ activeLabel: label.isSelect, label: !label.isSelect }"
-                @click="selectLabel(index)"
-              >
-                {{ label.label_name }}</el-button
-              >
-              <el-button size="mini" round type="primary" @click="modifyLabel"
-                >完成</el-button
-              >
-            </div>
-            <div v-else>
-              <el-button
-                size="mini"
-                round
-                v-for="label in activeLabel"
-                :key="label._id"
-                disabled
-                style="
-                  background-color: cadetblue;
-                  border-color: cadetblue;
-                  color: white;
-                "
-                >{{ label.label_name }}</el-button
-              >
-              <el-button size="mini" round type="primary" @click="modifyLabel"
-                >修改</el-button
-              >
+            <div>
+              <el-button size="mini" round v-for="label in this.music_info.labels" :key="label._id" disabled style="background-color: cadetblue;
+                                border-color: cadetblue;
+                                color: white;">
+                {{ label }}
+              </el-button>
+
             </div>
           </div>
           <!--对歌曲的操作-->
@@ -75,73 +40,34 @@
               <div v-for="l in playlist" :key="l.id">
                 <el-button style="width: 400px">{{ l.name }}</el-button>
               </div>
-              <el-input
-                v-model="complaintForm.reason"
-                type="textarea"
-                :rows="1"
-                placeholder="新建歌单"
-              ></el-input>
-              <el-button
-                type="default"
-                icon="el-icon-folder-add"
-                size="mini"
-                slot="reference"
-                >收藏</el-button
-              >
+              <el-input v-model="complaintForm.reason" type="textarea" :rows="1" placeholder="新建歌单"></el-input>
+              <el-button type="default" icon="el-icon-folder-add" size="mini" slot="reference">收藏</el-button>
             </el-popover>
             <el-popover placement="right" width="400" trigger="click">
-              <el-button
-                type="default"
-                icon="el-icon-share"
-                size="mini"
-                slot="reference"
-                >分享</el-button
-              >
+              <el-button type="default" icon="el-icon-share" size="mini" slot="reference">分享</el-button>
             </el-popover>
             <el-popover placement="right" width="400" trigger="click">
-              <el-button
-                type="default"
-                icon="el-icon-chat-dot-square"
-                size="mini"
-                slot="reference"
-                >评论</el-button
-              >
+              <el-button type="default" icon="el-icon-chat-dot-square" size="mini" slot="reference">评论</el-button>
             </el-popover>
             <el-popover placement="right" width="400" trigger="click">
               <div class="complaint-form">
                 <el-form ref="form" :model="complaintForm" label-width="80px">
                   <el-form-item label="投诉类型">
-                    <el-select
-                      v-model="complaintForm.type"
-                      placeholder="请选择投诉类型"
-                    >
+                    <el-select v-model="complaintForm.type" placeholder="请选择投诉类型">
                       <el-option label="服务" value="service"></el-option>
                       <el-option label="产品" value="product"></el-option>
                       <el-option label="其他" value="other"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="投诉理由">
-                    <el-input
-                      v-model="complaintForm.reason"
-                      type="textarea"
-                      :rows="4"
-                      placeholder="请输入投诉理由"
-                    ></el-input>
+                    <el-input v-model="complaintForm.reason" type="textarea" :rows="4" placeholder="请输入投诉理由"></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submitComplaintForm"
-                      >提交</el-button
-                    >
+                    <el-button type="primary" @click="submitComplaintForm">提交</el-button>
                   </el-form-item>
                 </el-form>
               </div>
-              <el-button
-                type="default"
-                icon="el-icon-warning-outline"
-                size="mini"
-                slot="reference"
-                >投诉</el-button
-              >
+              <el-button type="default" icon="el-icon-warning-outline" size="mini" slot="reference">投诉</el-button>
             </el-popover>
           </div>
           <div class="fronthead-description font-description">
@@ -151,8 +77,8 @@
       </el-col>
       <el-col :span="15" :offset="1" class="lyrics-container">
         <div class="lyrics-outline">
-          <ul class="lyrics" v-if="lyrics.length" >
-            <li v-for="(item,index) in lyrics" v-bind:key="index">
+          <ul class="lyrics" v-if="lyrics.length">
+            <li v-for="(item, index) in lyrics" v-bind:key="index">
               {{ item[1] }}
             </li>
           </ul>
@@ -177,7 +103,7 @@
   background-repeat: no-repeat;
   filter: blur(10px) brightness(70%);
   z-index: -1;
-  overflow-x:hidden
+  overflow-x: hidden
 }
 
 .song-cover {
@@ -215,7 +141,7 @@
 
 <script>
 import qs from "qs";
-import {mixin} from '../mixins'
+import { mixin } from '../mixins'
 import { mapGetters } from 'vuex'
 export default {
   mixins: [mixin],
@@ -223,8 +149,8 @@ export default {
   name: "SongPage",
   data() {
     return {
-      music_info:[],
-      lyrics:[],
+      music_info: [],
+      lyrics: [],
       isLike: false,
       isModifyLabel: false,
       complaintForm: {
@@ -250,7 +176,7 @@ export default {
   },
   created() {
     this.isLike = true;
-    this.getSongData(); 
+    this.getSongData();
   },
   computed: {
     activeLabel: function () {
@@ -263,7 +189,7 @@ export default {
       'id',
     ])
   },
-  watch: { 
+  watch: {
     //监听歌词变化
     curTime() {
       if (this.lyrics.length !== 0) {
@@ -276,22 +202,22 @@ export default {
             if (i >= 0) {
               document.querySelectorAll('.lyrics li')[i].style.color = '#FFA1A8'
               document.querySelectorAll('.lyrics li')[i].style.fontSize = '25px'
-              document.querySelector('.lyrics').style.transform= `translateY(${250 - (40 * (i + 1))}px)`
+              document.querySelector('.lyrics').style.transform = `translateY(${250 - (40 * (i + 1))}px)`
             }
           }
         }
       }
     },
     //监听歌曲id变化
-    id(){
+    id() {
       this.$message.success("跳转")
-      if(this.id!=this.song.id){
-        this.$router.push({path: `/song/${this.id}`});
+      if (this.id != this.song.id) {
+        this.$router.push({ path: `/song/${this.id}` });
         this.$forceUpdate;
       }
     }
   },
-  
+
   methods: {
     getSongData() {
       //下面这几行是算id的
@@ -305,58 +231,58 @@ export default {
       this.$axios.get("/music/get_music_info/", {
         params: {
           JWT: jwt,
-          music_id: num,          
+          music_id: num,
         }
       })
-      .then(
-        (res)=>{
-          console.log(res.data.music_info)
-          this.song.lyrics_path=res.data.music_info.lyrics_path;
-          this.song.music_path=res.data.music_info.music_path;
-          this.song.music_name=res.data.music_info.music_name;
-          this.song.cover_path=res.data.music_info.cover_path;
-          this.song.id=res.data.music_info.id;
-          this.toplay(this.song)
-          const xhr = new XMLHttpRequest();
-          xhr.responseType = 'text';
-          xhr.open('GET', this.song.lyrics_path);
-          xhr.send();
-          xhr.onload = () => {
+        .then(
+          (res) => {
+            console.log(res.data.music_info)
+            this.song.lyrics_path = res.data.music_info.lyrics_path;
+            this.song.music_path = res.data.music_info.music_path;
+            this.song.music_name = res.data.music_info.music_name;
+            this.song.cover_path = res.data.music_info.cover_path;
+            this.song.id = res.data.music_info.id;
+            this.toplay(this.song)
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'text';
+            xhr.open('GET', this.song.lyrics_path);
+            xhr.send();
+            xhr.onload = () => {
               const lyricsText = xhr.response;
               let lines = lyricsText.split('\n')
               let pattern = /\[\d{2}:\d{2}.(\d{3}|\d{2})\]/g
               let result = []
               if (!(/\[.+\]/.test(lyricsText))) {
-                  return [
-                      [0, lyricsText]
-                  ]
+                return [
+                  [0, lyricsText]
+                ]
               }
               while (!pattern.test(lines[0])) {
-                  lines = lines.slice(1)
+                lines = lines.slice(1)
               }
               lines[lines.length - 1].length === 0 && lines.pop()
               for (let item of lines) {
-                  let time = item.match(pattern)
-                  let value = item.replace(pattern, '')
-                  for (let item1 of time) {
-                      let t = item1.slice(1, -1).split(':')
-                      if (value !== '') {
-                          result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value])
-                      }
+                let time = item.match(pattern)
+                let value = item.replace(pattern, '')
+                for (let item1 of time) {
+                  let t = item1.slice(1, -1).split(':')
+                  if (value !== '') {
+                    result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value])
                   }
+                }
               }
-              result.sort(function(a, b) {
-                  return a[0] - b[0]
+              result.sort(function (a, b) {
+                return a[0] - b[0]
               })
-              this.lyrics=result
+              this.lyrics = result
             };
-        }
-      )
-      .catch(
-        (err)=>{
-          this.$message("获取歌曲失败！");
-        }
-      )
+          }
+        )
+        .catch(
+          (err) => {
+            this.$message("获取歌曲失败！");
+          }
+        )
     },
     like_song() {
       console.log(this.isLike);

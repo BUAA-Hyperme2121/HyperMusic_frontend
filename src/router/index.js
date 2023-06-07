@@ -36,6 +36,12 @@ const router = new VueRouter({
                                 import ("../views/ListPage/SingerListPage.vue"),
                             props: true,
                         },
+                        {
+                            path: "myupload",
+                            name: "MyUpload",
+                            component: () =>
+                                import ("../views/ListPage/MySongPage.vue"),
+                        },
                     ],
                 },
                 {
