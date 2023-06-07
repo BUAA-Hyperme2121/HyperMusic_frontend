@@ -280,11 +280,11 @@ export default {
               message: "点赞成功",
               type: "success",
             });
-            // // 更新点赞数
-            // this.$emit("addLikeCnt", this.commentInfo.id);
-            // // 修改点赞状态
-            // this.$emit("changeLikeStatus", this.commentInfo.id);
-            this.$emit("updateCommentList");
+            // 更新点赞数
+            this.$emit("addLikeCnt", this.commentInfo.id);
+            // 修改点赞状态
+            this.$emit("changeLikeStatus", this.commentInfo.id);
+            // this.$emit("updateCommentList");
             // 向被点赞用户发送消息
             // this.$axios({
             //   methods: "post",
@@ -319,7 +319,7 @@ export default {
         data: qs.stringify({
           JWT: jwt,
           type: 2,
-          obj_id: this.commentInfo.id,
+          object_id: this.commentInfo.id,
         }),
       })
         .then((res) => {
@@ -328,11 +328,11 @@ export default {
               message: "取消点赞成功",
               type: "success",
             });
-            // // 更新点赞数
-            // this.$emit("subLikeCnt", this.commentInfo.id);
-            // // 修改点赞状态
-            // this.$emit("changeLikeStatus", this.commentInfo.id);
-            this.$emit("updateCommentList");
+            // 更新点赞数
+            this.$emit("subLikeCnt", this.commentInfo.id);
+            // 修改点赞状态
+            this.$emit("changeLikeStatus", this.commentInfo.id);
+            // this.$emit("updateCommentList");
           } else {
             this.$message({
               message: res.data.message,

@@ -7,7 +7,9 @@
         v-for="item in commentList"
         :key="item.id"
         :commentInfo="item"
-        
+        @changeLikeStatus="changeLikeStatus"
+        @subLikeCnt="subLikeCnt"
+        @addLikeCnt="addLikeCnt"
       />
     </div>
   </div>
@@ -34,6 +36,30 @@ export default {
       this.$nextTick(() => {
         this.refresh = true;
       });
+    },
+    addLikeCnt(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].like_num += 1;
+          break;
+        }
+      }
+    },
+    subLikeCnt(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].like_num -= 1;
+          break;
+        }
+      }
+    },
+    changeLikeStatus(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].is_liked = !this.commentList[i].is_liked;
+          break;
+        }
+      }
     },
   },
   mounted() {
