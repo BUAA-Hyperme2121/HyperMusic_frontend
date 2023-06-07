@@ -10,7 +10,7 @@
           </router-link>
           <el-button size="mini" round @click="unfollow(index)" style="margin: 10px 0 10px 0;">取消关注</el-button>
 
-          <p class="singer-album-count">上传数量：{{ singer.post_num }}</p>
+          <p class="singer-album-count">动态数量：{{ singer.post_num }}</p>
         </div>
       </li>
     </ul>

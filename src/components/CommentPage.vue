@@ -16,16 +16,12 @@
             style="height: 100%; width: 100%"
           ></el-avatar>
         </div>
-        <!-- 评论输入框 -->
-        <el-input
+        <!-- 评论输入框 v-model="comment_content"-->
+        <input
           type="textarea"
-          maxlength="50"
-          show-word-limit
-          :rows="3"
-          placeholder="来说两句吧"
-          v-model="comment_content"
-          class="comment-input"
-        ></el-input>
+          v-bind:value="this.comment_content"
+          v-on:input="changeName"
+          class="comment-input"/>
       </div>
       <!-- 发表按钮  -->
       <div class="comment-submit-foot">
@@ -88,6 +84,9 @@ export default {
     };
   },
   methods: {
+    changeName: function (e) {
+            this.comment_content = e.target.value;
+        },
     //对评论排序
     handleSort(command) {
       if (command == "最热") {

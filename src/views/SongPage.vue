@@ -511,10 +511,10 @@ export default ({
         },
         fetchMenus() {
             if (localStorage.getItem("loginInfo") == null) {
-                this.$message({
-                    message: "请先登录",
-                    type: "warning",
-                });
+                // this.$message({
+                //     message: "请先登录",
+                //     type: "warning",
+                // });
                 return;
             }
             let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
