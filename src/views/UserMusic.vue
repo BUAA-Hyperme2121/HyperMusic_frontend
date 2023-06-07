@@ -65,16 +65,11 @@
                         </el-form-item>
                         <el-form-item label="歌曲标签">
                             <el-checkbox-group v-model="form.labels">
-                                <el-checkbox label="流行" name="type"></el-checkbox>
-                                <el-checkbox label="摇滚" name="type"></el-checkbox>
-                                <el-checkbox label="民谣" name="type"></el-checkbox>
-                                <el-checkbox label="电子" name="type"></el-checkbox>
-                                <el-checkbox label="说唱" name="type"></el-checkbox>
-                                <el-checkbox label="轻音乐" name="type"></el-checkbox>
-                                <el-checkbox label="古风" name="type"></el-checkbox>
-                                <el-checkbox label="爵士" name="type"></el-checkbox>
-                                <el-checkbox label="金属" name="type"></el-checkbox>
-                                <el-checkbox label="拉丁" name="type"></el-checkbox>
+                                <el-checkbox label="怀旧" name="type"></el-checkbox>
+                                <el-checkbox label="浪漫" name="type"></el-checkbox>
+                                <el-checkbox label="伤感" name="type"></el-checkbox>
+                                <el-checkbox label="放松" name="type"></el-checkbox>
+                                <el-checkbox label="治愈" name="type"></el-checkbox>
                                 <el-checkbox label="其他" name="type"></el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
@@ -259,14 +254,13 @@ export default ({
                 this.uploadDisabled = true;
                 this.$set(this, 'uploadDisabled', true);
                 this.onCoverChange(file.raw);
-                location.reload(true)
             }
         },
         handleRemove() {
             this.uploadDisabled = false;
             this.$set(this, 'uploadDisabled', false);
             this.form.cover = '';
-            location.reload(true)
+            // location.reload(true)
         },
         onCoverChange(file) {
             this.form.cover = file;

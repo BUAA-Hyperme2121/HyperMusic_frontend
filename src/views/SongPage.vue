@@ -6,10 +6,11 @@
         </div>
 
         <!-- main -->
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="height: max-content;">
             <!-- music_info -->
             <el-col :offset="1" :span="8"
-                style="display: flex;flex-direction:column; ;justify-content: center;align-items: center;">
+                style="display: flex;height: 95vh; overflow:auto; flex-direction:column; margin-bottom: 20px ;justify-content: center;align-items: center;">
+                
                 <div class="fronthead-cover-big">
                     <img :src="music_info.cover_path" alt="album cover" @click="Play" />
                 </div>
@@ -455,6 +456,7 @@ export default ({
             })
                 .then((res) => {
                     this.music_info = res.data.music_info;
+                    this.isLike = res.data.is_like;
                     this.toplay(this.music_info)
                     if (this.music_info.lyrics_path == "") {
                         this.lyrics = [];
@@ -473,7 +475,7 @@ export default ({
                 })
         },
         like_song() {
-            // this.isLike = !this.isLike;
+            this.isLike = !this.isLike;
             if (localStorage.getItem('loginInfo') != null) {
                 var formData = new FormData();
                 formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
@@ -489,6 +491,7 @@ export default ({
                     })
                     .catch(err => {
                         this.$message.error("添加失败")
+                        this.isLike = !this.isLike;
                     })
             } else {
                 this.$message.error("请先登录")
