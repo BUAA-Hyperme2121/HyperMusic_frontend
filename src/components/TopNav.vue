@@ -3,6 +3,7 @@
     <el-row class="top-nav">
       <!-- logo -->
       <el-col :span="5" class="logo">
+        <i style="font-size: 20px;" class="icon iconfont icon-yinle"></i>
         <span @click="goHomePage"> HyperMusic </span>
       </el-col>
       <!-- 主要分区 -->
@@ -36,6 +37,7 @@
       <a
         href="https://github.com/BUAA-Hyperme2121/HyperMusic_frontend"
         class="github-link"
+        style="margin-left: 50px;"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +51,7 @@
       </a>
 
       <!-- 消息中心 -->
-      <span class="message-center" @click="goMessage">
+      <span class="message-center" @click="goMessage" style="margin-left: 40px;">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -77,12 +79,12 @@
           v-if="!Object.keys($store.state.userInfo).length == 0"
         >
           <el-dropdown trigger="hover" @command="handleCommand">
-            <span class="user-image">
+            <span class="user-image" style="border-radius:50%">
               <el-avatar
                 shape="square"
                 fit="fill"
                 :src="$store.state.userInfo.avatar_path"
-                style="height: 100%; width: 100%"
+                style="height: 100%; width: 100% ;"
                 @click.native="goUserHome"
               ></el-avatar>
             </span>

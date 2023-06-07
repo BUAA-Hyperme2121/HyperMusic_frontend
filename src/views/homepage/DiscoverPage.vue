@@ -5,7 +5,7 @@
             <div class="left">
                 <div class="section">
                     <div class="section-title">
-                        <img style="border-radius: 50%;" src="@/assets/img/homepageTest/icon.jpg">
+                      <i style="font-size: 30px; line-height: 40px; display: inline-block;" class="icon iconfont icon-yinle"></i>
                         <em>随便听听</em>
                         <router-link to="/homepage/song">更多></router-link>
                     </div>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="section">
                     <div class="section-title">
-                        <img src="@/assets/img/homepageTest/icon.jpg">
+                      <i style="font-size: 30px; line-height: 40px; display: inline-block;" class="icon iconfont icon-yinle"></i>
                         <em>推荐歌单</em>
                         <router-link to="/homepage/playlist">更多></router-link>
                     </div>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="section">
                     <div class="section-title">
-                        <img src="@/assets/img/homepageTest/icon.jpg">
+                      <i style="font-size: 30px; line-height: 40px; display: inline-block;" class="icon iconfont icon-yinle"></i>
                         <em>推荐歌手</em>
                         <router-link to="/homepage/artist">更多></router-link>
                     </div>
@@ -98,7 +98,7 @@ export default {
         getPlaylists(){
           getAllPlaylists()
             .then(res => {
-              this.recommendplaylists=res.data.music_list_all.slice(0,5)
+              this.recommendplaylists=res.data.music_list_all.slice(3,8)
             })
             .catch(err => {
               console.log(err)
@@ -107,7 +107,7 @@ export default {
         getSingers(){
           getAllSingers()
             .then(res => {
-              this.recommendsingers=res.data.singer_list.slice(0,5)
+              this.recommendsingers=res.data.singer_list.slice(6,11)
             })
             .catch(err => {
               console.log(err)
@@ -147,12 +147,13 @@ export default {
   margin-right:20px;
 }
 .section-title em{
+  display: inline-block;
+  margin-left: 10px;
   height: 60px;
   line-height: 60px;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 500;
   color: black;
-  float:left;
 }
 .section-title a{
   height:60px;
