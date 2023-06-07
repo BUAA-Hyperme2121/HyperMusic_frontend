@@ -5,8 +5,8 @@
             <el-row style="display: flex; flex: 1; margin-right: 20px;">
                 <!-- cover -->
                 <div>
-                    <img class="fronthead-cover" :src="this.music_list_info.cover_path"
-                        alt="music_list_info.cover_path" @click="addToPlaylistAll" />
+                    <img class="fronthead-cover" :src="this.music_list_info.cover_path" alt="music_list_info.cover_path"
+                        @click="addToPlaylistAll" />
                     <!-- <el-upload class="fronthead-cover" style=" display: flex;justify-content: center;align-items: center;" v-else list-type="picture-card" :auto-upload="false" :class="{ 'none-up': uploadDisabled }"
                         accept="image/jpeg,image/jpg" :limit="1" action="" :on-change="handleLimit"
                         :on-remove="handleRemove">
@@ -56,10 +56,39 @@
                     <div class="fronthead-actions">
                         <el-button type="default" icon="el-icon-folder-delete" @click="deleteMusicList">删除</el-button>
                         <el-button type="default" icon="el-icon-plus" @click="jumpToSearch">添加歌曲</el-button>
-                        <el-button type="default" icon="el-icon-share">分享</el-button>
+                        <el-link style="margin-left: 10px;">
+                            <el-button type="default" icon="el-icon-folder-add"
+                                @click="shareListFormVisible = true; changeshareListForm()">分享</el-button>
+                            <el-dialog title="分享到你的动态" :visible.sync="shareListFormVisible" center
+                                :close-on-click-modal="false" :show-close="false">
+                                <div>
+                                    <el-input v-model="shareListForm.description" placeholder="说点什么吧"></el-input>
+                                </div>
+                                <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                                    <div
+                                        style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); min-width: 300px;border-radius: 5px;">
+                                        <div style="float:left">
+                                            <img style="width: 70px;height: 70px;display: block;border-radius:  5px 0px 0px 5px;"
+                                                :src="shareListForm.cover_path" alt="">
+                                        </div>
+                                        <div
+                                            style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
+                                            <p style="margin:0;">{{ shareListForm.music_name }} by {{
+                                                shareListForm.singer_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="shareListFormVisible = false; clearshareListForm()">取 消</el-button>
+                                    <el-button type="primary" @click="shareListFormVisible = false; shareList()">确
+                                        定</el-button>
+                                </div>
+                            </el-dialog>
+                        </el-link>
                         <el-button v-if="isModify" type="default" icon="el-icon-folder-add"
                             @click="submitModifyInfo">完成</el-button>
-                        <el-button v-else type="default" icon="el-icon-folder-add" @click="modifyInfo">修改</el-button>
+                        <el-button style="margin-left: 10px; " v-else type="default" icon="el-icon-folder-add"
+                            @click="modifyInfo">修改</el-button>
 
                     </div>
                     <div class="fronthead-description font-description" style="width: 50vw;" v-if="!isModify">{{
@@ -105,6 +134,14 @@ export default ({
             music_labels: [],
             uploadDisabled: false,
             change_cover: null,
+            shareListFormVisible: false,
+            shareListForm: {
+                description: '',
+                cover_path: '',
+                id: '',
+                music_name: '',
+                singer_name: '',
+            },
             labels: [
                 {
                     label_name: "怀旧",
@@ -152,13 +189,42 @@ export default ({
         activeLabelList: function () {
             return this.labels.filter((item) => {
                 return item.isSelect;
-            }).map(function(label) {
+            }).map(function (label) {
                 return label.label_name;
             });
         },
     },
     methods: {
-        
+        shareList() {
+            if (localStorage.getItem('loginInfo') != null) {
+                var formData = new FormData();
+                formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+                formData.append('object_id', this.shareListForm.id)
+                formData.append('type', '2')
+                formData.append('content', this.shareListForm.description)
+                setPosts(formData)
+                    .then(res => {
+                        //根据res进行区分
+                        this.$message.success("分享成功")
+                    })
+                    .catch(err => {
+                        this.$message.error("分享失败")
+                    })
+
+            } else {
+                this.$message.error("请先登录")
+            }
+            this.shareListForm.description = ''
+        },
+        changeshareListForm() {
+            this.shareListForm.cover_path = this.music_list_info.cover_path
+            this.shareListForm.id = this.music_list_info.id
+            this.shareListForm.music_name = this.music_list_info.name
+            this.shareListForm.singer_name = this.music_list_info.creator_name
+        },
+        clearshareListForm() {
+            this.shareListForm.description = ''
+        },
         addToPlaylistAll() {
             var i;
             if (this.music_list.length) {
@@ -225,7 +291,10 @@ export default ({
             formData.append('favorites_id', this.music_list_info.id)
             formData.append('name', this.music_list_info.name)
             console.log(this.activeLabelList)
-            formData.append('labels', this.activeLabelList)
+
+            this.activeLabelList.forEach(function (e) {
+                formData.append('labels', e)
+            })
             formData.append('description', this.music_list_info.description)
             // formData.append('old_labels', this.change_cover)
             changeMusiclist(formData)
@@ -324,10 +393,9 @@ export default ({
             this.$set(this, 'uploadDisabled', false);
             this.change_cover = '';
         },
-        
+
     }
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
