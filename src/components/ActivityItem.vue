@@ -25,7 +25,11 @@
 
       <!-- 发布时间 -->
       <div class="act-time">
-        <span>{{ activityInfo.create_date }}</span>
+        <span>{{
+          activityInfo.create_date.slice(0, 10) +
+          " " +
+          activityInfo.create_date.slice(11, 19)
+        }}</span>
       </div>
 
       <!-- 发布文案-->
@@ -146,7 +150,7 @@ export default {
             // });
           } else {
             this.$message({
-              message: this.res.message,
+              message: res.data.message,
               type: "error",
             });
           }
@@ -156,11 +160,11 @@ export default {
         });
     },
     cancelLike() {
-      console.log(this.activityInfo);
+      // console.log(11111111);
       // 取消点赞该动态
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/cancel_like/",
+        url: "/message/cancel_like/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,

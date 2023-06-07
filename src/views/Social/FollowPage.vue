@@ -29,14 +29,18 @@ export default {
     updateFollowList() {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/user/get_follow_list/",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
           user_id: this.user_id,
-        }),
+        },
       }).then((res) => {
-        this.followList = res.data;
+        if (res.data.result == 1) {
+          this.followList = res.data.follow_list;
+        } else {
+          this.$message.error(res.data.message);
+        }
       });
     },
   },
@@ -54,14 +58,18 @@ export default {
     }
     //获取指定用户的关注列表
     this.$axios({
-      method: "post",
+      method: "get",
       url: "user/get_follow_list/",
-      data: JSON.stringify({
+      params: {
         JWT: jwt,
         user_id: this.user_id,
-      }),
+      },
     }).then((res) => {
-      this.followList = res.data.follow_list;
+      if (res.data.result == 1) {
+        this.followList = res.data.follow_list;
+      } else {
+        this.$message.error(res.data.message);
+      }
     });
   },
 };

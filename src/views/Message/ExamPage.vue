@@ -28,7 +28,7 @@
         ></el-table-column>
 
         <el-table-column
-          prop="time"
+          prop="create_date"
           label="时间"
           width="160"
           sortable
