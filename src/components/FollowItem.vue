@@ -1,12 +1,12 @@
 <template>
-  <div class="follow-item">
+  <div class="follow-item" @click="goFollowHome" style="cursor: pointer;">
     <!-- 关注用户头像 -->
     <div class="follow-avatar">
       <el-avatar
         shape="square"
         fit="fill"
         :src="followInfo.avatar_path"
-        style="height: 100%; width: 100%"
+        style="height: 45px; width: 45px"
       ></el-avatar>
     </div>
     <!-- 关注用户信息 -->
@@ -53,7 +53,7 @@ export default {
       this.$router.push({
         path: "/user/home",
         query: {
-          userId: this.followInfo.id,
+          user_id: this.followInfo.id,
         },
       });
     },
@@ -178,6 +178,8 @@ export default {
 }
 .follow-info {
   margin-right: 10px;
+  width: 200px;
+  overflow: hidden;
 }
 .follow-sign {
   font-size: 12px;

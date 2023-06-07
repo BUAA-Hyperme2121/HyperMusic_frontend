@@ -1,12 +1,12 @@
 <template>
   <div class="fan-item">
     <!-- 粉丝头像 -->
-    <div class="fan-avatar" @click="goFanHome">
+    <div class="fan-avatar" @click="goFanHome" style="cursor: pointer;">
       <el-avatar
         shape="square"
         fit="fill"
         :src="fanInfo.avatar_path"
-        style="height: 100%; width: 100%"
+        style="height: 45px; width: 45px"
       ></el-avatar>
     </div>
     <!-- 粉丝信息 -->
@@ -185,6 +185,7 @@ export default {
 }
 .fan-info {
   margin-right: 10px;
+  width: 200px;
 }
 .fan-sign {
   font-size: 12px;
