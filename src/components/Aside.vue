@@ -70,7 +70,7 @@ export default {
 .the-aside {
     font-size: 14px;
     width: 250px;
-    height: 370px;
+    height: 500px;
     position: fixed;
     right: 0;
     top: 150px;
