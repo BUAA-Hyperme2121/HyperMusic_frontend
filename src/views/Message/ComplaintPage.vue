@@ -45,50 +45,7 @@ export default {
   data() {
     return {
       //投诉列表
-      complaintList: [
-        {
-          id: 1,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 2,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-        {
-          id: 3,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 4,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-        {
-          id: 5,
-          title: "标题1",
-          user: "用户1",
-          time: "2020-12-12 12:12:12",
-          status: "待审核",
-        },
-        {
-          id: 6,
-          title: "标题2",
-          user: "用户2",
-          time: "2020-12-12 12:12:12",
-          status: "已审核",
-        },
-      ],
+      complaintList: [],
     };
   },
   methods: {
@@ -125,8 +82,8 @@ export default {
         JWT: jwt,
       },
     }).then((res) => {
-      if (res.data.result == 1) {
-        this.complaintList = res.data.complaintList;
+      if (res.data.errno == 0) {
+        this.complaintList = res.data.music_complain_list;
       } else {
         this.$message.error(res.data.message);
       }

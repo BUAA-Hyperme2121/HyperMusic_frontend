@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
@@ -140,12 +141,12 @@ export default {
       this.$axios({
         method: "post",
         url: "/message/audit",
-        data: {
+        data: qs.stringify({
           complain_id: this.$route.query.id,
           result: this.pass,
           reason: this.reason,
           JWT: JSON.parse(localStorage.getItem("loginInfo")).JWT,
-        },
+        }),
       }).then((res) => {
         if (res.data.result == 1) {
           this.$message.success("审核成功");
