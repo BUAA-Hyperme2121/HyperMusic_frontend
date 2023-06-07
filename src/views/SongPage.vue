@@ -43,7 +43,7 @@
                                 style="background-color: cadetblue;
                                 border-color: cadetblue;
                                 color: white;">
-                                {{ label.label_name }}
+                                {{ label }}
                             </el-button>
                         </div>
                     </div>
@@ -456,7 +456,7 @@ export default ({
             })
                 .then((res) => {
                     this.music_info = res.data.music_info;
-                    this.isLike = res.data.is_like;
+                    this.isLike = res.data.music_info.is_like;
                     this.toplay(this.music_info)
                     if (this.music_info.lyrics_path == "") {
                         this.lyrics = [];

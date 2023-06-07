@@ -1,11 +1,11 @@
 <template>
   <div class="singer-page">
-    <h2 class="singer-count">关注的歌手：</h2>
+    <h2 class="singer-count">关注的用户：</h2>
     <ul class="singer-list">
       <li v-for="(singer, index) in this.follow_list" :key="singer._id" class="singer-item">
         <img :src="singer.avatar_path" class="singer-avatar" alt="" />
         <div class="singer-info">
-          <router-link class="songlist-table-link" :to="'/singer/' + singer.id">
+          <router-link class="songlist-table-link" :to="'/user/home?user_id=' + singer.id">
             <h3 class="singer-name" @click="jumpToUser(index)">{{ singer.username }}</h3>
           </router-link>
           <el-button size="mini" round @click="unfollow(index)" style="margin: 10px 0 10px 0;">取消关注</el-button>

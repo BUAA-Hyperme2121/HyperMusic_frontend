@@ -149,6 +149,13 @@ export default ({
                 return item.isSelect;
             });
         },
+        activeLabelList: function () {
+            return this.labels.filter((item) => {
+                return item.isSelect;
+            }).map(function(label) {
+                return label.label_name;
+            });
+        },
     },
     methods: {
         
@@ -217,6 +224,8 @@ export default ({
             formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
             formData.append('favorites_id', this.music_list_info.id)
             formData.append('name', this.music_list_info.name)
+            console.log(this.activeLabelList)
+            formData.append('labels', this.activeLabelList)
             formData.append('description', this.music_list_info.description)
             // formData.append('old_labels', this.change_cover)
             changeMusiclist(formData)
@@ -262,7 +271,6 @@ export default ({
                         for (j = 0; j < this.music_labels.length; j++) {
                             if (this.labels[i].label_name == this.music_labels[j]) {
                                 this.labels[i].isSelect = true;
-                                // console.log(this.labels[i]);
                             }
 
                         }
