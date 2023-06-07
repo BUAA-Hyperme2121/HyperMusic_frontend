@@ -29,7 +29,7 @@
                 </el-form-item>
                 <el-form-item label="歌曲封面">
                   <el-upload  list-type="picture-card" :auto-upload="false" :class="{disabled:uploadDisabled}"
-                   accept="image/jpeg,image/jpg" :limit="1" action="" :on-change="handleLimit"  :on-remove="handleRemove">
+                   accept="image" :limit="1" action="" :on-change="handleLimit"  :on-remove="handleRemove">
                     <img v-if="form.cover" :src="form.cover">
                     <i v-else class="el-icon-plus"></i>
                   </el-upload>
