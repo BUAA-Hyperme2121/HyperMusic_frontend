@@ -172,6 +172,7 @@ export default ({
     },
     mounted() {
         this.fetchList();
+
     },
     beforeRouteUpdate(to, from, next) {
         console.log(to, from, next)

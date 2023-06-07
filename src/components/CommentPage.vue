@@ -238,11 +238,11 @@ export default {
 
 <style>
 .comment-page {
-  background-color: #fff;
+  background-color: transparent;
 }
 .title {
   font-family: "Courier New", Courier, monospace;
-  color: #666;
+  color: #FFF;
   font-size: 20px;
   font-weight: bold;
   border-bottom: 2px solid #c20c0c;
@@ -273,7 +273,7 @@ export default {
 }
 .title2 {
   font-family: "Courier New", Courier, monospace;
-  color: #666;
+  color: #FFF;
   font-size: 12px;
   font-weight: bold;
   border-bottom: 1px solid;

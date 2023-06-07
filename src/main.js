@@ -11,6 +11,9 @@ import '@/assets/iconfont/iconfont.css';
 ElementUI.Dialog.props.lockScroll.default = false; //解决dialog遮罩层抖动问题
 import "./assets/css/PageCss/Label.css";
 import "../theme/index.css"
+// import loadong from "./views/loading/loading";
+// Vue.use(loadong);
+
 // 挂载到vue原型链上
 Vue.prototype.axios = axios;
 

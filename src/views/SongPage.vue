@@ -10,7 +10,7 @@
             <!-- music_info -->
             <el-col :offset="1" :span="8"
                 style="display: flex;height: 95vh; overflow:auto; flex-direction:column; margin-bottom: 20px ;justify-content: center;align-items: center;">
-                
+
                 <div class="fronthead-cover-big">
                     <img :src="music_info.cover_path" alt="album cover" @click="Play" />
                 </div>
@@ -29,7 +29,9 @@
                             <img v-else src="../assets/notlike.png" style="height: 40px" />
                         </a-button>
                         <div style="padding-left: 20px;">
-                            <router-link class="font-description" style="text-decoration: none;" :to="'/singer/' + this.music_info.singer_id">歌手：{{ this.music_info.singer_name }}</router-link>
+                            <router-link class="font-description" style="text-decoration: none;"
+                                :to="'/singer/' + this.music_info.singer_id">歌手：{{ this.music_info.singer_name
+                                }}</router-link>
                             <div class="font-description" style="">
                                 播放量：{{ music_info.listen_nums }}
                             </div>
@@ -173,10 +175,14 @@
                         </li>
                     </ul>
                 </div>
-                <CommentPage v-if="!this.isDescription" :object_id="this.music_info.id" :type="1" :owner_id="this.music_info.creator_id"/>
-                <el-button style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看评论</el-button>
+                <CommentPage v-if="!this.isDescription" :object_id="this.music_info.id" :type="1"
+                    :owner_id="this.music_info.creator_id" style="width: 50vw; height: max-content;"/>
+                <el-button v-if="this.isDescription" style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看评论</el-button>
+                <el-button v-else style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看歌词</el-button>
             </el-col>
+
         </el-row>
+        <div style="height: 60px; background-color:black;"></div>
     </div>
 </template>
 
@@ -578,5 +584,4 @@ export default ({
     line-height: 2;
     text-align: center;
     color: antiquewhite;
-}
-</style>
+}</style>

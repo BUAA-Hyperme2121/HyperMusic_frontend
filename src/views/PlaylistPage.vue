@@ -41,7 +41,7 @@
                             <el-button size="mini" round v-for="label in this.music_list_info.labels" :key="label._id" disabled style="background-color: cadetblue;
                                 border-color: cadetblue;
                                 color: white;">
-                                {{ label.label_name }}
+                                {{ label }}
                             </el-button>
 
                         </div>
