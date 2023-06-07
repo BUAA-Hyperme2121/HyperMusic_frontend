@@ -126,7 +126,6 @@ export default {
   },
   mounted() {
     this.fetchSinger();
-    this.fetchList();
   },
   methods: {
     goToHome() {
@@ -160,26 +159,6 @@ export default {
         this.$message.error("请先登录")
       }
     },
-
-    fetchList() {
-      this.axios.get("/music/get_music_list_info/", {
-        params: {
-          music_list_id: '4',
-        }
-      })
-        .then((res) => {
-          console.log(this.id);
-          this.music_list_info = res.data.music_list_info;
-          this.music_list = res.data.music_list;
-          console.log(this.music_list_info);
-          console.log(this.music_list);
-        })
-        .catch(
-          (err) => {
-            this.$message("获取歌单失败！");
-          }
-        )
-    },
     fetchSinger() {
       this.axios.get("/music/get_singer_info/", {
         params: {
@@ -188,6 +167,7 @@ export default {
       })
         .then((res) => {
           this.singer_info = res.data.singer_info;
+          this.music_list = res.data.music_list;
           console.log(this.singer_info);
         })
         .catch((err) => {
