@@ -175,6 +175,18 @@
             </el-table-column>
           </el-table>
         </div>
+        <div style="margin-top: 30px;"
+          class="user-recent-play">
+        <div class="title">上传歌曲</div>
+          <!-- 歌曲列表 -->
+          <el-table :data="uploadSongs" style="width: 100%" stripe :show-header="false" max-height="478px">
+            <el-table-column type="index" label="序号" width="100px" :show-header="false"></el-table-column>
+            <el-table-column
+              prop="music_name"
+              label="歌曲名称"
+            ></el-table-column>
+          </el-table>
+        </div>
         <div style="margin-top: 30px;">
           <div class="title">{{userInfo.username}}创建的歌单</div>
           <content-list :contentList="myPlayList" :type=2></content-list>
@@ -193,6 +205,21 @@ export default {
     ContentList,
   },
   methods: {
+    getUploadSongs(){
+      this.$axios({
+        method: "get",
+        url: "/user/get_user_upload_music/",
+        params: {
+          user_id:  this.user_id,
+        },
+      })
+        .then((res) => {
+          this.myPlayList=res.data.music_list
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getMyPlayList(){
       let jwt = ''
       if (localStorage.getItem("loginInfo") == null) {
@@ -451,6 +478,7 @@ export default {
     // 获取用户信息
     this.user_id = this.$route.query.user_id;
     this.getMyPlayList();
+    this.getUploadSongs();
     //自己的主页
     if (this.user_id == this.$store.state.userInfo.id) {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
@@ -534,6 +562,7 @@ export default {
   },
   data() {
     return {
+      uploadSongs:[],
       myPlayList:[],
       btnText: "已关注",
       user_id: 0,

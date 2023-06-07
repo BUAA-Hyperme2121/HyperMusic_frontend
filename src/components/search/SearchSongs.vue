@@ -10,7 +10,12 @@
                         </el-link>
                     </div>
                 </el-table-column>
-                <el-table-column label="歌曲名称" width="500px">
+                <el-table-column label="歌单封面" width="80px">
+                    <template slot-scope="scope">
+                        <el-image style="width: 60px;height: 60px; cursor: pointer; border-radius: 10%;" :src="scope.row.cover_path" @click="goSong(scope.row)"></el-image>
+                    </template>
+                </el-table-column>
+                <el-table-column label="歌曲名称" width="400px">
                     <template slot-scope="scope">
                         <p style="cursor: pointer;" @click="goSong(scope.row)">{{ scope.row.music_name}}</p>
                     </template>

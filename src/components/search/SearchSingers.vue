@@ -104,6 +104,7 @@ export default{
 
 .item-img {
     width: 100%;
+    height: 170px;
     transition: all 0.4s ease;
 }
 
