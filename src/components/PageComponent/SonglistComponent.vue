@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- playlistcomponent -->
-    <el-table :data="songlist" class="songlist-list-container" style="width: 100%;" stripe>
+    <el-table :data="songlist" class="songlist-list-container transparent-style" style="width: 100%;" stripe :show-header="false">
       <el-table-column width="80px" label="">
         <template slot-scope="scope">
           <span style="margin-left: 10px;">{{ scope.$index + 1 }}</span>
@@ -172,5 +172,15 @@ export default {
   font-size: 14px;
 }
 
-.operation {}
+.el-table,
+        .el-table__expanded-cell {
+            background-color: rgba(255,255,255,0.7) !important;
+        }    
+        .el-table th,
+        .el-table tr,
+        .el-table td {
+            background-color: rgba(255,255,255,0) !important;
+        } 
+
+
 </style>

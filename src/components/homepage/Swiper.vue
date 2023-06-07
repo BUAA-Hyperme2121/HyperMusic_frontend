@@ -2,32 +2,32 @@
     <div class="outer">
         <div class="swiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="image-inner">
+                <div class="swiper-slide" >
+                    <div class="image-inner" @click="goPlayList(29)">
                         <img src="../../assets/img/swiper/swiper1.jpg" alt="">
                     </div>
                     <div class="image-outer">
                         <img src="../../assets/img/swiper/swiper1-2.jpg" alt="">
                     </div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="image-inner">
+                <div class="swiper-slide" >
+                    <div class="image-inner" @click="goPlayList(30)">
                         <img src="../../assets/img/swiper/swiper2.jpg" alt="">
                     </div>
                     <div class="image-outer">
                         <img src="../../assets/img/swiper/swiper2-2.jpg" alt="">
                     </div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="image-inner">
+                <div class="swiper-slide" >
+                    <div class="image-inner" @click="goPlayList(31)">
                         <img src="../../assets/img/swiper/swiper3.jpeg" alt="">
                     </div>
                     <div class="image-outer">
                         <img src="../../assets/img/swiper/swiper3-2.jpg" alt="">
                     </div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="image-inner">
+                <div class="swiper-slide" >
+                    <div class="image-inner" @click="goPlayList(32)">
                         <img src="../../assets/img/swiper/swiper4.jpeg" alt="">
                     </div>
                     <div class="image-outer">
@@ -76,6 +76,11 @@ export default{
                 prevEl: '.swiper-button-prev',
             },
         })
+    },
+    methods:{
+        goPlayList(id){
+            this.$router.push({path: `/playlist/${id}`});
+        }
     }
 }         
 </script>
@@ -152,7 +157,7 @@ export default{
     right: 13%;
     width: 15%;
     height: 400px;
-    background-color: rgba(0, 0, 0, 0.76);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 20;
 
 }

@@ -78,7 +78,10 @@ import {uploadSong} from "@/api/api"
             console.log(this.form.labels)
             var formData = new FormData();
             formData.append('JWT',JSON.parse(localStorage.getItem("loginInfo")).JWT)
-            formData.append('music_labels',this.form.labels)
+            var i=0;
+            for(i=0;i<this.form.labels.length;i++){
+              formData.append('music_labels',this.form.labels[i])
+            }
             formData.append('music_name',this.form.name)
             formData.append('music_cover',this.form.cover)
             formData.append('singer_name',this.form.singer_name)
