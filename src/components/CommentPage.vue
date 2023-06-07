@@ -63,6 +63,9 @@
         :key="item.id"
         :commentInfo="item"
         @updateCommentList="updateCommentList"
+        @changeLikeStatus="changeLikeStatus"
+        @subLikeCnt="subLikeCnt"
+        @addLikeCnt="addLikeCnt"
       />
     </div>
   </div>
@@ -81,12 +84,7 @@ export default {
   data() {
     return {
       comment_content: "", //评论内容
-      commentList: [
-        {
-          //这是一个空评论
-          //评论id,评论对象类型(歌曲/歌单/动态),评论对象id,是否是回复，父评论id(如果是回复的话),评论内容,评论时间,点赞数
-        },
-      ],
+      commentList: [],
     };
   },
   methods: {
@@ -127,7 +125,7 @@ export default {
         data: qs.stringify({
           object_id: this.object_id,
           type: this.type,
-          content: this.comment,
+          content: this.comment_content,
           JWT: jwt,
         }),
       })
@@ -139,23 +137,21 @@ export default {
             });
             //清空输入框
             this.comment = "";
-            // //手动更新评论列表
-            // let commentObj = res.data.commentObj;
-            // this.commentList.unshift(commentObj);
+            
             this.updateCommentList();
             //向歌曲/歌单拥有者发送消息
-            this.$axios({
-              url: "/message/send_message/",
-              methods: "post",
-              data: qs.stringify({
-                receiver_id: this.owner_id,
-                poster_id: this.$store.state.userInfo.id,
-                content: "评论了你的歌曲/歌单",
-                type: this.type,
-                object_id: this.object_id,
-                message_type: 1,
-              }),
-            });
+            // this.$axios({
+            //   url: "/message/send_message/",
+            //   methods: "post",
+            //   data: qs.stringify({
+            //     receiver_id: this.owner_id,
+            //     poster_id: this.$store.state.userInfo.id,
+            //     content: "评论了你的歌曲/歌单",
+            //     type: this.type,
+            //     object_id: this.object_id,
+            //     message_type: 1,
+            //   }),
+            // });
           } else {
             this.$message({
               message: res.data.message,
@@ -172,30 +168,30 @@ export default {
         });
     },
 
-    // addLikeCnt(comment_id) {
-    //   for (let i = 0; i < this.commentList.length; i++) {
-    //     if (this.commentList[i].id == comment_id) {
-    //       this.commentList[i].like_num += 1;
-    //       break;
-    //     }
-    //   }
-    // },
-    // subLikeCnt(comment_id) {
-    //   for (let i = 0; i < this.commentList.length; i++) {
-    //     if (this.commentList[i].id == comment_id) {
-    //       this.commentList[i].like_num -= 1;
-    //       break;
-    //     }
-    //   }
-    // },
-    // changeLikeStatus(comment_id) {
-    //   for (let i = 0; i < this.commentList.length; i++) {
-    //     if (this.commentList[i].id == comment_id) {
-    //       this.commentList[i].is_like = !this.commentList[i].is_like;
-    //       break;
-    //     }
-    //   }
-    // },
+    addLikeCnt(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].like_num += 1;
+          break;
+        }
+      }
+    },
+    subLikeCnt(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].like_num -= 1;
+          break;
+        }
+      }
+    },
+    changeLikeStatus(comment_id) {
+      for (let i = 0; i < this.commentList.length; i++) {
+        if (this.commentList[i].id == comment_id) {
+          this.commentList[i].is_liked = !this.commentList[i].is_liked;
+          break;
+        }
+      }
+    },
 
     //更新评论列表
     updateCommentList() {
