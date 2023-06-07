@@ -24,7 +24,7 @@ export default {
             if(this.type==1){
                 this.$router.push({path: `/song/${item.id}`});
             }else if(this.type==2){
-                this.$router.push({path: `/album/${item.id}`});
+                this.$router.push({path: `/playlist/${item.id}`});
             }else if(this.type==3){
                 this.$router.push({path: `/singer/${item.id}`});
             }else{

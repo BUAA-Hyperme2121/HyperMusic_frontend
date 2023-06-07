@@ -5,7 +5,7 @@
             <div class="left">
                 <div class="section">
                     <div class="section-title">
-                        <img src="@/assets/img/homepageTest/icon.jpg">
+                        <img style="border-radius: 50%;" src="@/assets/img/homepageTest/icon.jpg">
                         <em>随便听听</em>
                         <router-link to="/homepage/song">更多></router-link>
                     </div>
@@ -49,14 +49,12 @@
   
 <script>
 import ContentList from "../../components/homepage/ContentList.vue";
-import Carousel from "../../components/homepage/Carousel.vue";
 import {recommendsongs, recommendsingers,recommendplaylists} from "../../assets/data/discoverlist";
 import RankList from "../../components/homepage/RankList.vue";
 import {getAllPlaylists,getAllSingers,getAllSongs,getRankList1} from "@/api/api";
 import Swiper from "@/components/homepage/Swiper.vue";
 export default {
     components:{
-    Carousel,
     ContentList,
     RankList,
     Swiper
@@ -91,7 +89,7 @@ export default {
         getSongs(){
           getAllSongs()
             .then(res => {
-              this.recommendsongs=res.data.music_list.slice(0,5)
+              this.recommendsongs=res.data.music_list.slice(8,13)
             })
             .catch(err => {
               console.log(err)

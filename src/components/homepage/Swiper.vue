@@ -20,7 +20,7 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="image-inner">
-                        <img src="../../assets/img/swiper/swiper3.jpg" alt="">
+                        <img src="../../assets/img/swiper/swiper3.jpeg" alt="">
                     </div>
                     <div class="image-outer">
                         <img src="../../assets/img/swiper/swiper3-2.jpg" alt="">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="image-inner">
-                        <img src="../../assets/img/swiper/swiper4.jpg" alt="">
+                        <img src="../../assets/img/swiper/swiper4.jpeg" alt="">
                     </div>
                     <div class="image-outer">
                         <img src="../../assets/img/swiper/swiper4-2.jpg" alt="">

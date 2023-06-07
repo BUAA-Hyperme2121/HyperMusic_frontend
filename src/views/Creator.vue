@@ -75,6 +75,7 @@ import {uploadSong} from "@/api/api"
           if(this.form.name==''||this.form.singer_name==''||this.form.introduction==''||this.form.audio==null||this.form.labels.length==0){
             alert("内容不能为空");
           }else{
+            console.log(this.form.labels)
             var formData = new FormData();
             formData.append('JWT',JSON.parse(localStorage.getItem("loginInfo")).JWT)
             formData.append('music_labels',this.form.labels)
