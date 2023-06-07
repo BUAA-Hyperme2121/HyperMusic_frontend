@@ -1,5 +1,8 @@
 <template>
   <div class="login-page">
+    <div class="container">
+      <div class="typed-out">HyperMusic</div>
+    </div>
     <el-form
       :model="loginForm"
       :rules="rules"
@@ -156,5 +159,37 @@ export default {
 }
 .register-link:hover {
   color: #044b9c;
+}
+
+.container {
+  display: block;
+  text-align: center;
+  margin-left: 100px;
+  margin-right: 100px; 
+}
+.typed-out {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  overflow: hidden;
+  border-right: 0.15em solid orange;
+  white-space: nowrap;
+  font-size: 35px;
+  width: 0;
+  animation: typing 2s steps(20, end) forwards, blink 1.5s infinite;
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes blink {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: black;
+  }
 }
 </style>

@@ -17,8 +17,8 @@
           <span class="user-name">{{ userInfo.username }}</span>
           <!-- 性别  -->
           <!-- 根据性别展示不同icon -->
-          <i class="el-icon-male" v-if="userInfo.gender === 'male'"></i>
-          <i class="el-icon-female" v-if="userInfo.gender === 'female'"></i>
+          <i class="el-icon-male" v-if="userInfo.gender == '男'"></i>
+          <i class="el-icon-female" v-if="userInfo.gender == '女'"></i>
           <!-- 编辑按钮 -->
           <el-button
             icon="el-icon-edit"
@@ -53,17 +53,17 @@
         <ul class="user-relate">
           <!-- 动态数  -->
           <li>
-            <span @click.native="goSocial">动态 {{ userInfo.post_num }}</span>
+            <span @click="goSocial">动态 {{ userInfo.post_num }}</span>
           </li>
           <el-divider direction="vertical"></el-divider>
           <!-- 关注数 -->
           <li>
-            <span @click.native="goFollow">关注 {{ userInfo.follow_num }}</span>
+            <span @click="goFollow">关注 {{ userInfo.follow_num }}</span>
           </li>
           <el-divider direction="vertical"></el-divider>
           <!-- 粉丝数 -->
           <li>
-            <span @click.native="goFan">粉丝 {{ userInfo.fan_num }}</span>
+            <span @click="goFan">粉丝 {{ userInfo.fan_num }}</span>
           </li>
         </ul>
 
@@ -74,85 +74,116 @@
         </div>
       </div>
     </div>
-    <div class="user-home-mid">
-      <!-- 个人简介 -->
-      <div class="user-intro">
-        <div class="title">个人简介</div>
-        <div style="margin-top: 10px; margin-bottom: 10px">
-          {{ userInfo.introduction }}
+
+    <!-- 音乐相关 -->
+    <div class="music-relate">
+      <!-- 播放相关 -->
+      <div class="play-relate">
+        <!-- 个人简介 -->
+        <div class="user-intro">
+          <div class="title">个人简介</div>
+          <div style="margin-top: 10px; margin-bottom: 10px">
+            {{ userInfo.introduction }}
+          </div>
+        </div>
+        <!-- 最近播放，用户自定义最大记录数量10，20，50，仅自己可见-->
+        <div
+          class="user-recent-play"
+          v-show="user_id == $store.state.userInfo.id"
+        >
+          <div class="title">最近播放</div>
+          <!-- 歌曲列表 -->
+          <el-table :data="historyList" style="width: 100%" stripe>
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column
+              prop="music_name"
+              label="歌曲名称"
+            ></el-table-column>
+          </el-table>
+        </div>
+        <!-- 听歌排行，最近一周/全部时间，播放最多的10首-->
+        <div class="user-music-rank">
+          <div class="title">
+            <span>听歌排行</span>
+            <!-- 时间选项 -->
+            <span class="time-op">
+              <el-link id="op1" type="info" @click="showWeek">最近一周</el-link>
+              <el-divider direction="vertical"></el-divider>
+              <el-link id="op2" type="info" @click="showAll">全部时间</el-link>
+            </span>
+          </div>
+          <!-- 最近一周 -->
+          <el-table
+            :data="rankList1"
+            style="width: 100%"
+            stripe
+            v-show="showRankOption == 0"
+          >
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column
+              prop="music_name"
+              label="歌曲名称"
+            ></el-table-column>
+            <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
+            <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
+            <el-table-column prop="user_listen_times" label="播放次数">
+              <template slot-scope="scope">
+                <el-progress
+                  :percentage="
+                    (scope.row.user_listen_times /
+                      rankList1[0].user_listen_times) *
+                    100
+                  "
+                  :format="
+                    function () {
+                      return scope.row.user_listen_times + '次';
+                    }
+                  "
+                ></el-progress>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 全部时间 -->
+          <el-table
+            :data="rankList2"
+            style="width: 100%"
+            stripe
+            v-show="showRankOption == 1"
+          >
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column
+              prop="music_name"
+              label="歌曲名称"
+            ></el-table-column>
+            <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
+            <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
+            <el-table-column prop="user_listen_times" label="播放次数">
+              <template slot-scope="scope">
+                <el-progress
+                  :percentage="
+                    (scope.row.user_listen_times /
+                      rankList2[0].user_listen_times) *
+                    100
+                  "
+                  :format="
+                    function () {
+                      return scope.row.user_listen_times + '次';
+                    }
+                  "
+                ></el-progress>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </div>
-      <!-- 最近播放，用户自定义最大记录数量10，20，50，仅自己可见-->
-      <div
-        class="user-recent-play"
-        v-show="user_id == $store.state.userInfo.id"
-      >
-        <div class="title">最近播放</div>
-        <!-- 歌曲列表 -->
-        <el-table :data="historyList" style="width: 100%" stripe>
-          <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
-        </el-table>
-      </div>
-      <!-- 听歌排行，最近一周/全部时间，播放最多的10首-->
-      <div class="user-music-rank">
-        <div class="title">
-          <span>听歌排行</span>
-          <!-- 时间选项 -->
-          <span class="time-op">
-            <el-link id="op1" type="info" @click="showWeek">最近一周</el-link>
-            <el-divider direction="vertical"></el-divider>
-            <el-link id="op2" type="info" @click="showAll">全部时间</el-link>
-          </span>
-        </div>
-        <!-- 最近一周 -->
-        <el-table
-          :data="rankList1"
-          style="width: 100%"
-          stripe
-          v-show="showRankOption == 0"
-        >
-          <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
-          <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
-          <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
-          <el-table-column prop="user_listen_times" label="播放次数">
-            <template slot-scope="scope">
-              <el-progress
-                :percentage="(scope.row.playCnt / rankList1[0].playCnt) * 100"
-                :format="
-                  function () {
-                    return scope.row.playCnt + '次';
-                  }
-                "
-              ></el-progress>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 全部时间 -->
-        <el-table
-          :data="rankList2"
-          style="width: 100%"
-          stripe
-          v-show="showRankOption == 1"
-        >
-          <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column prop="music_name" label="歌曲名称"></el-table-column>
-          <!-- <el-table-column prop="duration" label="时长"></el-table-column> -->
-          <!-- <el-table-column prop="singer" label="歌手"></el-table-column> -->
-          <el-table-column prop="user_listen_times" label="播放次数">
-            <template slot-scope="scope">
-              <el-progress
-                :percentage="(scope.row.playCnt / rankList2[0].playCnt) * 100"
-                :format="
-                  function () {
-                    return scope.row.playCnt + '次';
-                  }
-                "
-              ></el-progress>
-            </template>
-          </el-table-column>
-        </el-table>
+      <!-- 垂直分割线 -->
+      <el-divider direction="vertical"></el-divider>
+      <!-- 歌单相关 -->
+      <div class="playlist-relate">
+        <!-- 创建的歌单 -->
+        <div class="title">创建的歌单</div>
+        <!-- 收藏的歌单 -->
+        <div class="title">收藏的歌单</div>
       </div>
     </div>
   </div>
@@ -306,37 +337,37 @@ export default {
             this.userInfo.fan_num++;
             //增加关注者(当前登录用户)关注数量
             this.$store.commit("addFollowNum");
-          //   // 向被关注用户发送消息
-          //   this.$axios({
-          //     methods: "post",
-          //     url: "/message/send_message/",
-          //     data: qs.stringify({
-          //       receiver_id: this.user_id,
-          //       content: "关注了你",
-          //       poster_id: this.$store.state.userInfo.id,
-          //       object_id: -1,
-          //       type: -1,
-          //       message_type: 3,
-          //     }),
-          //   })
-          //     .then((res) => {
-          //       if (res.data.result == 1) {
-          //         console.log("关注消息发送成功");
-          //       } else {
-          //         this.$message({
-          //           message: res.data.message,
-          //           type: "error",
-          //         });
-          //       }
-          //     })
-          //     .catch((err) => {
-          //       console.log(err);
-          //       this.$message({
-          //         message: "服务器开摆了~(￣▽￣)~*",
-          //         type: "error",
-          //       });
-          //     });
-          // 
+            //   // 向被关注用户发送消息
+            //   this.$axios({
+            //     methods: "post",
+            //     url: "/message/send_message/",
+            //     data: qs.stringify({
+            //       receiver_id: this.user_id,
+            //       content: "关注了你",
+            //       poster_id: this.$store.state.userInfo.id,
+            //       object_id: -1,
+            //       type: -1,
+            //       message_type: 3,
+            //     }),
+            //   })
+            //     .then((res) => {
+            //       if (res.data.result == 1) {
+            //         console.log("关注消息发送成功");
+            //       } else {
+            //         this.$message({
+            //           message: res.data.message,
+            //           type: "error",
+            //         });
+            //       }
+            //     })
+            //     .catch((err) => {
+            //       console.log(err);
+            //       this.$message({
+            //         message: "服务器开摆了~(￣▽￣)~*",
+            //         type: "error",
+            //       });
+            //     });
+            //
           } else {
             this.$message({
               message: res.data.message,
@@ -396,10 +427,37 @@ export default {
   mounted() {
     // 获取用户信息
     this.user_id = this.$route.query.user_id;
-    // 如果是自己的主页，直接从vuex中获取信息
+    //自己的主页
     if (this.user_id == this.$store.state.userInfo.id) {
-      // 这里是浅拷贝
-      this.userInfo = this.$store.state.userInfo;
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      this.$axios({
+        method: "get",
+        url: "/page/get_user_info/",
+        params: {
+          JWT: jwt,
+          user_id: this.user_id,
+        },
+      })
+        .then((res) => {
+          // 获取成功
+          if (res.data.result == 1) {
+            this.userInfo = res.data.user_info;
+          }
+          // 获取失败
+          else {
+            this.$message({
+              message: res.data.message,
+              type: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            message: "服务器开摆了~(￣▽￣)~*",
+            type: "error",
+          });
+        });
       // 获取最近播放歌曲列表
       this.getHistoryList();
     }
@@ -415,7 +473,7 @@ export default {
       } else {
         jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       }
-      console.log(jwt);
+      // console.log(jwt);
       this.$axios({
         method: "get",
         url: "/page/get_user_info/",
@@ -540,6 +598,17 @@ export default {
 
 .user-home-mid {
   margin-top: 50px;
+}
+
+.music-relate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.play-relate {
+  margin-right: 20px;
 }
 
 .user-recent-play {

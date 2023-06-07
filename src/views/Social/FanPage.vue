@@ -13,6 +13,7 @@
 </template>
 
 <script>
+// import qs from "qs";
 import FanItem from "../../components/FanItem.vue";
 export default {
   components: {
@@ -29,14 +30,18 @@ export default {
     updateFanList() {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/user/get_fan_list/",
-        data: JSON.stringify({
+        params: {
           JWT: jwt,
           user_id: this.user_id,
-        }),
+        },
       }).then((res) => {
-        this.fanList = res.data;
+        if (res.data.result == 1) {
+          this.fanList = res.data.fan_list;
+        } else {
+          this.$message.error(res.data.message);
+        }
       });
     },
   },
@@ -52,16 +57,22 @@ export default {
     } else {
       jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
     }
+    // console.log(this.user_id);
+    // console.log(jwt);
     //获取指定用户的粉丝列表
     this.$axios({
-      method: "post",
+      method: "get",
       url: "/user/get_fan_list/",
-      data: JSON.stringify({
+      params: {
         JWT: jwt,
         user_id: this.user_id,
-      }),
+      },
     }).then((res) => {
-      this.fanList = res.data.fan_list;
+      if (res.data.result == 1) {
+        this.fanList = res.data.fan_list;
+      } else {
+        this.$message.error(res.data.message);
+      }
     });
   },
 };

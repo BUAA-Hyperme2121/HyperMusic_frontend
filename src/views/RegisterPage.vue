@@ -1,6 +1,8 @@
 <template>
   <div class="register-page">
-    <h1>\ HyperMusic /</h1>
+    <div class="container">
+      <div class="typed-out">\ Join Us /</div>
+    </div>
     <!-- 注册表单 -->
     <el-form
       :model="registerForm"
@@ -285,5 +287,36 @@ export default {
 }
 .login-link:hover {
   color: #044b9c;
+}
+.container {
+  display: block;
+  text-align: center;
+  margin-left: 95px;
+  margin-right: 95px;
+}
+.typed-out {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  overflow: hidden;
+  /* border-right: 0.15em solid orange; */
+  white-space: nowrap;
+  font-size: 35px;
+  width: 0;
+  animation: typing 2s steps(20, end) forwards;
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes blink {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: black;
+  }
 }
 </style>

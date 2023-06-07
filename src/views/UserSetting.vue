@@ -30,21 +30,26 @@
             <!-- 左边的表单 -->
             <div style="margin-right: 50px">
               <el-form-item label="用户名" prop="username">
-                <el-input v-model="basicForm.name"></el-input>
+                <el-input v-model="basicForm.username"></el-input>
               </el-form-item>
               <el-form-item label="性别">
                 <el-radio-group v-model="basicForm.gender">
-                  <el-radio label="male">男</el-radio>
-                  <el-radio label="female">女</el-radio>
-                  <el-radio label="secret">保密</el-radio>
+                  <!-- 单选框的label代表的是选中后的值 -->
+                  <el-radio label="男">男</el-radio>
+                  <el-radio label="女">女</el-radio>
+                  <el-radio label="未知">未知</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="所在地">
-                <el-cascader></el-cascader>
+                <el-cascader
+                  v-model="basicForm.location"
+                  :options="options"
+                  :props="{ expandTrigger: 'hover' }"
+                ></el-cascader>
               </el-form-item>
               <el-form-item label="个人简介">
                 <el-input
-                  v-model="basicForm.userIntro"
+                  v-model="basicForm.introduction"
                   type="textarea"
                   autosize="true"
                   placeholder="请输入个人简介(最多50字)"
@@ -59,24 +64,35 @@
                   头像 (.jpg格式,大小不超过1M)</label
                 >
               </div>
+              <!-- 原来的头像 -->
               <el-avatar
                 shape="square"
                 fit="fill"
                 :src="$store.state.userInfo.avatar_path"
-                style="height: 100px; width: 100px; margin:15px 0"
+                v-show="!basicForm.avatar"
+                style="height: 100px; width: 100px; margin: 15px 0"
               ></el-avatar>
+              <!-- 新上传的头像 -->
+              <img
+                :src="newAvatarUrl"
+                v-show="basicForm.avatar"
+                style="height: 100px; width: 100px; margin: 15px 0"
+              />
               <el-upload
-                action="#"
-                :http-request="uploadAvatar"
+                action=""
+                :auto-upload="false"
+                accept="image/jpeg,image/jpg"
                 :show-file-list="false"
-                :before-upload="beforeAvatarUpload"
+                :on-change="handleAvatarUpload"
               >
                 <el-button>更换头像</el-button>
               </el-upload>
             </div>
           </div>
           <!-- 保存按钮 -->
-          <el-button type="primary" @click="updateUserInfo">保存</el-button>
+          <el-button type="primary" @click.native="updateUserInfo"
+            >保存</el-button
+          >
         </el-form>
         <!-- 账号设置 -->
         <div v-show="activeTab === 'bind'" class="right-content">
@@ -221,7 +237,7 @@
             </el-select>
           </el-form-item>
           <!-- 保存按钮 -->
-          <el-button type="primary" @click="updatePersonalizeInfo"
+          <el-button type="primary" @click.native="updatePersonalizeInfo"
             >保存</el-button
           >
         </el-form>
@@ -231,6 +247,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   data() {
     return {
@@ -244,12 +261,42 @@ export default {
       updatePasswordDialogVisible: false,
       // 选中的设置页
       activeTab: "basic",
+      // 新头像的url
+      newAvatarUrl: "",
+      // 可选的地址列表
+      options: [
+        {
+          value: "符文大陆",
+          label: "符文大陆",
+        },
+        {
+          value: "B612",
+          label: "B612",
+        },
+        {
+          value: "火星",
+          label: "火星",
+        },
+        {
+          value: "夜之城",
+          label: "夜之城",
+        },
+        {
+          value: "提瓦特",
+          label: "提瓦特",
+        },
+        {
+          value: "暂无",
+          label: "暂无",
+        },
+      ],
       // 基础设置表单
       basicForm: {
-        username: "",
-        gender: "",
-        location: "",
-        userIntro: "",
+        username: this.$store.state.userInfo.username,
+        gender: this.$store.state.userInfo.gender,
+        avatar: null,
+        location: this.$store.state.userInfo.location,
+        introduction: this.$store.state.userInfo.introduction,
       },
       rules: {
         username: [
@@ -297,7 +344,7 @@ export default {
       },
       // 个性设置表单
       personalizeForm: {
-        maxHistoryNum: 10,
+        maxHistoryNum: this.$store.state.userInfo.history_record,
       },
       maxHistoryNumList: [10, 20, 50],
     };
@@ -311,68 +358,43 @@ export default {
     handleSelect(index) {
       this.activeTab = index;
     },
-    //大小及格式检验
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 1;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-      }
-      return isJPG && isLt2M;
+    //大小检验
+    checkSize(file) {
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      return isLt1M;
     },
-    //上传头像
-    uploadAvatar(file) {
-      var jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
-      let data = new FormData();
-      data.append("JWT", jwt);
-      data.append("avatar", file);
-      this.$axios({
-        method: "post",
-        url: "/user/upload_avatar",
-        data: data,
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        // },
-      })
-        .then((res) => {
-          if (res.data.code == 200) {
-            this.$message({
-              message: "上传成功",
-              type: "success",
-            });
-            //更新头像
-            this.imageUrl = URL.createObjectURL(file.raw);
-          } else {
-            //上传失败或者审核未通过
-            this.$message({
-              message: res.data.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$message({
-            message: "出了点问题(⊙o⊙)？",
-            type: "error",
-          });
-        });
+
+    handleAvatarUpload(file) {
+      if (this.checkSize(file)) {
+        // console.log("bbb");
+        this.newAvatarUrl = URL.createObjectURL(file.raw);
+        this.basicForm.avatar = file;
+      } else {
+        // console.log("aaa");
+        this.$message.error("上传头像图片大小不能超过 1MB!");
+        return false;
+      }
     },
     //更新用户信息
     updateUserInfo() {
       this.$refs["basicForm"].validate((valid) => {
         if (valid) {
+          let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+          var formData = new FormData();
+          formData.append("JWT", jwt);
+          formData.append("username", this.basicForm.username);
+          formData.append("gender", this.basicForm.gender);
+          formData.append("location", this.basicForm.location);
+          formData.append("introduction", this.basicForm.introduction);
+          formData.append("avatar", this.basicForm.avatar);
+          // console.log(formData);
           this.$axios({
-            methods: "post",
-            url: "/user/update_user_info",
-            data: JSON.stringify(this.basicForm),
+            method: "post",
+            url: "/user/change_info/",
+            data: formData,
           })
             .then((res) => {
-              if (res.data.code == 200) {
+              if (res.data.result == 1) {
                 this.$message({
                   message: "更新成功",
                   type: "success",
@@ -380,7 +402,7 @@ export default {
                 //更新vuex和localStorage中的用户信息
               } else {
                 this.$message({
-                  message: res.data.msg,
+                  message: res.data.message,
                   type: "error",
                 });
               }
@@ -388,7 +410,7 @@ export default {
             .catch((err) => {
               console.log(err);
               this.$message({
-                message: "出了点问题(⊙o⊙)？",
+                message: "服务器出了点问题(⊙o⊙)？",
                 type: "error",
               });
             });
@@ -489,17 +511,21 @@ export default {
         }
       });
     },
-    //更新个性化设置
+    //更新个性化设置(目前只调用了更新最大历史记录数)
     updatePersonalizeInfo() {
       this.$refs["personalizeForm"].validate((valid) => {
         if (valid) {
+          let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
           this.$axios({
-            methods: "post",
-            url: "/user/update_personalize_info",
-            data: JSON.stringify(this.personalizeForm),
+            method: "post",
+            url: "/user/set_history_record/",
+            data: qs.stringify({
+              JWT: jwt,
+              history_record: this.personalizeForm.maxHistoryNum,
+            }),
           })
             .then((res) => {
-              if (res.data.code == 200) {
+              if (res.data.result == 1) {
                 this.$message({
                   message: "更新成功",
                   type: "success",
@@ -531,8 +557,7 @@ export default {
   background-color: #fff;
   margin-left: 10%;
   margin-right: 10%;
-  padding: 20px;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 .menu {
   border-right: 1px solid #ccc;

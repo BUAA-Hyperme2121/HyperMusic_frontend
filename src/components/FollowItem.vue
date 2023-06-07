@@ -39,8 +39,9 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
-  props: ["followInfo", "user_id"],
+  props: ["followInfo"],
   data() {
     return {
       btnText: "已关注",
@@ -52,7 +53,7 @@ export default {
       this.$router.push({
         path: "/user/home",
         query: {
-          userId: this.followInfo.user_id,
+          userId: this.followInfo.id,
         },
       });
     },
@@ -76,14 +77,14 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        methods: "post",
-        url: "/user/follow",
-        data: {
+        method: "post",
+        url: "/user/follow/",
+        data: qs.stringify({
           JWT: jwt,
-          follow_user_id: this.followInfo.id,
-        },
+          follow_id: this.followInfo.id,
+        }),
       }).then((res) => {
-        if (res.data.result == 0) {
+        if (res.data.result == 1) {
           this.$message({
             message: "关注成功",
             type: "success",
@@ -93,22 +94,22 @@ export default {
           //因为没有再次发送请求刷新数据，在这之前必须手动维护数据
           //增加关注者(当前登录用户)关注数量
           this.$store.commit("addFollowNum");
-          // 向被关注用户发送消息
-          this.$axios({
-            methods: "post",
-            url: "/message/send_message",
-            data: {
-              receiver_id: this.followInfo.id,
-              content: "关注了你",
-              poster_id: this.$store.state.userInfo.id,
-              object_id: -1,
-              type: -1,
-              message_type: 3,
-            },
-          });
+          // // 向被关注用户发送消息
+          // this.$axios({
+          //   methods: "post",
+          //   url: "/message/send_message",
+          //   data: {
+          //     receiver_id: this.followInfo.id,
+          //     content: "关注了你",
+          //     poster_id: this.$store.state.userInfo.id,
+          //     object_id: -1,
+          //     type: -1,
+          //     message_type: 3,
+          //   },
+          // });
         } else {
           this.$message({
-            message: "关注失败",
+            message: res.data.message,
             type: "error",
           });
         }
@@ -125,14 +126,14 @@ export default {
         .then(() => {
           let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
           this.$axios({
-            methods: "post",
-            url: "/user/unFollow",
-            data: {
+            method: "post",
+            url: "/user/unfollow/",
+            data: qs.stringify({
               JWT: jwt,
-              user_id: this.followInfo.id,
-            },
+              follow_id: this.followInfo.id,
+            }),
           }).then((res) => {
-            if (res.data.reult == 0) {
+            if (res.data.result == 1) {
               this.$message({
                 type: "success",
                 message: "取消关注成功",
@@ -141,12 +142,12 @@ export default {
               this.$emit("updateFollowList");
               //因为没有再次发送请求刷新数据，在这之前必须手动维护数据
               //减少关注者(当前登录用户)关注数量
-              this.$store.commit("reduceFollowNum");
+              this.$store.commit("subFollowNum");
 
             } else {
               this.$message({
                 type: "error",
-                message: "取消关注失败",
+                message: res.data.message,
               });
             }
           });

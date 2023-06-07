@@ -12,9 +12,9 @@
               :activityInfo="activity"
               :key="activity.id"
               :user_id="user_id"
-              :addLikeCnt="addLikeCnt"
-              :subLikeCnt="subLikeCnt"
-              :changeLikeStatus="changeLikeStatus"
+              @addLikeCnt="addLikeCnt"
+              @subLikeCnt="subLikeCnt"
+              @changeLikeStatus="changeLikeStatus"
             ></ActivityItem>
             <el-divider></el-divider>
             <!-- <CommentPage></CommentPage> -->
@@ -134,7 +134,9 @@ export default {
     addLikeCnt(activity_id) {
       // 更新动态列表中的点赞数
       for (let i = 0; i < this.activityList.length; i++) {
+        // console.log(1111);
         if (this.activityList[i].id == activity_id) {
+          // console.log(2222);
           this.activityList[i].like_num++;
           break;
         }

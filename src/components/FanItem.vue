@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import qs from "qs";
 export default {
   //传入粉丝信息
   props: ["fanInfo"],
@@ -48,7 +49,7 @@ export default {
       this.$router.push({
         path: "/user/home",
         query: {
-          userId: this.fanInfo.id,
+          user_id: this.fanInfo.id,
         },
       });
     },
@@ -71,14 +72,14 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        methods: "post",
-        url: "/user/follow",
-        data: {
+        method: "post",
+        url: "/user/follow/",
+        data: qs.stringify({
           JWT: jwt,
-          follow_user_id: this.fanInfo.user_id,
-        },
+          follow_id: this.fanInfo.id,
+        }),
       }).then((res) => {
-        if (res.data.result == 0) {
+        if (res.data.result == 1) {
           this.$message({
             message: "关注成功",
             type: "success",
@@ -89,21 +90,21 @@ export default {
           //增加关注者(当前登录用户)关注数量
           this.$store.commit("addFollowNum");
           // 向被关注用户发送消息
-          this.$axios({
-            methods: "post",
-            url: "/message/send_message",
-            data: {
-              receiver_id: this.fanInfo.id,
-              content: "关注了你",
-              poster_id: this.$store.state.userInfo.id,
-              object_id: -1,
-              type: -1,
-              message_type: 3,
-            },
-          });
+          // this.$axios({
+          //   methods: "post",
+          //   url: "/message/send_message",
+          //   data: {
+          //     receiver_id: this.fanInfo.id,
+          //     content: "关注了你",
+          //     poster_id: this.$store.state.userInfo.id,
+          //     object_id: -1,
+          //     type: -1,
+          //     message_type: 3,
+          //   },
+          // });
         } else {
           this.$message({
-            message: "关注失败",
+            message: res.data.message,
             type: "error",
           });
         }
@@ -119,15 +120,17 @@ export default {
         // 确认取消关注
         .then(() => {
           let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+          // console.log(jwt);
+          // console.log(this.fanInfo.id);
           this.$axios({
-            methods: "post",
-            url: "/user/unFollow",
-            data: {
+            method: "post",
+            url: "/user/unfollow/",
+            data: qs.stringify({
               JWT: jwt,
-              user_id: this.fanInfo.id,
-            },
+              follow_id: this.fanInfo.id,
+            }),
           }).then((res) => {
-            if (res.data.reult == 0) {
+            if (res.data.result == 1) {
               this.$message({
                 type: "success",
                 message: "取消关注成功",
@@ -140,7 +143,7 @@ export default {
             } else {
               this.$message({
                 type: "error",
-                message: "取消关注失败",
+                message: res.data.message,
               });
             }
           });
