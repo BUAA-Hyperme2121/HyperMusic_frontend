@@ -71,15 +71,16 @@ export default {
 <style scoped>
 .notice-item {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 10px 0;
-  padding: 10px;
-  border-bottom: 1px solid #e8e8e8;
+  margin-bottom: 20px;
 }
 .notice-item-avatar {
   width: 50px;
   height: 50px;
   margin-right: 10px;
+}
+.notice-item-username {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 8px;
 }
 </style>
