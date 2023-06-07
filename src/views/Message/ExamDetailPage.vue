@@ -20,20 +20,16 @@
           <el-avatar
             shape="square"
             fit="fill"
-            :src="examInfo.cover_path"
+            :src="examInfo.object_cover_path"
             style="height: 100%; width: 100%"
           ></el-avatar>
         </div>
         <div class="src-info">
           <!-- 歌名 -->
-          <div class="src-name">{{ examInfo.name }}</div>
+          <div class="src-name">{{ examInfo.object_name }}</div>
           <!-- 歌手 -->
-          <el-link type="info" class="src-owner" v-show="examInfo.type == 1">{{
-            examInfo.singer_name
-          }}</el-link>
-          <!-- 歌单 -->
-          <el-link type="info" class="src-owner" v-show="examInfo.type == 2">{{
-            examInfo.creator_name
+          <el-link type="info" class="src-owner">{{
+            examInfo.object_owner_name
           }}</el-link>
         </div>
       </div>
@@ -68,7 +64,7 @@
         </el-option>
       </el-select>
 
-      <el-button @click="finishExam">完成审核</el-button>
+      <el-button @click.native="finishExam">完成审核</el-button>
     </div>
 
     <!-- 审核结果 -->
@@ -98,11 +94,6 @@ export default {
   data() {
     return {
       examInfo: {},
-      examForm: {
-        pass: "",
-        reason: "",
-      },
-
       pass: "",
       options: [
         {
@@ -140,7 +131,7 @@ export default {
       }
       this.$axios({
         method: "post",
-        url: "/message/audit",
+        url: "/message/audit/",
         data: qs.stringify({
           complain_id: this.$route.query.id,
           result: this.pass,
@@ -171,7 +162,7 @@ export default {
       },
     }).then((res) => {
       if (res.data.result == 1) {
-        this.examInfo = res.data.complain_info;
+        this.examInfo = res.data.complain;
       } else {
         this.$message.error(res.data.message);
       }

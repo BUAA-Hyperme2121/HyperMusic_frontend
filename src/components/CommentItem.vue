@@ -5,7 +5,7 @@
       <el-avatar
         shape="square"
         fit="fill"
-        :src="commentInfo.avatar_path"
+        :src="commentInfo.poster_avatar_path"
         style="height: 100%; width: 100%"
       ></el-avatar>
     </div>
@@ -18,7 +18,11 @@
 
       <div class="comment-item-right-foot">
         <!-- 评论时间 -->
-        <span class="comment-time">{{ commentInfo.create_date }}</span>
+        <span class="comment-time">{{
+          commentInfo.create_date.slice(0, 10) +
+          " " +
+          commentInfo.create_date.slice(11, 19)
+        }}</span>
         <!-- 展开回复 -->
         <el-button
           type="text"
@@ -58,7 +62,7 @@
           class="delete-btn"
           @click.native="deleteComment"
           icon="el-icon-delete"
-          v-if="commentInfo.poster_id == $store.state.userInfo.user_id"
+          v-if="commentInfo.poster_id == $store.state.userInfo.id"
         >
           <span>删除</span>
         </el-button>
@@ -67,9 +71,9 @@
           type="text"
           size="mini"
           class="edit-btn"
-          @click.native="editComment"
+          @click.native="changeShowModify"
           icon="el-icon-edit"
-          v-if="commentInfo.poster_id == $store.state.userInfo.user_id"
+          v-if="commentInfo.poster_id == $store.state.userInfo.id"
         >
           <span>编辑</span>
         </el-button>
@@ -111,6 +115,34 @@
           />
         </div>
       </div>
+
+      <!-- 修改评论 -->
+      <div v-show="showModify" class="reply-container">
+        <!-- 修改评论 -->
+        <div class="comment-submit">
+          <div class="comment-submit-top">
+            <!-- 输入框 -->
+            <el-input
+              type="textarea"
+              maxlength="50"
+              show-word-limit
+              :rows="3"
+              placeholder="修改评论"
+              v-model="new_comment"
+              class="comment-input"
+            ></el-input>
+          </div>
+          <div class="comment-submit-foot">
+            <el-button
+              type="primary"
+              @click.native="modifyComment"
+              class="comment-submit-btn"
+              size="small"
+              >修改</el-button
+            >
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -133,7 +165,7 @@ export default {
         jwt = "-1";
       }
       this.$axios({
-        path: "/message/get_reply",
+        url: "/message/get_reply/",
         method: "get",
         params: {
           JWT: jwt,
@@ -142,7 +174,7 @@ export default {
       })
         .then((res) => {
           if (res.data.result == 1) {
-            this.replyList = res.data.reply_list;
+            this.replyList = res.data.replys;
           } else {
             this.$message({
               message: res.data.message,
@@ -162,6 +194,12 @@ export default {
       //展开或收起回复
       this.showReply = !this.showReply;
     },
+
+    //展开或收起修改评论
+    changeShowModify() {
+      this.showModify = !this.showModify;
+    },
+
     //回复评论
     submitReply() {
       //判断是否登录
@@ -182,13 +220,13 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/cre_reply",
+        url: "/message/cre_reply/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,
           root_id: this.commentInfo.id,
           fa_id: -1,
-          isLevel2: true,
+          isLevel2: 1,
           content: this.reply_content,
         }),
       })
@@ -228,11 +266,11 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/like",
+        url: "/message/like/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,
-          type: 4, //类型为评论
+          type: 2, //类型为评论
           object_id: this.commentInfo.id,
         }),
       })
@@ -248,18 +286,18 @@ export default {
             // this.$emit("changeLikeStatus", this.commentInfo.id);
             this.$emit("updateCommentList");
             // 向被点赞用户发送消息
-            this.$axios({
-              methods: "post",
-              url: "/message/send_message",
-              data: qs.stringify({
-                receiver_id: this.commentInfo.poster_id,
-                content: "点赞了你的评论",
-                poster_id: this.$store.state.userInfo.id,
-                object_id: this.commentInfo.id,
-                type: 4,
-                message_type: 2,
-              }),
-            });
+            // this.$axios({
+            //   methods: "post",
+            //   url: "/message/send_message",
+            //   data: qs.stringify({
+            //     receiver_id: this.commentInfo.poster_id,
+            //     content: "点赞了你的评论",
+            //     poster_id: this.$store.state.userInfo.id,
+            //     object_id: this.commentInfo.id,
+            //     type: 4,
+            //     message_type: 2,
+            //   }),
+            // });
           } else {
             this.$message({
               message: this.res.message,
@@ -276,11 +314,11 @@ export default {
       // 取消点赞该评论
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/cancel_like",
+        url: "/message/cancel_like/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,
-          type: 4,
+          type: 2,
           obj_id: this.commentInfo.id,
         }),
       })
@@ -295,29 +333,6 @@ export default {
             // // 修改点赞状态
             // this.$emit("changeLikeStatus", this.commentInfo.id);
             this.$emit("updateCommentList");
-            // // 删除消息，防止再次点赞后再次收到消息
-            // this.$axios({
-            //   path: "/message",
-            //   method: "delete",
-            //   data: JSON.stringify({
-            //     JWT: jwt,
-            //     // 1表示点赞类型的消息
-            //     msg_type: 1,
-            //     // 1表示点赞对象为动态
-            //     type: 1,
-            //     obj_id: this.activityInfo.activity_id,
-            //   }),
-            // })
-            //   .then((res) => {
-            //     if (res.data.code == 200) {
-            //       console.log("删除消息成功");
-            //     } else {
-            //       console.log("删除消息失败");
-            //     }
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //   });
           } else {
             this.$message({
               message: res.data.message,
@@ -333,12 +348,12 @@ export default {
     deleteComment() {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/del_comment",
-        method: "post",
-        data: qs.stringify({
+        url: "/message/del_comment/",
+        method: "get",
+        params: {
           JWT: jwt,
           comment_id: this.commentInfo.id,
-        }),
+        },
       })
         .then((res) => {
           if (res.data.result == 1) {
@@ -348,29 +363,6 @@ export default {
             });
             // 更新评论列表
             this.$emit("updateCommentList");
-            // // 删除消息
-            // this.$axios({
-            //   path: "/message",
-            //   method: "delete",
-            //   data: JSON.stringify({
-            //     JWT: jwt,
-            //     // 1表示点赞类型的消息
-            //     msg_type: 1,
-            //     // 1表示点赞对象为动态
-            //     type: 1,
-            //     obj_id: this.commentInfo.id,
-            //   }),
-            // })
-            //   .then((res) => {
-            //     if (res.data.code == 200) {
-            //       console.log("删除消息成功");
-            //     } else {
-            //       console.log("删除消息失败");
-            //     }
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //   });
           } else {
             this.$message({
               message: res.data.message,
@@ -383,36 +375,48 @@ export default {
         });
     },
     //编辑评论
+    modifyComment(){
+      let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+      this.$axios({
+        url: "/message/modify_comment/",
+        method: "get",
+        params: {
+          JWT: jwt,
+          comment_id: this.commentInfo.id,
+          content: this.new_comment,
+        },
+      })
+        .then((res) => {
+          if (res.data.result == 1) {
+            this.$message({
+              message: res.data.message,
+              type: "success",
+            });
+            // 关闭编辑框
+            this.showModify = false;
+            // 强制刷新页面
+            location.reload(true);
+            // this.$emit("refreshing");
+          } else {
+            this.$message({
+              message: res.data.message,
+              type: "error",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   },
   data() {
     return {
       showReply: false,
-
+      showModify: false,
       reply_content: "",
+      new_comment: "",
 
-      replyList: [
-        {
-          reply_id: 1,
-          replyer_name: "shyJyt",
-          replyer_avatarUrl:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          reply_time: "2021-01-01 12:00:00",
-          reply_content: "是这样的",
-          fa_id: 1,
-        },
-        {
-          reply_id: 2,
-          replyer_name: "shyJyt",
-          replyer_avatarUrl:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          reply_time: "2021-01-01 12:00:00",
-          reply_content: "你说得对",
-          isLevel2: false,
-          fa_username: "shyJyt",
-          fa_reply_content: "是这样的",
-          fa_id: 1,
-        },
-      ],
+      replyList: [],
     };
   },
 };

@@ -5,27 +5,31 @@
       <el-avatar
         shape="square"
         fit="fill"
-        :src="replyInfo.avatar_path"
+        :src="replyInfo.poster_avatar"
         style="height: 100%; width: 100%"
       ></el-avatar>
     </div>
     <div class="reply-item-right">
       <!-- 用户名和回复内容 -->
       <div class="reply-item-right-top">
-        <span class="replyer-name">{{ replyInfo.replyer_name }} :</span>
+        <span class="replyer-name">{{ replyInfo.poster_name }} :</span>
         <span class="reply-content">{{ replyInfo.content }}</span>
       </div>
 
-      <div v-show="replyInfo.fa_id != null" class="fa-content">
+      <div v-show="replyInfo.fa_id != -1" class="fa-content">
         <!-- 三级及以上评论显示父评论内容 -->
         <span style="font-size: 10px; color: #999"
-          >{{ replyInfo.fa_username }}:{{ replyInfo.fa_content }}</span
+          >{{ replyInfo.fa_poster_name }}:{{ replyInfo.fa_content }}</span
         >
       </div>
 
       <div class="reply-item-right-foot">
         <!-- 评论时间 -->
-        <span class="reply-time">{{ replyInfo.create_date }}</span>
+        <span class="reply-time">{{
+          replyInfo.create_date.slice(0, 10) +
+          " " +
+          replyInfo.create_date.slice(11, 19)
+        }}</span>
         <!-- 展开回复 -->
         <el-button
           type="text"
@@ -79,7 +83,7 @@
           <div class="comment-submit-foot">
             <el-button
               type="primary"
-              @click="submitReply"
+              @click.native="submitReply"
               class="comment-submit-btn"
               size="mini"
               >发送</el-button
@@ -126,13 +130,13 @@ export default {
       }
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
-        path: "/message/cre_reply",
+        url: "/message/cre_reply/",
         method: "post",
         data: qs.stringify({
           JWT: jwt,
           root_id: this.replyInfo.root_id,
           fa_id: this.replyInfo.id,
-          isLevel2: false,
+          isLevel2: 0,
           content: this.reply_content,
         }),
       })
@@ -148,6 +152,8 @@ export default {
             // let replyObj = res.data.replyObj;
             // this.replyList.unshift(replyObj);
             this.$emit("updateReplyList");
+            //收起回复输入框
+            this.changeShowReply();
             //向回复的所有者发送消息
           } else {
             this.$message({

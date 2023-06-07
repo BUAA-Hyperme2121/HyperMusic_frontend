@@ -175,41 +175,42 @@ const router = new VueRouter({
                 },
             ],
         },
-        {
-            path: "/creator",
-            component: () =>
-                import ("../views/Creator.vue"),
-        },
-        {
-            path: "/login",
-            name: "LoginPage",
-            component: () =>
-                import ("../views/LoginPage.vue"),
-        },
-        {
-            path: "/register",
-            component: () =>
-                import ("../views/RegisterPage.vue"),
-        },
-        // 404页面
-        {
-            path: "/404",
-            component: () =>
-                import ("../views/NotFoundPage.vue"),
-        },
-        // 所有未定义路由，全部重定向到404页面
-        {
-            path: "*",
-            redirect: "/404",
-        },
-        {
-            path: "/dev/:music_id",
-            name: "Dev",
-            props: true,
-            component: () =>
-                import ("../views/dev.vue"),
-        }
-    ],
+      ],
+    },
+    {
+      path: "/creator",
+      component: () => import("../views/Creator.vue"),
+    },
+    {
+      path: "/login",
+      name: "LoginPage",
+      component: () => import("../views/LoginPage.vue"),
+    },
+    {
+      path: "/register",
+      component: () => import("../views/RegisterPage.vue"),
+    },
+    {
+      path: "/findpsw",
+      component: () => import("../views/FindPSW.vue"),
+    },
+    // 404页面
+    {
+      path: "/404",
+      component: () => import("../views/NotFoundPage.vue"),
+    },
+    // 所有未定义路由，全部重定向到404页面
+    {
+      path: "*",
+      redirect: "/404",
+    },
+    {
+      path: "/dev/:music_id",
+      name: "Dev",
+      props: true,
+      component: () => import("../views/dev.vue"),
+    }
+  ],
 });
 
 // router.beforeEach((to, from, next) => {

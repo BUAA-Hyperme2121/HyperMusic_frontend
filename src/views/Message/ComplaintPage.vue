@@ -24,17 +24,30 @@
         ></el-table-column>
 
         <el-table-column
-          prop="user"
+          prop="owner_name"
           label="投诉对象"
           width="180"
         ></el-table-column>
+
         <el-table-column
           prop="create_date"
           label="发起时间"
           width="160"
           sortable
-        ></el-table-column>
-        <el-table-column prop="state" label="状态" width="80"></el-table-column>
+        >
+          <template slot-scope="scope">
+            {{
+              scope.row.create_date.slice(0, 10) +
+              "" +
+              scope.row.create_date.slice(11, 19)
+            }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" label="状态" width="80">
+          <template slot-scope="scope">
+            {{ scope.row.state == 1 ? "待审核" : "已审核" }}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>

@@ -72,20 +72,17 @@
                 v-show="!basicForm.avatar"
                 style="height: 100px; width: 100px; margin: 15px 0"
               ></el-avatar>
-              <!-- 新上传的头像 -->
-              <img
-                :src="newAvatarUrl"
-                v-show="basicForm.avatar"
-                style="height: 100px; width: 100px; margin: 15px 0"
-              />
               <el-upload
-                action=""
+                list-type="picture-card"
                 :auto-upload="false"
+                :class="{ 'none-up': uploadDisabled }"
                 accept="image/jpeg,image/jpg"
-                :show-file-list="false"
-                :on-change="handleAvatarUpload"
+                :limit="1"
+                action=""
+                :on-change="handleLimit"
+                :on-remove="handleRemove"
               >
-                <el-button>更换头像</el-button>
+                <i class="el-icon-plus"></i>
               </el-upload>
             </div>
           </div>
@@ -261,8 +258,7 @@ export default {
       updatePasswordDialogVisible: false,
       // 选中的设置页
       activeTab: "basic",
-      // 新头像的url
-      newAvatarUrl: "",
+
       // 可选的地址列表
       options: [
         {
@@ -359,22 +355,30 @@ export default {
       this.activeTab = index;
     },
     //大小检验
-    checkSize(file) {
-      const isLt1M = file.size / 1024 / 1024 < 1;
-      return isLt1M;
-    },
+    // checkSize(file) {
+    //   const isLt1M = file.size / 1024 / 1024 < 1;
+    //   return isLt1M;
+    // },
 
-    handleAvatarUpload(file) {
-      if (this.checkSize(file)) {
-        // console.log("bbb");
-        this.newAvatarUrl = URL.createObjectURL(file.raw);
-        this.basicForm.avatar = file;
-      } else {
-        // console.log("aaa");
-        this.$message.error("上传头像图片大小不能超过 1MB!");
-        return false;
+    handleLimit(file, fileList) {
+      if (fileList.length >= 1) {
+        console.log("handleLimit");
+        this.uploadDisabled = true;
+        this.$set(this, "uploadDisabled", true);
+        this.onCoverChange(file.raw);
+        this.$forceUpdate();
       }
     },
+    handleRemove() {
+      this.uploadDisabled = false;
+      this.$set(this, "uploadDisabled", false);
+      this.basicForm.avatar = "";
+      this.$forceUpdate();
+    },
+    onCoverChange(file) {
+      this.basicForm.avatar = file;
+    },
+
     //更新用户信息
     updateUserInfo() {
       this.$refs["basicForm"].validate((valid) => {

@@ -1,48 +1,39 @@
 <template>
-  <div class="register-page">
+  <div class="find-page">
     <div class="container">
-      <div class="typed-out">\ Join Us /</div>
+      <div class="typed-out">\ Find Your Way /</div>
     </div>
-    <!-- 注册表单 -->
+    <!-- 找回密码表单 -->
     <el-form
-      :model="registerForm"
+      :model="findForm"
       :rules="rules"
-      ref="registerForm"
+      ref="findForm"
       label-position="top"
       status-icon
       size="mini"
     >
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="新密码" prop="password_1">
         <el-input
-          v-model="registerForm.username"
-          placeholder="3~10个字符"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password_1">
-        <el-input
-          v-model="registerForm.password_1"
-          placeholder="6~16位密码"
+          v-model="findForm.password_1"
+          placeholder="6~16位"
           show-password
         ></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="password_2">
+      <el-form-item label="确认新密码" prop="password_2">
         <el-input
-          v-model="registerForm.password_2"
-          placeholder="请再次输入密码"
+          v-model="findForm.password_2"
+          placeholder="请再次输入新密码"
           show-password
         ></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="registerForm.email"
-          placeholder="请输入邮箱"
-        ></el-input>
+        <el-input v-model="findForm.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <!-- 邮箱验证码 -->
       <el-form-item label="邮箱验证码" prop="sms_code">
         <div style="display: flex">
           <el-input
-            v-model="registerForm.sms_code"
+            v-model="findForm.sms_code"
             placeholder="请输入邮箱验证码"
             style="margin-right: 20px"
           ></el-input>
@@ -57,17 +48,10 @@
         </div>
       </el-form-item>
     </el-form>
-    <!-- 注册按钮 -->
-    <el-button
-      type="primary"
-      @click="register('registerForm')"
-      class="register-btn"
-      >注册</el-button
+    <!-- 确认按钮 -->
+    <el-button type="primary" @click="find('findForm')" class="find-btn"
+      >确认</el-button
     >
-    <!-- 跳转到登录页面 -->
-    <div class="to-login">
-      <router-link to="/login" class="login-link">已有账号？去登录</router-link>
-    </div>
   </div>
 </template>
 
@@ -81,23 +65,13 @@ export default {
       // 是否可以点击获取邮箱验证码按钮
       canPostCode: false,
       // 注册表单
-      registerForm: {
-        username: "",
+      findForm: {
         password_1: "",
         password_2: "",
         email: "",
         sms_code: "",
       },
       rules: {
-        username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          {
-            min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
-            trigger: "blur",
-          },
-        ],
         password_1: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {
@@ -146,23 +120,22 @@ export default {
     };
   },
   methods: {
-    register(formName) {
-      // 处理注册逻辑
+    find(formName) {
+      // 处理找回逻辑
       this.$refs[formName].validate((validate) => {
         if (validate) {
           this.$axios({
             method: "post",
-            url: "/user/register/",
+            url: "/user/find_password/",
             data: qs.stringify({
-              username: this.registerForm.username,
-              password_1: this.registerForm.password_1,
-              password_2: this.registerForm.password_2,
-              email: this.registerForm.email,
-              sms_code: this.registerForm.sms_code,
+              new_password: this.findForm.password_1,
+              new_password2: this.findForm.password_2,
+              email: this.findForm.email,
+              sms_code: this.findForm.sms_code,
             }),
           })
             .then((res) => {
-              // 注册成功
+              // 找回成功
               if (res.data.result == 1) {
                 this.$message({
                   message: res.data.message,
@@ -171,7 +144,7 @@ export default {
                 // 跳转到登录页面
                 this.$router.push("/login");
               } else {
-                // 注册失败
+                // 找回失败
                 this.$message({
                   message: res.data.message,
                   type: "error",
@@ -202,16 +175,16 @@ export default {
     },
     //两次输入密码是否相同
     isSamePassword() {
-      return this.registerForm.password_1 === this.registerForm.password_2;
+      return this.findForm.password_1 === this.findForm.password_2;
     },
     //发送邮箱验证码
     postEmailCode() {
       // 处理发送邮箱验证码逻辑
       this.$axios({
         method: "post",
-        url: "/message/send_email_register/",
+        url: "/message/send_email_find_password/",
         data: qs.stringify({
-          email: this.registerForm.email,
+          email: this.findForm.email,
         }),
       })
         .then((res) => {
@@ -259,7 +232,7 @@ export default {
 </script>
 
 <style scoped>
-.register-page {
+.find-page {
   background-color: #fff;
   padding: 50px;
   border-radius: 5px;
@@ -267,11 +240,11 @@ export default {
   width: 350px;
   margin: 20px auto;
 }
-.register-page h1 {
+.find-page h1 {
   text-align: center;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-.register-btn {
+.find-btn {
   margin: 0 auto;
   display: block;
 }
@@ -291,8 +264,8 @@ export default {
 .container {
   display: block;
   text-align: center;
-  margin-left: 95px;
-  margin-right: 95px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .typed-out {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

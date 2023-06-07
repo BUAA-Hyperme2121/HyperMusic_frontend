@@ -24,6 +24,9 @@
         ></el-input>
       </el-form-item>
     </el-form>
+    <div style="margin-left:320px">
+      <router-link to="/findpsw" class="findpsw-link">忘记密码？</router-link>
+    </div>
     <el-button type="primary" @click="login" class="btn-primary">
       登录
     </el-button>
@@ -160,15 +163,28 @@ export default {
 .register-link:hover {
   color: #044b9c;
 }
+.findpsw-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #0366d6;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.findpsw-link:hover {
+  color: #044b9c;
+}
 
 .container {
   display: block;
   text-align: center;
   margin-left: 100px;
-  margin-right: 100px; 
+  margin-right: 100px;
 }
 .typed-out {
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   overflow: hidden;
   border-right: 0.15em solid orange;
   white-space: nowrap;
