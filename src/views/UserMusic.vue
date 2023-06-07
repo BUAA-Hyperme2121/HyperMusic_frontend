@@ -146,6 +146,7 @@ export default ({
             this.axios.get("/user/get_create_music_list/", {
                 params: {
                     JWT: jwt,
+                    // user_id: "0",
                 }
             })
                 .then((res) => {

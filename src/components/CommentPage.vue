@@ -240,7 +240,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .comment-page {
   background-color: #fff;
 }

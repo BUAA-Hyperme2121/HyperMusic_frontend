@@ -83,7 +83,7 @@ export default {
 </script>
   <style scoped>
     .song-audio{
-      display: inline;
+      display: none;
         position: fixed;
         left: 0;
         top: 200px;

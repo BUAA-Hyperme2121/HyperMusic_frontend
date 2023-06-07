@@ -50,3 +50,4 @@ export const changeMusiclist = (formdata) => post(`/music/change_favorites_info/
 export const complainMusic = (formdata) => post(`/message/cre_complain/`, formdata);
 export const unfollowing = (formdata) => post(`/user/unfollow/`, formdata);
 export const following = (formdata) => post(`/user/follow/`, formdata);
+export const delSong = (formdata) => post(`/user/del_music/`, formdata);

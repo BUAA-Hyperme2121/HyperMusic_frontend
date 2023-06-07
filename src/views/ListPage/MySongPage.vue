@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>歌曲列表</h2>
-        <SonglistComponent :songlist="this.music_list" />
+        <SonglistComponent :songlist="this.music_list" :myAccess="true"/>
     </div>
 </template>
 
@@ -32,13 +32,14 @@ export default ({
             }
             let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
             console.log(jwt);
-            this.axios.get("/music/get_music_list_info/", {
+            this.axios.get("/music/get_upload_music/", {
                 params: {
-                    JWT: this.jwt,
+                    JWT: jwt,
                 }
             })
                 .then((res) => {
-                    if (res.data.music_list != "此歌单尚无歌曲") {
+                    console.log(res.data);
+                    if (res.data.music_list != []) {
                         this.music_list = res.data.music_list;
                     }
                 })

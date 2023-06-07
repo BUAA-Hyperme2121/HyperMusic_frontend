@@ -83,7 +83,7 @@
                                             <el-button @click="complaintFormVisible = false; clearcomplaintForm()">取
                                                 消</el-button>
                                             <el-button type="primary"
-                                                @click="complaintFormVisible = false; complaintSong()">确
+                                                @click="complaintFormVisible = false; complaintPlaylist()">确
                                                 定</el-button>
                                         </div>
                                     </el-dialog>
@@ -119,7 +119,7 @@
 
 <script>
 import SonglistComponent from '@/components/PageComponent/SonglistComponent.vue';
-import { setPublic, setNotPublic, deleteList, changeMusiclist } from "@/api/api.js";
+import { setPublic, setNotPublic, deleteList, changeMusiclist,complainMusic } from "@/api/api.js";
 import { mixin } from '../mixins'
 export default ({
     props: ["id"],
@@ -194,7 +194,7 @@ export default ({
             this.complaintForm.name = this.music_list_info.name
             this.complaintForm.creator_name = this.music_list_info.creator_name
         },
-        complaintSong() {
+        complaintPlaylist() {
             if (localStorage.getItem('loginInfo') != null) {
                 var formData = new FormData();
                 formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)

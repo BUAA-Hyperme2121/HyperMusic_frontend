@@ -166,13 +166,14 @@
             </el-col>
             <!-- 歌词 -->
             <el-col :span="14" class="lyrics-container">
-                <div class="lyrics-outline">
+                <div v-if="this.isDescription" class="lyrics-outline">
                     <ul class="lyrics" v-if="lyrics.length">
                         <li v-for="(item, index) in lyrics" v-bind:key="index">
                             {{ item[1] }}
                         </li>
                     </ul>
                 </div>
+                <CommentPage v-if="!this.isDescription" :object_id="this.music_info.id" :type="1" :owner_id="this.music_info.creator_id"/>
                 <el-button style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看评论</el-button>
             </el-col>
         </el-row>
@@ -183,19 +184,24 @@
 import { setFavorites, setLikes, setPosts, complainMusic } from '@/api/api';
 import { mixin } from '@/mixins'
 import { mapGetters } from 'vuex'
+import CommentPage from '@/components/CommentPage.vue'
 export default ({
     mixins: [mixin],
     props: ["music_id"],
+    components: {
+        CommentPage,
+    },
     data() {
         return {
             isLike: false,
-            isDescription: false,
+            isDescription: true,
             lyrics: [],
             music_info: {
                 id: 0,
                 music_name: "",
                 singer_name: "",
                 singer_id: '',
+                creator_id: '',
                 music_path: '',
                 cover_path: '',
                 listen_nums: '',

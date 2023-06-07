@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- playlistcomponent -->
-    <el-table :data="songlist" class="songlist-list-container transparent-style" style="width: 100%;" stripe :show-header="false">
+    <el-table :data="songlist" class="songlist-list-container transparent-style" style="width: 100%;" stripe
+      :show-header="false">
       <el-table-column width="80px" label="">
         <template slot-scope="scope">
           <span style="margin-left: 10px;">{{ scope.$index + 1 }}</span>
@@ -62,7 +63,7 @@
 
 <script>
 import { mixin } from '../../mixins'
-import { delFromList, setPosts } from '@/api/api'
+import { delFromList, setPosts, delSong } from '@/api/api'
 export default {
   name: "songlistComponent",
   mixins: [mixin],
@@ -76,6 +77,11 @@ export default {
       required: false,
     },
     noAccess: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    myAccess: {
       type: Boolean,
       required: false,
       default: false,
@@ -113,16 +119,29 @@ export default {
         formData.append('favorites_id', this.objectId);
         formData.append('music_id', row.id);
         console.log(this.objectId);
-        delFromList(formData)
-          .then(res => {
-            this.$message("已删除")
-            location.reload(true)
-            console.log(res)
-          })
-          .catch(err => {
-            this.$message("删除失败，请重试")
-            console.log(err)
-          })
+        if (this.myAccess) {
+          delSong(formData)
+            .then(res => {
+              this.$message("已删除")
+              location.reload(true)
+              console.log(res)
+            })
+            .catch(err => {
+              this.$message("删除失败，请重试")
+              console.log(err)
+            })
+        } else {
+          delFromList(formData)
+            .then(res => {
+              this.$message("已删除")
+              location.reload(true)
+              console.log(res)
+            })
+            .catch(err => {
+              this.$message("删除失败，请重试")
+              console.log(err)
+            })
+        }
 
       }
 
@@ -134,6 +153,7 @@ export default {
         formData.append('object_id', row.id)
         formData.append('type', '1')
         formData.append('content', "我分享了一首歌曲，快来看看吧~")
+
         setPosts(formData)
           .then(res => {
             //根据res进行区分
@@ -142,6 +162,7 @@ export default {
           .catch(err => {
             this.$message.error("分享失败")
           })
+
 
       } else {
         this.$message.error("请先登录")
@@ -173,14 +194,13 @@ export default {
 }
 
 .el-table,
-        .el-table__expanded-cell {
-            background-color: rgba(255,255,255,0.7) !important;
-        }    
-        .el-table th,
-        .el-table tr,
-        .el-table td {
-            background-color: rgba(255,255,255,0) !important;
-        } 
+.el-table__expanded-cell {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+}
 
-
+.el-table th,
+.el-table tr,
+.el-table td {
+  background-color: rgba(255, 255, 255, 0) !important;
+}
 </style>
