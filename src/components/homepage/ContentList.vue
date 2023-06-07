@@ -8,7 +8,7 @@
                 <div class="mask" @click="goSpecific(item)">
                     <i class="icon iconfont icon-bofang1"></i>
                 </div>
-                <p v-if="type" class="item-name">{{item.music_name}}</p>
+                <p v-if="type==1" class="item-name">{{item.music_name}}</p>
                 <p v-if="type!=1" class="item-name">{{item.name}}</p>
             </li>
         </ul>
