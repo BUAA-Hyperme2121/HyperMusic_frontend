@@ -88,8 +88,42 @@
                                         </div>
                                     </el-dialog>
                                 </el-link>
-                                <el-button type="default" icon="el-icon-plus" @click="jumpToSearch"
-                                    style="margin-left: 20px;" size="mini">批量添加</el-button>
+                                <el-link class="operation-link">
+                            <el-tooltip content="收藏" placement="top">
+                                <el-button type="default" icon="el-icon-folder-add" size="mini"
+                                    @click="starPlaylistFormVisible = true; changestarPlaylistForm()">批量添加</el-button>
+                            </el-tooltip>
+                            <el-dialog title="添加到你的收藏夹中" :visible.sync="starPlaylistFormVisible" center
+                                :close-on-click-modal="false" :show-close="false">
+                                <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                                    <div
+                                        style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); border-radius: 5px; min-width: 300px;">
+                                        <div style="float:left">
+                                            <img style="width: 70px;height: 70px;display: block; border-radius: 5px 0px 0px 5px;"
+                                                :src="starPlaylistForm.cover_path" alt="">
+                                        </div>
+                                        <div
+                                            style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
+                                            <p style="margin:0;">{{ starPlaylistForm.music_name }} by {{
+                                                starPlaylistForm.singer_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex;">
+                                    <div style="margin: auto; margin-top: 40px;">
+                                        <el-select size="medium" :disabled="disabled" v-model="starPlaylistForm.favorites_id">
+                                            <el-option v-for="(item, index) in create_music_list" :key="index"
+                                                :label="item.name" :value="item.id"></el-option>
+                                        </el-select>
+                                    </div>
+                                </div>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="starPlaylistFormVisible = false; clearstarPlaylistForm()">取 消</el-button>
+                                    <el-button type="primary" @click="starPlaylistFormVisible = false; starPlaylist()">确
+                                        定</el-button>
+                                </div>
+                            </el-dialog>
+                        </el-link>
 
                             </div>
                             <div class="fronthead-description font-description" style="width: 50vw;" v-if="!isModify">{{
@@ -119,7 +153,7 @@
 
 <script>
 import SonglistComponent from '@/components/PageComponent/SonglistComponent.vue';
-import { setPublic, setNotPublic, deleteList, changeMusiclist,complainMusic } from "@/api/api.js";
+import { setPublic, setNotPublic, deleteList, changeMusiclist,complainMusic, markList } from "@/api/api.js";
 import { mixin } from '../mixins'
 export default ({
     props: ["id"],
@@ -158,10 +192,20 @@ export default ({
                 title: '',
             },
             disabled: false,
+            starPlaylistFormVisible: false,
+            starPlaylistForm: {
+                cover_path: '',
+                id: '',
+                music_name: '',
+                singer_name: '',
+                favorites_id: '',
+            },
+            create_music_list: [],
         }
     },
     mounted() {
         this.fetchList();
+        this.fetchMenus();
     },
     beforeRouteUpdate(to, from, next) {
         console.log(to, from, next)
@@ -178,6 +222,66 @@ export default ({
         },
     },
     methods: {
+        fetchMenus() {
+            if (localStorage.getItem("loginInfo") == null) {
+                // this.$message({
+                //     message: "请先登录",
+                //     type: "warning",
+                // });
+                return;
+            }
+            let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+            this.axios.get("/user/get_create_music_list/", {
+                params: {
+                    JWT: jwt,
+                }
+            })
+                .then((res) => {
+                    this.create_music_list = res.data.create_music_list.slice(1);
+                })
+                .catch(
+                    (err) => {
+                        this.$message("获取我的音乐失败！请尝试重新登陆");
+
+                    }
+                )
+        },
+        changestarPlaylistForm() {
+            this.starPlaylistForm.cover_path = this.music_list_info.cover_path
+            this.starPlaylistForm.id = this.music_list_info.id
+            this.starPlaylistForm.music_name = this.music_list_info.name
+            this.starPlaylistForm.singer_name = this.music_list_info.creator_name
+        },
+        clearstarPlaylistForm() {
+            this.starPlaylistForm.favorites_id = ''
+            this.disabled = false
+        },
+        starPlaylist() {
+            if (localStorage.getItem('loginInfo') != null && this.starPlaylistForm.favorites_id != '') {
+                var formData = new FormData();
+                console.log(this.starPlaylistForm);
+                var s = this.starPlaylistForm.favorites_id;
+                console.log(s);
+                
+                formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
+                formData.append('music_list_id', this.music_list_info.id)
+                formData.append('favorites_id', s)
+                
+                markList(formData)
+                    .then(res => {
+                        //根据res进行区分
+                        console.log(res.data);
+                        this.$message.success("收藏成功")
+                    })
+                    .catch(err => {
+                        this.$message.error("收藏失败")
+                    })
+            } else {
+                this.$message.error("请先登录")
+            }
+            this.starPlaylistForm.favorites_id = ''
+            this.disabled = false
+        },
         addToPlaylistAll() {
             var i;
             if (this.music_list.length) {

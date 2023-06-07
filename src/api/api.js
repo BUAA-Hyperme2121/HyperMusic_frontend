@@ -51,3 +51,5 @@ export const complainMusic = (formdata) => post(`/message/cre_complain/`, formda
 export const unfollowing = (formdata) => post(`/user/unfollow/`, formdata);
 export const following = (formdata) => post(`/user/follow/`, formdata);
 export const delSong = (formdata) => post(`/user/del_music/`, formdata);
+
+export const markList = (formdata) => post(`/user/mark_music_list/`, formdata);

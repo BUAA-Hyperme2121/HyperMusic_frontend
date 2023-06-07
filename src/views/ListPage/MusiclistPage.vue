@@ -85,7 +85,7 @@
                                 </div>
                             </el-dialog>
                         </el-link>
-                        <el-button v-if="isModify" type="default" icon="el-icon-folder-add"
+                        <el-button style="margin-left: 10px; " v-if="isModify" type="default" icon="el-icon-folder-add"
                             @click="submitModifyInfo">完成</el-button>
                         <el-button style="margin-left: 10px; " v-else type="default" icon="el-icon-folder-add"
                             @click="modifyInfo">修改</el-button>

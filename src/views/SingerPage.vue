@@ -9,7 +9,7 @@
       <!-- music_info -->
       <el-col :offset="1" :span="8"
         style="display: flex;flex-direction:column; ;justify-content: center;align-items: center;">
-        <div class="fronthead-cover-round">
+        <div class="fronthead-cover-round" style="margin-top: 80px;">
           <img :src="this.singer_info.cover_path" alt="album cover" @click="addToPlaylistAll" />
         </div>
         <!--name, description-->
