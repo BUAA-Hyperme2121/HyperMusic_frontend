@@ -10,10 +10,13 @@
             <!-- music_info -->
             <el-col :offset="1" :span="8"
                 style="display: flex;height: 95vh; overflow:auto; flex-direction:column; margin-bottom: 20px ;justify-content: center;align-items: center;">
+                <transition name="changeShow" appear>
+                    <div class="fronthead-cover-big">
 
-                <div class="fronthead-cover-big">
-                    <img :src="music_info.cover_path" alt="album cover" @click="Play" />
-                </div>
+                        <img :src="music_info.cover_path" alt="album cover" @click="togglePlay" />
+
+                    </div>
+                </transition>
                 <!--name, description-->
                 <div class="fronthead-header">
                     <div class="fronthead-title">
@@ -161,28 +164,39 @@
                             </el-tooltip>
                         </el-link>
                     </div>
-                    <div class="fronthead-description font-description" style="width: 30vw;">
-                        {{ music_info.description }}
+                    <div style="display: flex; align-items: center;justify-content: center; flex-direction: column;">
+                        <div class="fronthead-description font-description" style="max-width: 30vw;">
+                            {{ music_info.description }}
+                        </div>
                     </div>
+
                 </div>
             </el-col>
             <!-- 歌词 -->
             <el-col :span="14" class="lyrics-container">
-                <div v-if="this.isDescription" class="lyrics-outline">
-                    <ul class="lyrics" v-if="lyrics.length">
-                        <li v-for="(item, index) in lyrics" v-bind:key="index">
-                            {{ item[1] }}
-                        </li>
-                    </ul>
-                </div>
-                <CommentPage v-if="!this.isDescription" :object_id="this.music_info.id" :type="1"
-                    :owner_id="this.music_info.creator_id" style="width: 50vw; height: max-content;"/>
-                <el-button v-if="this.isDescription" style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看评论</el-button>
-                <el-button v-else style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看歌词</el-button>
+                <transition name="changeRoll" appear @after-enter="afteranter2" @after-leave="afterLeave">
+                    <div v-if="this.isDescription" class="lyrics-outline">
+                        <ul class="lyrics" v-if="lyrics.length">
+                            <li v-for="(item, index) in lyrics" v-bind:key="index">
+                                {{ item[1] }}
+                            </li>
+                        </ul>
+                    </div>
+                </transition>
+                <transition name="changeRollR" appear type="animation" @after-enter="afteranter" @after-leave="afterLeave1">
+                    <CommentPage v-if="!this.isDescription1" :object_id="this.music_info.id" :type="1"
+                        :owner_id="this.music_info.creator_id" style="width: 50vw;  height: max-content;" />
+                </transition>
+                <transition name="changeRollB" appear type="animation"><el-button v-if="this.buttonC"
+                        style="margin-top: 20px;" size="mini" round @click="changeRightDiv">查看评论</el-button></transition>
+                <transition name="changeRollB" appear type="animation"><el-button v-if="this.buttonC2"
+                        style="margin-top: 20px;" size="mini" round @click="changeRightDiv1">查看歌词</el-button></transition>
+
+
             </el-col>
 
         </el-row>
-        <div style="height: 60px; background-color:black;"></div>
+        <!-- <div style="height: 60px; background-color:black;"></div> -->
     </div>
 </template>
 
@@ -201,6 +215,7 @@ export default ({
         return {
             isLike: false,
             isDescription: true,
+            isDescription1: true,
             lyrics: [],
             music_info: {
                 id: 0,
@@ -241,6 +256,8 @@ export default ({
             },
             disabled: false,
             create_music_list: [],
+            buttonC: false,
+            buttonC2: false,
 
         }
     },
@@ -248,6 +265,8 @@ export default ({
         ...mapGetters([
             'curTime',
             'id',
+            'isPlay',
+            'autoNext' // 用于触发自动播放下一首
         ])
     },
     watch: {
@@ -278,6 +297,9 @@ export default ({
     },
     mounted() {
         this.fetchSong();
+        window.scrollTo(0, document.documentElement.scrollHeight);
+        this.keydown();
+
     },
     beforeRouteUpdate(to, from, next) {
         next()
@@ -286,6 +308,60 @@ export default ({
         }
     },
     methods: {
+        afteranter2() {
+            this.buttonC = !this.buttonC;
+        },
+        afteranter() {
+            this.buttonC2 = !this.buttonC2;
+        },
+        afterLeave() {
+            this.isDescription1 = this.isDescription;
+        },
+        afterLeave1() {
+            this.isDescription = this.isDescription1;
+        },
+        changeRightDiv() {
+            this.isDescription = !this.isDescription;
+            this.buttonC = !this.buttonC;
+        },
+        changeRightDiv1() {
+            this.isDescription1 = !this.isDescription1;
+            this.buttonC2 = !this.buttonC2;
+        },
+
+        togglePlay() {
+            let player = this.$refs.player
+            if (this.isPlay) {
+                this.$store.commit('setIsPlay', false);
+            } else {
+                this.toplay(this.music_info);
+            }
+        },
+        keydown() {
+            var self = this
+            document.onkeydown = function (event) {
+                let key = window.event.keyCode;
+
+                if (event.ctrlKey) {
+                    // 监听ctrl
+                    window.event.preventDefault(); //关闭浏览器默认快捷键
+                    console.log(key);
+                    if (key == 40) {
+                        let player = self.$refs.player
+                        if (self.isPlay) {
+                            self.$store.commit('setIsPlay', false);
+                        } else {
+                            self.toplay(self.music_info);
+                        }
+                    }
+                    else if (key == 39) {
+                        self.$store.commit('setIsPlay', false)
+                        self.$store.commit('setCurTime', 0)
+                        self.$store.commit('setAutoNext', !self.autoNext)
+                    }
+                }
+            };
+        },
         changeComplaintForm() {
             this.complaintForm.cover_path = this.music_info.cover_path
             this.complaintForm.object_id = this.music_info.id
@@ -404,12 +480,7 @@ export default ({
                     console.log(err)
                 })
         },
-        changeRightDiv() {
-            this.isDescription = !this.isDescription;
-        },
-        Play() {
-            this.toplay(this.music_info);
-        },
+
         getlyrics() {
             const xhr = new XMLHttpRequest();
             xhr.responseType = 'text';
@@ -539,6 +610,87 @@ export default ({
 </script>
 
 <style scoped>
+.changeShow-enter-active {
+    animation: changeShow 0.8s;
+}
+
+.changeShow-leave-active {
+    animation: changeShow 0.8s reverse;
+}
+
+.changeRoll-enter-active {
+    animation: changeRolla 0.6s;
+}
+
+.changeRoll-leave-active {
+    animation: changeRoll 0.6s reverse;
+}
+
+.changeRollR-enter-active {
+    animation: changeRolla 0.6s;
+}
+
+.changeRollR-leave-active {
+    animation: changeRollR 0.6s reverse;
+}
+
+.changeRollB-enter-active {
+    animation: changeRolla 0.6s;
+}
+
+.changeRollB-leave-active {
+    animation: changeRolla 0.6s reverse;
+}
+
+@keyframes changeShow {
+    from {
+        transform: scale(1.2);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes changeRoll {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes changeRolla {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes changeRollR {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+.el-row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -562,7 +714,7 @@ export default ({
 
 .lyrics-container {
     height: 100%;
-    padding-top: 90px;
+    padding-top: 120px;
     display: flex;
     justify-content: center;
     align-items: center;

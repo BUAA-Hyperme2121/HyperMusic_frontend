@@ -26,6 +26,9 @@ export const mixin = {
                 i++;
             }
         },
+        stopplay() {
+            this.$store.commit('setIsPlay', true);
+        },
         handleDownload(name, music_path) {
             this.$message({
                 message: '文件正在下载，请您耐心等待！',

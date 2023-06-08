@@ -582,12 +582,8 @@ export default {
   // },
   data() {
     return {
-<<<<<<< HEAD
-      myPlayList: [],
-=======
       uploadSongs:[],
       myPlayList:[],
->>>>>>> a32d2dd9554471cb23a69da721e5282bde930735
       btnText: "已关注",
       user_id: 0,
       // 不完全的用户信息，只是用来在主页展示

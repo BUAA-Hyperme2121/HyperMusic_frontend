@@ -9,9 +9,11 @@
       <!-- music_info -->
       <el-col :offset="1" :span="8"
         style="display: flex;flex-direction:column; ;justify-content: center;align-items: center;">
-        <div class="fronthead-cover-round" style="margin-top: 80px;">
-          <img :src="this.singer_info.cover_path" alt="album cover" @click="addToPlaylistAll" />
-        </div>
+        <transition name="changeShow" appear>
+          <div class="fronthead-cover-round" style="margin-top: 80px;">
+            <img :src="this.singer_info.cover_path" alt="album cover" @click="addToPlaylistAll" />
+          </div>
+        </transition>
         <!--name, description-->
         <div class="fronthead-header">
           <div class="fronthead-title">
@@ -23,7 +25,7 @@
           <div style="display: flex;">
 
             <el-button type="primary" @click="followSinger" size="mini">关注</el-button>
-            <el-button type="primary" @click="goToHome" size="mini">访问主页</el-button>
+            <!-- <el-button type="primary" @click="goToHome" size="mini">访问主页</el-button> -->
 
           </div>
           <!--歌手标签-->
@@ -132,15 +134,15 @@ export default {
       this.$router.push("/user/home?user_id=" + this.id);
     },
     addToPlaylistAll() {
-            var i;
-            if (this.music_list.length) {
-                for (i = 0; i < this.music_list.length; i++) {
-                    this.playlater(this.music_list[i]);
-                }
-                this.toplay(this.music_list[0])
-            }
+      var i;
+      if (this.music_list.length) {
+        for (i = 0; i < this.music_list.length; i++) {
+          this.playlater(this.music_list[i]);
+        }
+        this.toplay(this.music_list[0])
+      }
 
-        },
+    },
     followSinger() {
       if (localStorage.getItem('loginInfo') != null) {
         var formData = new FormData();
@@ -183,6 +185,23 @@ export default {
 <style scoped>
 /* 页面遮罩 */
 /* 页面遮罩样式 */
+.changeShow-enter-active {
+    animation: changeShow 0.8s;
+}
+
+.changeShow-leave-active {
+    animation: changeShow 0.8s reverse;
+}
+
+@keyframes changeShow {
+    from {
+        transform: scale(1.2);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
 .background-container {
   position: absolute;
   overflow: hidden;

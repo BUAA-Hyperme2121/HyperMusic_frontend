@@ -1,0 +1,169 @@
+Date : 2023-06-08 09:37:28
+Directory : d:\Coding\Vue\HyperMusic_frontend
+Total : 107 files,  25103 codes, 436 comments, 596 blanks, all 26135 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| vue                |         71 |     13,256 |        342 |        499 |     14,097 |
+| JSON               |          3 |     10,520 |          0 |          3 |     10,523 |
+| JavaScript         |         24 |        995 |         53 |         51 |      1,099 |
+| CSS                |          6 |        281 |         28 |         36 |        345 |
+| HTML               |          1 |         24 |          1 |          1 |         26 |
+| Markdown           |          1 |         19 |          0 |          6 |         25 |
+| JSON with Comments |          1 |          8 |         12 |          0 |         20 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                  | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                     |        107 |     25,103 |        436 |        596 |     26,135 |
+| . (Files)                                                                             |          6 |     10,450 |         12 |          9 |     10,471 |
+| axios                                                                                 |          1 |          0 |          0 |          1 |          1 |
+| public                                                                                |          1 |         24 |          1 |          1 |         26 |
+| src                                                                                   |         98 |     14,628 |        423 |        585 |     15,636 |
+| src (Files)                                                                           |          2 |         49 |          3 |         15 |         67 |
+| src\api                                                                               |          2 |         44 |         16 |          9 |         69 |
+| src\assets                                                                            |         18 |        800 |         32 |         52 |        884 |
+| src\assets\PageCss                                                                    |          1 |         65 |          1 |         10 |         76 |
+| src\assets\css                                                                        |          3 |        160 |         27 |          9 |        196 |
+| src\assets\css\PageCss                                                                |          3 |        160 |         27 |          9 |        196 |
+| src\assets\data                                                                       |         10 |        399 |          4 |         14 |        417 |
+| src\assets\iconfont                                                                   |          3 |        163 |          0 |         18 |        181 |
+| src\assets\js                                                                         |          1 |         13 |          0 |          1 |         14 |
+| src\assets\js\PageJs                                                                  |          1 |         13 |          0 |          1 |         14 |
+| src\components                                                                        |         30 |      4,831 |        116 |        203 |      5,150 |
+| src\components (Files)                                                                |         15 |      2,950 |         92 |         86 |      3,128 |
+| src\components\PageComponent                                                          |          2 |        319 |          6 |         24 |        349 |
+| src\components\homepage                                                               |          4 |        380 |          2 |         24 |        406 |
+| src\components\ranklist                                                               |          5 |        618 |         16 |         53 |        687 |
+| src\components\search                                                                 |          4 |        564 |          0 |         16 |        580 |
+| src\mixins                                                                            |          1 |         51 |          3 |          2 |         56 |
+| src\router                                                                            |          1 |        182 |         23 |          7 |        212 |
+| src\store                                                                             |          3 |        244 |          4 |          6 |        254 |
+| src\views                                                                             |         41 |      8,427 |        226 |        291 |      8,944 |
+| src\views (Files)                                                                     |         19 |      5,276 |        171 |        165 |      5,612 |
+| src\views\ListPage                                                                    |          3 |        531 |         11 |         35 |        577 |
+| src\views\Message                                                                     |          7 |        793 |         29 |         29 |        851 |
+| src\views\Social                                                                      |          2 |        171 |          0 |          6 |        177 |
+| src\views\homepage                                                                    |          5 |        721 |          0 |         18 |        739 |
+| src\views\loading                                                                     |          2 |         62 |          0 |          7 |         69 |
+| src\views\specific                                                                    |          3 |        873 |         15 |         31 |        919 |
+| theme                                                                                 |          1 |          1 |          0 |          0 |          1 |
++---------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                              | language           | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| d:\Coding\Vue\HyperMusic_frontend\README.md                                           | Markdown           |         19 |          0 |          6 |         25 |
+| d:\Coding\Vue\HyperMusic_frontend\axios\axios.js                                      | JavaScript         |          0 |          0 |          1 |          1 |
+| d:\Coding\Vue\HyperMusic_frontend\babel.config.js                                     | JavaScript         |          5 |          0 |          1 |          6 |
+| d:\Coding\Vue\HyperMusic_frontend\jsconfig.json                                       | JSON with Comments |          8 |         12 |          0 |         20 |
+| d:\Coding\Vue\HyperMusic_frontend\package-lock.json                                   | JSON               |     10,360 |          0 |          1 |     10,361 |
+| d:\Coding\Vue\HyperMusic_frontend\package.json                                        | JSON               |         53 |          0 |          1 |         54 |
+| d:\Coding\Vue\HyperMusic_frontend\public\index.html                                   | HTML               |         24 |          1 |          1 |         26 |
+| d:\Coding\Vue\HyperMusic_frontend\src\App.vue                                         | vue                |         26 |          0 |          9 |         35 |
+| d:\Coding\Vue\HyperMusic_frontend\src\api\api.js                                      | JavaScript         |         33 |         14 |          8 |         55 |
+| d:\Coding\Vue\HyperMusic_frontend\src\api\http.js                                     | JavaScript         |         11 |          2 |          1 |         14 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\PageCss\Title.css                        | CSS                |         65 |          1 |         10 |         76 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\css\PageCss\Label.css                    | CSS                |         36 |          0 |          0 |         36 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\css\PageCss\Layout.css                   | CSS                |         18 |          0 |          1 |         19 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\css\PageCss\Title.css                    | CSS                |        106 |         27 |          8 |        141 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\artistclassify.js                   | JavaScript         |         29 |          0 |          0 |         29 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\artistlist.js                       | JavaScript         |         25 |          0 |          0 |         25 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\discoverlist.js                     | JavaScript         |         36 |          1 |          5 |         42 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\favorites.js                        | JavaScript         |         28 |          0 |          3 |         31 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\playliststyle.js                    | JavaScript         |         12 |          1 |          0 |         13 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\ranklist.js                         | JavaScript         |        106 |          0 |          1 |        107 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\searchRes.js                        | JavaScript         |         94 |          0 |          4 |         98 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\songlist.js                         | JavaScript         |         27 |          1 |          0 |         28 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\songsRank.js                        | JavaScript         |         25 |          1 |          1 |         27 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\data\songstyle.js                        | JavaScript         |         17 |          0 |          0 |         17 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\iconfont\iconfont.css                    | CSS                |         55 |          0 |         17 |         72 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\iconfont\iconfont.js                     | JavaScript         |          1 |          0 |          0 |          1 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\iconfont\iconfont.json                   | JSON               |        107 |          0 |          1 |        108 |
+| d:\Coding\Vue\HyperMusic_frontend\src\assets\js\PageJs\page.js                        | JavaScript         |         13 |          0 |          1 |         14 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ActivityItem.vue                     | vue                |        257 |         14 |          8 |        279 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ActivityItemReadOnly.vue             | vue                |        116 |         11 |          6 |        133 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\Aside.vue                            | vue                |        114 |          0 |          5 |        119 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\Audio.vue                            | vue                |         89 |          0 |          3 |         92 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\CommentItem.vue                      | vue                |        456 |         15 |          8 |        479 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\CommentItemReadOnly.vue              | vue                |         81 |          3 |          3 |         87 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\CommentPage.vue                      | vue                |        277 |          5 |          6 |        288 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\EmptyPage.vue                        | vue                |         13 |          0 |          3 |         16 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\FanItem.vue                          | vue                |        187 |          5 |          2 |        194 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\FollowItem.vue                       | vue                |        179 |          5 |          4 |        188 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\NoticeItem.vue                       | vue                |         71 |         13 |          3 |         87 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\PageComponent\AlbumlistComponent.vue | vue                |        135 |          0 |          7 |        142 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\PageComponent\SonglistComponent.vue  | vue                |        184 |          6 |         17 |        207 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\PlayBar.vue                          | vue                |        424 |          0 |          6 |        430 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ReplyItem.vue                        | vue                |        307 |         10 |          7 |        324 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ReplyItemReadOnly.vue                | vue                |         96 |          4 |          5 |        105 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\TopNav.vue                           | vue                |        283 |          7 |         17 |        307 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\homepage\ContentList.vue             | vue                |        110 |          0 |          6 |        116 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\homepage\RankList.vue                | vue                |         59 |          0 |          2 |         61 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\homepage\SelectNav.vue               | vue                |         40 |          0 |          4 |         44 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\homepage\Swiper.vue                  | vue                |        171 |          2 |         12 |        185 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ranklist\Hot.vue                     | vue                |         95 |          4 |         12 |        111 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ranklist\New.vue                     | vue                |         95 |          4 |         12 |        111 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ranklist\Origin.vue                  | vue                |         95 |          4 |         12 |        111 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ranklist\SongList.vue                | vue                |        238 |          0 |          5 |        243 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\ranklist\Surge.vue                   | vue                |         95 |          4 |         12 |        111 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\search\SearchPlayLists.vue           | vue                |         88 |          0 |          3 |         91 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\search\SearchSingers.vue             | vue                |        110 |          0 |          8 |        118 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\search\SearchSongs.vue               | vue                |        282 |          0 |          1 |        283 |
+| d:\Coding\Vue\HyperMusic_frontend\src\components\search\SearchUsers.vue               | vue                |         84 |          0 |          4 |         88 |
+| d:\Coding\Vue\HyperMusic_frontend\src\main.js                                         | JavaScript         |         23 |          3 |          6 |         32 |
+| d:\Coding\Vue\HyperMusic_frontend\src\mixins\index.js                                 | JavaScript         |         51 |          3 |          2 |         56 |
+| d:\Coding\Vue\HyperMusic_frontend\src\router\index.js                                 | JavaScript         |        182 |         23 |          7 |        212 |
+| d:\Coding\Vue\HyperMusic_frontend\src\store\index.js                                  | JavaScript         |         25 |          2 |          3 |         30 |
+| d:\Coding\Vue\HyperMusic_frontend\src\store\information.js                            | JavaScript         |         26 |          0 |          1 |         27 |
+| d:\Coding\Vue\HyperMusic_frontend\src\store\song.js                                   | JavaScript         |        193 |          2 |          2 |        197 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\AlbumPage.vue                             | vue                |        351 |          4 |          9 |        364 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Creator.vue                               | vue                |        156 |          0 |          4 |        160 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\FindPSW.vue                               | vue                |        288 |          4 |          3 |        295 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\HomePage.vue                              | vue                |         27 |          0 |          4 |         31 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\ListPage\MusiclistPage.vue                | vue                |        367 |         11 |         24 |        402 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\ListPage\MySongPage.vue                   | vue                |         54 |          0 |          2 |         56 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\ListPage\SingerListPage.vue               | vue                |        110 |          0 |          9 |        119 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\LoginPage.vue                             | vue                |        207 |          0 |          4 |        211 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\ComplaintDetailPage.vue           | vue                |        143 |         14 |          5 |        162 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\ComplaintPage.vue                 | vue                |        119 |          1 |          5 |        125 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\ExamDetailPage.vue                | vue                |        214 |         11 |          7 |        232 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\ExamPage.vue                      | vue                |        110 |          0 |          6 |        116 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\MyCommentPage.vue                 | vue                |        106 |          1 |          2 |        109 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\NoticePage.vue                    | vue                |         54 |          1 |          2 |         57 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Message\ReplyToMe.vue                     | vue                |         47 |          1 |          2 |         50 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\NotFoundPage.vue                          | vue                |         12 |          0 |          4 |         16 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\PlayingSongPage.vue                       | vue                |        315 |          3 |         12 |        330 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\PlaylistPage.vue                          | vue                |        437 |          6 |         23 |        466 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\RegisterPage.vue                          | vue                |        314 |          5 |          3 |        322 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Search.vue                                | vue                |        159 |          0 |          9 |        168 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\SingerPage.vue                            | vue                |        136 |         58 |          9 |        203 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\SocialPage.vue                            | vue                |        270 |          7 |          4 |        281 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Social\FanPage.vue                        | vue                |         87 |          0 |          3 |         90 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\Social\FollowPage.vue                     | vue                |         84 |          0 |          3 |         87 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\SongPage.vue                              | vue                |        565 |          8 |         19 |        592 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\UserHome.vue                              | vue                |        668 |         26 |         14 |        708 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\UserMessage.vue                           | vue                |         45 |         10 |          3 |         58 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\UserMusic.vue                             | vue                |        259 |         11 |         13 |        283 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\UserPage.vue                              | vue                |          5 |          1 |          1 |          7 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\UserSetting.vue                           | vue                |        556 |         20 |          9 |        585 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\dev.vue                                   | vue                |        506 |          8 |         18 |        532 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\homepage\ArtistPage.vue                   | vue                |        151 |          0 |          4 |        155 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\homepage\DiscoverPage.vue                 | vue                |        199 |          0 |          4 |        203 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\homepage\PlayListPage.vue                 | vue                |        118 |          0 |          3 |        121 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\homepage\SongPage.vue                     | vue                |        119 |          0 |          3 |        122 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\homepage\TopListPage.vue                  | vue                |        134 |          0 |          4 |        138 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\loading\loading.js                        | JavaScript         |         28 |          0 |          4 |         32 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\loading\loading.vue                       | vue                |         34 |          0 |          3 |         37 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\specific\AlbumPage.vue                    | vue                |        351 |          4 |          9 |        364 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\specific\SingerPage.vue                   | vue                |        347 |         11 |          8 |        366 |
+| d:\Coding\Vue\HyperMusic_frontend\src\views\specific\SongPage.vue                     | vue                |        175 |          0 |         14 |        189 |
+| d:\Coding\Vue\HyperMusic_frontend\theme\index.css                                     | CSS                |          1 |          0 |          0 |          1 |
+| d:\Coding\Vue\HyperMusic_frontend\vue.config.js                                       | JavaScript         |          5 |          0 |          0 |          5 |
+| Total                                                                                 |                    |     25,103 |        436 |        596 |     26,135 |
++---------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

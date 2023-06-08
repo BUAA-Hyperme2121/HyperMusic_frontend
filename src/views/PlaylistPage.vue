@@ -38,13 +38,14 @@
                             <!--歌曲标签-->
                             <div style=" padding-top: 10px;">
                                 <div>
-                            <el-button size="mini" round v-for="label in this.music_list_info.labels" :key="label._id" disabled style="background-color: cadetblue;
+                                    <el-button size="mini" round v-for="label in this.music_list_info.labels"
+                                        :key="label._id" disabled style="background-color: cadetblue;
                                 border-color: cadetblue;
                                 color: white;">
-                                {{ label }}
-                            </el-button>
+                                        {{ label }}
+                                    </el-button>
 
-                        </div>
+                                </div>
                             </div>
 
                             <div class="fronthead-actions" style="padding-top: 10px;">
@@ -52,7 +53,8 @@
                                 <el-link>
                                     <el-tooltip content="投诉" placement="top">
                                         <el-button type="default" icon="el-icon-folder-add"
-                                            @click="complaintFormVisible = true; changeComplaintForm()" size="mini">投诉</el-button>
+                                            @click="complaintFormVisible = true; changeComplaintForm()"
+                                            size="mini">投诉</el-button>
                                     </el-tooltip>
                                     <el-dialog title="投诉信息" :visible.sync="complaintFormVisible" center
                                         :close-on-click-modal="false" :show-close="false">
@@ -88,42 +90,46 @@
                                         </div>
                                     </el-dialog>
                                 </el-link>
-                                <el-link class="operation-link">
-                            <el-tooltip content="收藏" placement="top">
-                                <el-button type="default" icon="el-icon-folder-add" size="mini"
-                                    @click="starPlaylistFormVisible = true; changestarPlaylistForm()">批量添加</el-button>
-                            </el-tooltip>
-                            <el-dialog title="添加到你的收藏夹中" :visible.sync="starPlaylistFormVisible" center
-                                :close-on-click-modal="false" :show-close="false">
-                                <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
-                                    <div
-                                        style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); border-radius: 5px; min-width: 300px;">
-                                        <div style="float:left">
-                                            <img style="width: 70px;height: 70px;display: block; border-radius: 5px 0px 0px 5px;"
-                                                :src="starPlaylistForm.cover_path" alt="">
-                                        </div>
+                                <el-link class="operation-link" style="padding-left: 10px;">
+                                    <el-tooltip content="收藏" placement="top">
+                                        <el-button type="default" icon="el-icon-folder-add" size="mini"
+                                            @click="starPlaylistFormVisible = true; changestarPlaylistForm()">批量添加</el-button>
+                                    </el-tooltip>
+                                    <el-dialog title="添加到你的收藏夹中" :visible.sync="starPlaylistFormVisible" center
+                                        :close-on-click-modal="false" :show-close="false">
                                         <div
-                                            style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
-                                            <p style="margin:0;">{{ starPlaylistForm.music_name }} by {{
-                                                starPlaylistForm.singer_name }}</p>
+                                            style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                                            <div
+                                                style="margin: auto; margin-top: 30px; box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3); border-radius: 5px; min-width: 300px;">
+                                                <div style="float:left">
+                                                    <img style="width: 70px;height: 70px;display: block; border-radius: 5px 0px 0px 5px;"
+                                                        :src="starPlaylistForm.cover_path" alt="">
+                                                </div>
+                                                <div
+                                                    style="float:left; margin:0px 26px;  height: 100%; line-height: 70px; font-size: 15px;">
+                                                    <p style="margin:0;">{{ starPlaylistForm.music_name }} by {{
+                                                        starPlaylistForm.singer_name }}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div style="width: 100%; display: flex;">
-                                    <div style="margin: auto; margin-top: 40px;">
-                                        <el-select size="medium" :disabled="disabled" v-model="starPlaylistForm.favorites_id">
-                                            <el-option v-for="(item, index) in create_music_list" :key="index"
-                                                :label="item.name" :value="item.id"></el-option>
-                                        </el-select>
-                                    </div>
-                                </div>
-                                <div slot="footer" class="dialog-footer">
-                                    <el-button @click="starPlaylistFormVisible = false; clearstarPlaylistForm()">取 消</el-button>
-                                    <el-button type="primary" @click="starPlaylistFormVisible = false; starPlaylist()">确
-                                        定</el-button>
-                                </div>
-                            </el-dialog>
-                        </el-link>
+                                        <div style="width: 100%; display: flex;">
+                                            <div style="margin: auto; margin-top: 40px;">
+                                                <el-select size="medium" :disabled="disabled"
+                                                    v-model="starPlaylistForm.favorites_id">
+                                                    <el-option v-for="(item, index) in create_music_list" :key="index"
+                                                        :label="item.name" :value="item.id"></el-option>
+                                                </el-select>
+                                            </div>
+                                        </div>
+                                        <div slot="footer" class="dialog-footer">
+                                            <el-button @click="starPlaylistFormVisible = false; clearstarPlaylistForm()">取
+                                                消</el-button>
+                                            <el-button type="primary"
+                                                @click="starPlaylistFormVisible = false; starPlaylist()">确
+                                                定</el-button>
+                                        </div>
+                                    </el-dialog>
+                                </el-link>
 
                             </div>
                             <div class="fronthead-description font-description" style="width: 50vw;" v-if="!isModify">{{
@@ -153,7 +159,7 @@
 
 <script>
 import SonglistComponent from '@/components/PageComponent/SonglistComponent.vue';
-import { setPublic, setNotPublic, deleteList, changeMusiclist,complainMusic, markList } from "@/api/api.js";
+import { setPublic, setNotPublic, deleteList, changeMusiclist, complainMusic, markList } from "@/api/api.js";
 import { mixin } from '../mixins'
 export default ({
     props: ["id"],
@@ -262,11 +268,11 @@ export default ({
                 console.log(this.starPlaylistForm);
                 var s = this.starPlaylistForm.favorites_id;
                 console.log(s);
-                
+
                 formData.append('JWT', JSON.parse(localStorage.getItem("loginInfo")).JWT)
                 formData.append('music_list_id', this.music_list_info.id)
                 formData.append('favorites_id', s)
-                
+
                 markList(formData)
                     .then(res => {
                         //根据res进行区分
@@ -462,5 +468,4 @@ export default ({
     object-fit: cover;
     z-index: -1;
     filter: blur(10px) brightness(70%);
-}
-</style>
+}</style>
