@@ -9,10 +9,10 @@
             <span>我的评论</span>
           </el-menu-item>
           <!-- 回复我的 -->
-          <el-menu-item index="/user/message/reply"
+          <!-- <el-menu-item index="/user/message/reply"
             ><i class="el-icon-s-promotion"></i>
             <span>回复我的</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <!-- 被点赞、被关注、被喜欢（收藏）、被投诉、其余系统通知（不需要关联到实体，故不做区分）
               部分通知内容较为简短，直接展示内容即可，不需要额外设置对应的detail页面-->
           <el-menu-item index="/user/message/notice"

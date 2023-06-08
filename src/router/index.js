@@ -54,10 +54,10 @@ const router = new VueRouter({
               path: "comment",
               component: () => import("../views/Message/MyCommentPage.vue"),
             },
-            {
-              path: "reply",
-              component: () => import("../views/Message/ReplyToMe.vue"),
-            },
+            // {
+            //   path: "reply",
+            //   component: () => import("../views/Message/ReplyToMe.vue"),
+            // },
             {
               path: "complaint",
               component: () => import("../views/Message/ComplaintPage.vue"),

@@ -78,7 +78,7 @@
     <!-- 音乐相关 -->
     <div class="music-relate">
       <!-- 播放相关 -->
-      <div style="margin-bottom: 30px;" class="play-relate">
+      <div style="margin-bottom: 30px" class="play-relate">
         <!-- 个人简介 -->
         <div class="user-intro">
           <div class="title">个人简介</div>
@@ -87,14 +87,26 @@
           </div>
         </div>
         <!-- 最近播放，用户自定义最大记录数量10，20，50，仅自己可见-->
-        <div style="margin-top: 30px;"
+        <div
+          style="margin-top: 30px"
           class="user-recent-play"
           v-show="user_id == $store.state.userInfo.id"
         >
           <div class="title">最近播放</div>
           <!-- 歌曲列表 -->
-          <el-table :data="historyList" style="width: 100%" stripe :show-header="false" max-height="478px">
-            <el-table-column type="index" label="序号" width="100px" :show-header="false"></el-table-column>
+          <el-table
+            :data="historyList"
+            style="width: 100%"
+            stripe
+            :show-header="false"
+            max-height="478px"
+          >
+            <el-table-column
+              type="index"
+              label="序号"
+              width="100px"
+              :show-header="false"
+            ></el-table-column>
             <el-table-column
               prop="music_name"
               label="歌曲名称"
@@ -208,7 +220,7 @@ import ContentList from "../components/homepage/ContentList.vue";
 export default {
   mixins: [mixin],
   name: "UserHome",
-  components:{
+  components: {
     ContentList,
   },
   methods: {
@@ -231,17 +243,16 @@ export default {
     getMyPlayList(){
       let jwt = ''
       if (localStorage.getItem("loginInfo") == null) {
-          jwt=-1;
-      }
-      else {
-          jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
+        jwt = -1;
+      } else {
+        jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       }
       this.$axios({
         method: "get",
         url: "/user/get_user_music_list/",
         params: {
           JWT: jwt,
-          user_id:  this.user_id,
+          user_id: this.user_id,
         },
       })
         .then((res) => {
@@ -482,6 +493,9 @@ export default {
     },
     playSong(row){
       this.toplay(row)
+    },
+    initFunc(){
+      this.mounted();
     }
   },
   mounted() {
@@ -522,7 +536,6 @@ export default {
         });
       // 获取最近播放歌曲列表
       this.getHistoryList();
-      
     }
     // 如果是别人的主页，就需要获取用户信息，但不用获取最近播放，
     else {
@@ -570,6 +583,13 @@ export default {
     this.getRankList(1);
     this.getRankList(2);
   },
+  // beforeRouteUpdate(to, from) {
+  //   if (to.fullPath != from.fullPath) {
+  //     setTimeout(() => {
+  //       this.initFunc();
+  //     }, 0);
+  //   }
+  // },
   data() {
     return {
       uploadSongs:[],
