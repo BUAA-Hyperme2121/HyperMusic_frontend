@@ -24,7 +24,7 @@
                     <div class="fronthead-title font-title" v-if="!isModify">{{ this.music_list_info.name }}</div>
                     <div class="fronthead-title font-title" v-else>
                         <input type="text" v-bind:value="this.music_list_info.name" v-on:input="changeName"
-                            style="height: 30px; border: 0px; font-size: 30px; background-color:transparent;">
+                            style="height: 30px; border: 0px; font-size: 30px;max-width: 50vw; background-color:transparent;">
                     </div>
 
                     <div>
@@ -96,7 +96,7 @@
                     }}</div>
                     <div class="fronthead-description font-description" v-else>
                         <input type="text" v-bind:value="this.music_list_info.description" v-on:input="changeDescription"
-                            style="height: 20px; border: 0px;  background-color:transparent;">
+                            style="height: 20px; border: 0px;  max-width: 50vw; background-color:transparent;">
                     </div>
                 </div>
             </el-row>
