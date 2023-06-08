@@ -90,7 +90,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .all-singer {
   cursor: pointer;
   font-weight: 600;

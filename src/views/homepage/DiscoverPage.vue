@@ -87,31 +87,52 @@ export default {
     },
     methods:{
         getSongs(){
-          getAllSongs()
-            .then(res => {
-              this.recommendsongs=res.data.music_list.slice(8,13)
-            })
-            .catch(err => {
-              console.log(err)
-            })
+          this.$axios({
+          method: "get",
+          url: "/page/get_some_music/",
+          })
+          .then((res) => {
+            this.recommendsongs=res.data.music_list
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$message({
+              message: "服务器开摆了~(￣▽￣)~*",
+              type: "error",
+            });
+          });
         },
         getPlaylists(){
-          getAllPlaylists()
-            .then(res => {
-              this.recommendplaylists=res.data.music_list_all.slice(3,8)
-            })
-            .catch(err => {
-              console.log(err)
-            })
+          this.$axios({
+          method: "get",
+          url: "/page/get_some_music_list/",
+          })
+          .then((res) => {
+            this.recommendplaylists=res.data.music_list_all
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$message({
+              message: "服务器开摆了~(￣▽￣)~*",
+              type: "error",
+            });
+          });
         },
         getSingers(){
-          getAllSingers()
-            .then(res => {
-              this.recommendsingers=res.data.singer_list.slice(6,11)
-            })
-            .catch(err => {
-              console.log(err)
-            })
+          this.$axios({
+          method: "get",
+          url: "/page/get_some_singer/",
+          })
+          .then((res) => {
+            this.recommendsingers=res.data.singer_list
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$message({
+              message: "服务器开摆了~(￣▽￣)~*",
+              type: "error",
+            });
+          });
         },
         getRankList(){
           getRankList1()
