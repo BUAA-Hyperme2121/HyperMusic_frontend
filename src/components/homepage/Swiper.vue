@@ -177,9 +177,9 @@ export default{
   text-decoration: none;
 }
 .github-link svg {
-    margin-left: 20px;
-    margin-top: 100px;
-    width: 150px;
-    height: 150px;
+    margin-left: 35px;
+    margin-top: 80px;
+    width: 60%;
+    height: 30%;
 }
 </style>

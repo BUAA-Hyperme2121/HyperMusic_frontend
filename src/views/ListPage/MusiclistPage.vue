@@ -91,12 +91,12 @@
                             @click="modifyInfo">修改</el-button>
 
                     </div>
-                    <div class="fronthead-description font-description" style="width: 50vw;" v-if="!isModify">{{
+                    <div class="fronthead-description font-description" style="max-width: 50vw;" v-if="!isModify">{{
                         this.music_list_info.description
                     }}</div>
                     <div class="fronthead-description font-description" v-else>
                         <input type="text" v-bind:value="this.music_list_info.description" v-on:input="changeDescription"
-                            style="height: 20px; border: 0px;  max-width: 50vw; background-color:transparent;">
+                            style="height: 20px; border: 0px;   background-color:transparent;">
                     </div>
                 </div>
             </el-row>

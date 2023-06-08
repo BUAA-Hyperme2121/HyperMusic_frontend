@@ -32,7 +32,7 @@
         <el-table-column
           prop="create_date"
           label="发起时间"
-          width="160"
+          width="180"
           sortable
         >
           <template slot-scope="scope">
