@@ -75,12 +75,12 @@ export default {
         // 发送请求查找自己发布的动态,更新左边动态列表
         let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
         this.$axios({
-          method: "post",
-          url: "/message/get_user_post",
-          data: JSON.stringify({
+          method: "get",
+          url: "/message/get_user_post/",
+          params:{
             JWT: jwt,
             user_id: this.userInfo.id,
-          }),
+          },
         }).then((res) => {
           this.activityList = res.data.posts;
         });
@@ -180,7 +180,7 @@ export default {
       let jwt = JSON.parse(localStorage.getItem("loginInfo")).JWT;
       this.$axios({
         method: "get",
-        url: "/message/get_follow_post",
+        url: "/message/get_follow_post/",
         params: {
           JWT: jwt,
         },
@@ -221,7 +221,7 @@ export default {
       // 发送请求查找该用户的动态,更新左边动态列表
       this.$axios({
         method: "get",
-        url: "/message/get_user_post",
+        url: "/message/get_user_post/",
         params: {
           JWT: jwt,
           user_id: this.user_id,
