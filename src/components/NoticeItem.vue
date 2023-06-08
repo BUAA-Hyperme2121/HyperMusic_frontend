@@ -15,9 +15,7 @@
       <div>
         <!-- 消息发布者昵称 -->
         <span class="notice-item-username">
-          <a href="" style="color: cornflowerblue">{{
-            noticeInfo.poster_name
-          }}</a>
+          <span>{{ noticeInfo.poster_name }} :</span>
         </span>
         <!-- 消息内容 -->
         <span class="notice-item-text">{{ noticeInfo.content }}</span>
@@ -40,7 +38,11 @@
       </div>
       <!-- 消息发布时间 -->
       <div class="notice-item-time">
-        <span>{{ noticeInfo.create_date }}</span>
+        <span>{{
+          noticeInfo.create_date.slice(0, 10) +
+          " " +
+          noticeInfo.create_date.slice(11, 19)
+        }}</span>
       </div>
     </div>
   </div>
@@ -71,7 +73,7 @@ export default {
 <style scoped>
 .notice-item {
   display: flex;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 .notice-item-avatar {
@@ -83,5 +85,10 @@ export default {
   font-size: 16px;
   font-weight: bold;
   margin-right: 8px;
+}
+.notice-item-time {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #999;
 }
 </style>

@@ -31,7 +31,7 @@
           <template slot-scope="scope">
             {{
               scope.row.create_date.slice(0, 10) +
-              "" +
+              " " +
               scope.row.create_date.slice(11, 19)
             }}
           </template>

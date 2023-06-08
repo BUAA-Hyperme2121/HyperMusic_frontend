@@ -61,7 +61,7 @@
             <div class="update-avatar">
               <div>
                 <label class="el-form-item__label">
-                  头像 (.jpg格式,大小不超过1M)</label
+                  头像 (.jpg格式)</label
                 >
               </div>
               <!-- 原来的头像 -->
