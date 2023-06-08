@@ -724,7 +724,7 @@ export default ({
 .lyrics-outline {
     overflow: hidden;
     overflow-y: scroll;
-    height: 70vh;
+    height: 65vh;
     width: 50vw;
 }
 

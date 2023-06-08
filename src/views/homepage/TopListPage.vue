@@ -110,7 +110,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .main-div {
   display: flex;
   width: 85%;
