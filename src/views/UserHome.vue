@@ -177,14 +177,19 @@
         </div>
         <div style="margin-top: 30px;"
           class="user-recent-play">
-        <div class="title">上传歌曲</div>
+        <div class="title">{{userInfo.username}}上传的歌曲</div>
           <!-- 歌曲列表 -->
-          <el-table :data="uploadSongs" style="width: 100%" stripe :show-header="false" max-height="478px">
-            <el-table-column type="index" label="序号" width="100px" :show-header="false"></el-table-column>
-            <el-table-column
-              prop="music_name"
-              label="歌曲名称"
-            ></el-table-column>
+          <el-table :data="uploadSongs" style="width: 100%" stripe :show-header="false" max-height="478px" >
+            <el-table-column label="序号" width="60px">
+                <template slot-scope="scope">
+                    <p style="color: black; font-weight: 500;">{{ scope.$index + 1 }}</p>
+                </template>
+            </el-table-column>
+            <el-table-column label="歌曲名称" >
+                <template slot-scope="scope">
+                    <p style="cursor: pointer;" @click="playSong(scope.row)">{{ scope.row.music_name}}</p>
+                </template>
+            </el-table-column>
           </el-table>
         </div>
         <div style="margin-top: 30px;">
@@ -198,8 +203,10 @@
 
 <script>
 import qs from "qs";
+import { mixin } from '../mixins'
 import ContentList from "../components/homepage/ContentList.vue";
 export default {
+  mixins: [mixin],
   name: "UserHome",
   components:{
     ContentList,
@@ -208,13 +215,14 @@ export default {
     getUploadSongs(){
       this.$axios({
         method: "get",
-        url: "/user/get_user_upload_music/",
+        url: "/music/get_user_upload_music/",
         params: {
           user_id:  this.user_id,
         },
       })
         .then((res) => {
-          this.myPlayList=res.data.music_list
+          console.log(res.data.music_list)
+          this.uploadSongs=res.data.music_list
         })
         .catch((err) => {
           console.log(err);
@@ -237,7 +245,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.music_list)
           this.myPlayList=res.data.music_list
         })
         .catch((err) => {
@@ -473,6 +480,9 @@ export default {
           });
         });
     },
+    playSong(row){
+      this.toplay(row)
+    }
   },
   mounted() {
     // 获取用户信息
